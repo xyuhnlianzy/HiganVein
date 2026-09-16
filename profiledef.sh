@@ -1,5 +1,5 @@
-iso_name="cryoarch"
-iso_label="CRYOARCH_$(date +%Y%m)"
+iso_name="nexusarch"
+iso_label="NEXUSARCH_$(date +%Y%m)"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')

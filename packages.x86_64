@@ -24,6 +24,7 @@ pipewire-pulse
 wireplumber
 xorg-server-xwayland
 limine
+syslinux
 mtools
 dosfstools
 ntfs-3g

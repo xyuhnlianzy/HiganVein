@@ -20,16 +20,28 @@
         }
     </script>
     <style>
-        /* Red Spider Lily Field Background Glow Effect */
-        .lily-glow {
-            background: radial-gradient(circle at 50% 100%, rgba(220, 38, 38, 0.25) 0%, rgba(127, 29, 29, 0.1) 40%, transparent 70%);
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.05); }
+        }
+        .bg-eyes {
+            animation: pulseGlow 5s ease-in-out infinite;
         }
     </style>
 </head>
 <body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden">
-    <!-- Red Spider Lily Ambient Background Glow -->
-    <div class="absolute bottom-0 left-0 right-0 h-[600px] lily-glow pointer-events-none -z-10"></div>
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-red-950/20 blur-[140px] pointer-events-none -z-10 rounded-full"></div>
+    <!-- Fading Glowing Eyes in the Back -->
+    <div class="absolute top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] flex justify-between items-center px-20 pointer-events-none -z-10 bg-eyes">
+        <div class="w-16 h-6 rounded-full bg-red-600 blur-[30px] opacity-60"></div>
+        <div class="w-16 h-6 rounded-full bg-red-600 blur-[30px] opacity-60"></div>
+    </div>
+
+    <!-- Red Spider Lily Field Background SVG Silhouette at Bottom -->
+    <div class="absolute bottom-0 left-0 right-0 h-64 pointer-events-none -z-10 opacity-30 overflow-hidden">
+        <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-red-600 fill-current">
+            <path d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </div>
 
     <!-- Navbar -->
     <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">

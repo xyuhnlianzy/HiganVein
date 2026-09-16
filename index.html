@@ -11,21 +11,31 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#0f172a',
-                        cardbg: '#1e293b',
+                        darkbg: '#09090b',
+                        cardbg: '#121214',
                         accent: '#ef4444',
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Red Spider Lily Field Background Glow Effect */
+        .lily-glow {
+            background: radial-gradient(circle at 50% 100%, rgba(220, 38, 38, 0.25) 0%, rgba(127, 29, 29, 0.1) 40%, transparent 70%);
+        }
+    </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-500 selection:text-white">
+<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden">
+    <!-- Red Spider Lily Ambient Background Glow -->
+    <div class="absolute bottom-0 left-0 right-0 h-[600px] lily-glow pointer-events-none -z-10"></div>
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-red-950/20 blur-[140px] pointer-events-none -z-10 rounded-full"></div>
+
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-slate-800">
+    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <img src="logo.svg" alt="NexusArch Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-500/20 border border-slate-700">
+                <img src="logo.svg" alt="NexusArch Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-600/30 border border-zinc-700">
                 <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-white via-slate-200 to-red-500 bg-clip-text text-transparent">NexusArch</span>
             </div>
             <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
@@ -40,15 +50,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-6 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/30 via-darkbg to-darkbg -z-10"></div>
+    <section class="pt-32 pb-24 px-6 relative">
         <div class="max-w-5xl mx-auto text-center space-y-8">
             <div class="flex justify-center mb-4">
-                <img src="logo.svg" alt="NexusArch Emblem" class="w-32 h-32 rounded-3xl shadow-2xl shadow-red-600/30 border border-slate-700 animate-pulse">
+                <img src="logo.svg" alt="NexusArch Emblem" class="w-36 h-36 rounded-3xl shadow-2xl shadow-red-600/40 border border-zinc-700 hover:scale-105 transition duration-500">
             </div>
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-semibold text-red-400">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-semibold text-red-400">
                 <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                <span>Powered by CachyOS Kernel & Hyprland</span>
+                <span>Tokyo Ghoul Episode 12 • Higanbana Edition</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
                 Blazing Fast. <span class="bg-gradient-to-r from-red-500 via-rose-400 to-white bg-clip-text text-transparent">Stunningly Riced.</span>
@@ -57,8 +66,8 @@
                 An elite Arch Linux derivative combining CachyOS raw performance, Hyprland Wayland compositor, Caelestia shell, and Limine bootloader.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <a href="#download" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-red-600/20">Download ISO</a>
-                <a href="https://github.com/xyuhnlianzy/NexusArch" target="_blank" class="px-8 py-4 font-bold bg-slate-800 border border-slate-700 text-slate-200 rounded-xl hover:bg-slate-700 transition">View on GitHub</a>
+                <a href="#download" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-red-600/30">Download ISO</a>
+                <a href="https://github.com/xyuhnlianzy/NexusArch" target="_blank" class="px-8 py-4 font-bold bg-zinc-900 border border-zinc-800 text-slate-200 rounded-xl hover:bg-zinc-800 transition">View on GitHub</a>
             </div>
         </div>
     </section>
@@ -70,17 +79,17 @@
             <p class="text-slate-400">Everything you love about Arch, supercharged.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-            <div class="p-8 rounded-2xl bg-cardbg border border-slate-800/80 hover:border-red-500/50 transition">
+            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-red-500/50 transition">
                 <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-xl mb-6">⚡</div>
                 <h3 class="text-xl font-semibold mb-3">CachyOS Kernel</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">Optimized scheduler and compiler flags designed for maximum FPS in games and lightning-fast responsiveness.</p>
             </div>
-            <div class="p-8 rounded-2xl bg-cardbg border border-slate-800/80 hover:border-red-500/50 transition">
+            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-red-500/50 transition">
                 <div class="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold text-xl mb-6">🪟</div>
                 <h3 class="text-xl font-semibold mb-3">Hyprland & Caelestia</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">Dynamic tiling Wayland compositor paired with the sleek Caelestia shell for an unmatched desktop experience.</p>
             </div>
-            <div class="p-8 rounded-2xl bg-cardbg border border-slate-800/80 hover:border-red-500/50 transition">
+            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-red-500/50 transition">
                 <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold text-xl mb-6">🚀</div>
                 <h3 class="text-xl font-semibold mb-3">Limine Bootloader</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">Blazing fast modern bootloader replacing legacy GRUB for instant and reliable system boot times.</p>
@@ -90,18 +99,19 @@
 
     <!-- Download Section -->
     <section id="download" class="py-20 px-6 max-w-4xl mx-auto text-center">
-        <div class="p-10 md:p-16 rounded-3xl bg-gradient-to-b from-cardbg to-slate-900 border border-slate-800 space-y-6">
+        <div class="p-10 md:p-16 rounded-3xl bg-gradient-to-b from-cardbg to-zinc-900 border border-zinc-800 space-y-6 shadow-2xl relative overflow-hidden">
+            <div class="absolute bottom-0 left-0 right-0 h-32 bg-red-600/10 blur-2xl pointer-events-none"></div>
             <h2 class="text-3xl font-bold">Get NexusArch ISO</h2>
             <p class="text-slate-400 max-w-xl mx-auto">Flash to a USB drive, boot into the live Hyprland environment, and install via Calamares in minutes.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <a href="#" class="px-8 py-4 font-bold bg-red-600 text-white rounded-xl hover:bg-red-500 transition shadow-lg shadow-red-600/20">Download Latest ISO (x86_64)</a>
+                <a href="#" class="px-8 py-4 font-bold bg-red-600 text-white rounded-xl hover:bg-red-500 transition shadow-lg shadow-red-600/30">Download Latest ISO (x86_64)</a>
             </div>
             <p class="text-xs text-slate-500 pt-2">SHA256 checksum verified • Rolling release</p>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-slate-800 text-center text-sm text-slate-500">
+    <footer class="py-12 border-t border-zinc-800 text-center text-sm text-slate-500">
         <p>&copy; 2026 NexusArch Project. Built with Arch Linux & CachyOS.</p>
     </footer>
 </body>

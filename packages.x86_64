@@ -27,7 +27,7 @@ firefox
 sddm
 gdm
 calamares
-systemd-zram-generator
+zram-generator
 
 # --- Audio & Multimedia ---
 alsa-utils

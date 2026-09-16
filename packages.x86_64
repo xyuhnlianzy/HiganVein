@@ -15,6 +15,7 @@ wofi
 kitty
 firefox
 sddm
+calamares
 alsa-utils
 pipewire
 pipewire-alsa
@@ -31,8 +32,6 @@ rsync
 tar
 zip
 unzip
-# Nyarch aesthetic / Ricing
-neofetch
 papirus-icon-theme
 ttf-jetbrains-mono-nerd
 ttf-fira-code
@@ -40,10 +39,6 @@ noto-fonts-emoji
 kvantum
 qt5ct
 qt6ct
-# CachyOS perf / tools
-schroot
-ccache
-# Caelestia shell deps
 avizo
 brightnessctl
 playerctl

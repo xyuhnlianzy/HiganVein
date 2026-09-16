@@ -9,22 +9,39 @@ htop
 fastfetch
 git
 networkmanager
+
+# --- Window Managers & Desktops ---
 hyprland
+sway
+i3-wm
+plasma-meta
+gnome
+
+# --- Shell, Panel & Utilities ---
 waybar
 wofi
+rofi
 kitty
+alacritty
 firefox
 sddm
+gdm
 calamares
 systemd-zram-generator
+
+# --- Audio & Multimedia ---
 alsa-utils
 pipewire
 pipewire-alsa
 pipewire-pulse
 wireplumber
 xorg-server-xwayland
+
+# --- Bootloader ---
 limine
 syslinux
+
+# --- Filesystem & Tools ---
 mtools
 dosfstools
 ntfs-3g
@@ -34,6 +51,8 @@ rsync
 tar
 zip
 unzip
+
+# --- Ricing & Aesthetics ---
 papirus-icon-theme
 ttf-jetbrains-mono-nerd
 ttf-fira-code
@@ -41,6 +60,8 @@ noto-fonts-emoji
 kvantum
 qt5ct
 qt6ct
+
+# --- Caelestia Shell & Dev Deps ---
 avizo
 brightnessctl
 playerctl

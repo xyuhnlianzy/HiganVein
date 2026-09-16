@@ -1,1 +1,10 @@
-/usr/lib/systemd/system/sddm.service
+[Unit]
+Description=Simple Desktop Display Manager
+After=systemd-user-sessions.service
+
+[Service]
+ExecStart=/usr/bin/sddm
+Restart=always
+
+[Install]
+Alias=display-manager.service

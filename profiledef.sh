@@ -1,5 +1,5 @@
-iso_name="glacialos"
-iso_label="GLACIALOS_$(date +%Y%m)"
+iso_name="cryoos"
+iso_label="CRYOOS_$(date +%Y%m)"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')

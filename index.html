@@ -21,11 +21,11 @@
     </script>
     <style>
         .split-bg {
-            background: linear-gradient(180deg, rgba(220, 38, 38, 0.18) 0%, rgba(9, 9, 11, 0.95) 45%, rgba(9, 9, 11, 0.95) 55%, rgba(124, 58, 237, 0.18) 100%);
+            background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(9, 9, 11, 0.96) 45%, rgba(9, 9, 11, 0.96) 55%, rgba(124, 58, 237, 0.2) 100%);
         }
         @keyframes portalPulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.08); }
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
         }
         .portal-glow {
             animation: portalPulse 6s ease-in-out infinite;
@@ -34,7 +34,7 @@
 </head>
 <body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden split-bg">
     <!-- Central Portal Glow Bridging Top & Bottom -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-red-600/20 via-pink-500/10 to-purple-600/20 blur-[140px] pointer-events-none -z-10 portal-glow rounded-full"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-red-600/25 via-pink-500/15 to-purple-600/25 blur-[150px] pointer-events-none -z-10 portal-glow rounded-full"></div>
 
     <!-- Navbar -->
     <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
@@ -54,15 +54,18 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section with Signature N Logo Centerpiece -->
     <section class="pt-32 pb-24 px-6 relative">
         <div class="max-w-5xl mx-auto text-center space-y-8">
-            <div class="flex justify-center mb-4">
-                <img src="logo.svg" alt="NexusArch Emblem" class="w-36 h-36 rounded-3xl shadow-2xl shadow-purple-600/40 border border-zinc-700 hover:scale-105 transition duration-500">
+            <!-- Signature N Logo as Central Focal Point -->
+            <div class="relative flex justify-center mb-6">
+                <div class="absolute -inset-4 bg-gradient-to-r from-red-600 to-purple-600 rounded-[2.5rem] blur-xl opacity-50 portal-glow"></div>
+                <img src="logo.svg" alt="NexusArch Signature N Logo" class="relative w-44 h-44 rounded-3xl shadow-2xl shadow-black/80 border-2 border-zinc-700 hover:scale-105 transition duration-500">
             </div>
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-semibold text-rose-400">
+
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-semibold text-rose-400 shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                <span>Dark Fantasy Split-Screen Edition • Crimson & Violet</span>
+                <span>Signature N Edition • Dark Fantasy Split-Screen</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
                 Blazing Fast. <span class="bg-gradient-to-r from-red-500 via-purple-400 to-white bg-clip-text text-transparent">Stunningly Riced.</span>

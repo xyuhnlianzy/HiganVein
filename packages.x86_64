@@ -16,6 +16,7 @@ kitty
 firefox
 sddm
 calamares
+systemd-zram-generator
 alsa-utils
 pipewire
 pipewire-alsa

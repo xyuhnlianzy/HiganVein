@@ -1,7 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
   <defs>
+    <!-- Red Spider Lily Crimson Gradient -->
+    <linearGradient id="lilyRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="50%" stop-color="#dc2626" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    
     <radialGradient id="kakuganGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="0%" stop-color="#ff2222" />
       <stop offset="60%" stop-color="#991b1b" />
       <stop offset="100%" stop-color="#000000" />
     </radialGradient>
@@ -28,20 +35,34 @@
   <!-- Deep Obsidian Canvas -->
   <rect width="500" height="500" rx="110" fill="url(#monoCanvas)" stroke="#27272a" stroke-width="4" />
 
-  <!-- Background Abstract Ep 11 Lines -->
-  <g stroke="#27272a" stroke-width="3" opacity="0.4">
-    <circle cx="250" cy="250" r="170" fill="none" stroke-dasharray="12 12" />
+  <!-- Red Spider Lily (Higanbana) Field at the bottom -->
+  <g fill="url(#lilyRed)" filter="url(#bloodGlow)" opacity="0.85">
+    <!-- Stylized Spider Lily Petals / Field Wave -->
+    <path d="M0,420 Q50,380 100,410 Q150,370 200,400 Q250,360 300,390 Q350,360 400,400 Q450,370 500,410 L500,500 L0,500 Z" />
+    <path d="M0,450 Q70,410 140,440 Q210,400 280,430 Q350,400 420,440 Q470,420 500,440 L500,500 L0,500 Z" opacity="0.7" />
   </g>
 
-  <!-- The "N" Monogram - Pure Ep 11 White Hair Kaneki Vibe -->
-  <g transform="translate(250, 250)">
-    <!-- N Letterform: White hair aesthetic -->
+  <!-- Individual Spider Lily Stamen / Filaments floating -->
+  <g stroke="#f87171" stroke-width="2" opacity="0.7">
+    <path d="M120,400 Q130,340 110,300" fill="none" />
+    <path d="M130,410 Q145,350 135,310" fill="none" />
+    <path d="M370,400 Q360,340 380,300" fill="none" />
+    <path d="M385,410 Q370,350 395,310" fill="none" />
+    <circle cx="110" cy="300" r="3" fill="#ef4444" />
+    <circle cx="135" cy="310" r="3" fill="#ef4444" />
+    <circle cx="380" cy="300" r="3" fill="#ef4444" />
+    <circle cx="395" cy="310" r="3" fill="#ef4444" />
+  </g>
+
+  <!-- The "N" Monogram - White Hair Kaneki -->
+  <g transform="translate(250, 230)">
+    <!-- N Letterform -->
     <path d="M-90,110 L-90,-110 L-40,-110 L40,60 L40,-110 L90,-110 L90,110 L40,110 L-40,-60 L-40,110 Z" fill="url(#whiteHair)" stroke="#09090b" stroke-width="6" stroke-linejoin="round" />
     
     <!-- Shadow depth on N -->
     <path d="M-40,-60 L40,60 L40,110 L-40,110 Z" fill="#71717a" opacity="0.3" />
 
-    <!-- Iconic Kakugan Red Eye embedded into the top-right stem of N -->
+    <!-- Kakugan Red Eye -->
     <g filter="url(#bloodGlow)">
       <circle cx="65" cy="-50" r="28" fill="url(#kakuganGlow)" />
       <circle cx="65" cy="-50" r="11" fill="#fca5a5" />

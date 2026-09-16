@@ -10,6 +10,4 @@ airootfs_image_type="squashfs"
 airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '3')
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
-  ["/root"]="0:0:750"
-  ["/root/.gnupg"]="0:0:700"
 )

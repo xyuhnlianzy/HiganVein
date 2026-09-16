@@ -6,7 +6,10 @@ linux-firmware
 vim
 nano
 htop
+btop
 fastfetch
+cmatrix
+cava
 git
 networkmanager
 

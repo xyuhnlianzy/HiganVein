@@ -6,14 +6,14 @@
       <stop offset="100%" stop-color="#000000" />
     </radialGradient>
     
-    <linearGradient id="monoDark" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#18181b" />
-      <stop offset="100%" stop-color="#09090b" />
+    <linearGradient id="monoCanvas" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#121214" />
+      <stop offset="100%" stop-color="#050507" />
     </linearGradient>
 
-    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+    <linearGradient id="whiteHair" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#a1a1aa" />
+      <stop offset="100%" stop-color="#d4d4d8" />
     </linearGradient>
 
     <filter id="bloodGlow" x="-50%" y="-50%" width="200%" height="200%">
@@ -26,41 +26,40 @@
   </defs>
 
   <!-- Deep Obsidian Canvas -->
-  <rect width="500" height="600" rx="110" fill="url(#monoDark)" stroke="#27272a" stroke-width="4" />
+  <rect width="500" height="600" rx="110" fill="url(#monoCanvas)" stroke="#27272a" stroke-width="4" />
 
-  <!-- Background Shading -->
-  <g stroke="#27272a" stroke-width="2" opacity="0.5">
-    <line x1="80" y1="80" x2="420" y2="420" />
-    <line x1="420" y1="80" x2="80" y2="420" />
-    <circle cx="250" cy="225" r="150" fill="none" stroke-dasharray="10 10" />
+  <!-- Background Ep 11 Shading (White hair strands / abstract lines) -->
+  <g stroke="#27272a" stroke-width="3" opacity="0.4">
+    <path d="M100,80 Q250,200 400,80" fill="none" />
+    <path d="M80,120 Q250,240 420,120" fill="none" />
+    <circle cx="250" cy="225" r="160" fill="none" stroke-dasharray="12 12" />
   </g>
 
-  <!-- Kaneki Mask Emblem -->
+  <!-- The "N" Monogram - Styled with Ep 11 White Hair Kaneki Vibe -->
   <g transform="translate(250, 225)">
-    <path d="M-80,-100 L80,-100 L110,-10 L80,110 L-80,110 L-110,-10 Z" fill="#09090b" stroke="#71717a" stroke-width="6" stroke-linejoin="round" />
-    <line x1="0" y1="-100" x2="0" y2="110" stroke="#a1a1aa" stroke-width="5" stroke-dasharray="8 6" />
+    <!-- N Letterform: Sharp, architectural, stark black & white contrast -->
+    <path d="M-90,110 L-90,-110 L-40,-110 L40,60 L40,-110 L90,-110 L90,110 L40,110 L-40,-60 L-40,110 Z" fill="url(#whiteHair)" stroke="#09090b" stroke-width="6" stroke-linejoin="round" />
+    
+    <!-- Shadow depth on N -->
+    <path d="M-40,-60 L40,60 L40,110 L-40,110 Z" fill="#71717a" opacity="0.3" />
 
-    <!-- Left Eye -->
-    <circle cx="-45" cy="-15" r="16" fill="#18181b" stroke="#52525b" stroke-width="4" />
-    <circle cx="-45" cy="-15" r="5" fill="#71717a" />
-
-    <!-- Right Kakugan Eye -->
+    <!-- Iconic Kakugan Red Eye embedded into the top-right stem of N -->
     <g filter="url(#bloodGlow)">
-      <circle cx="45" cy="-15" r="24" fill="url(#kakuganGlow)" />
-      <circle cx="45" cy="-15" r="9" fill="#fca5a5" />
-      <circle cx="45" cy="-15" r="3" fill="#ffffff" />
+      <circle cx="65" cy="-50" r="28" fill="url(#kakuganGlow)" />
+      <circle cx="65" cy="-50" r="11" fill="#fca5a5" />
+      <circle cx="65" cy="-50" r="4" fill="#ffffff" />
     </g>
   </g>
 
   <!-- NexusArch Signature Typography -->
   <g transform="translate(250, 480)" text-anchor="middle">
-    <!-- Crimson accent glow under text -->
+    <!-- Crimson glow -->
     <ellipse cx="0" cy="25" rx="120" ry="8" fill="#ef4444" opacity="0.3" filter="url(#bloodGlow)" />
     
     <!-- Brand Name -->
-    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="42" fill="url(#textGrad)" letter-spacing="4">Nexus<tspan fill="#ef4444">Arch</tspan></text>
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="4">Nexus<tspan fill="#ef4444">Arch</tspan></text>
     
     <!-- Subtitle -->
-    <text x="0" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="14" fill="#71717a" letter-spacing="8">ANIME • PERFORMANCE</text>
+    <text x="0" y="32" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="14" fill="#a1a1aa" letter-spacing="6">EPISODE 11 • WHITE HAIR</text>
   </g>
 </svg>

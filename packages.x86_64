@@ -65,7 +65,6 @@ qt5ct
 qt6ct
 
 # --- Caelestia Shell & Dev Deps ---
-avizo
 brightnessctl
 playerctl
 grim
@@ -82,4 +81,4 @@ libadwaita
 gst-plugins-good
 gst-plugins-bad
 gst-libav
-astral-uv
+uv

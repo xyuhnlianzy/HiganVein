@@ -37,9 +37,12 @@ pipewire-pulse
 wireplumber
 xorg-server-xwayland
 
-# --- Bootloader ---
-limine
+# --- Bootloader & Archiso Req ---
 syslinux
+grub
+efibootmgr
+memtest86+
+edk2-shell
 
 # --- Filesystem & Tools ---
 mtools

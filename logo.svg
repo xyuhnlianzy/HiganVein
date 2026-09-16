@@ -1,30 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
   <defs>
-    <!-- Red Spider Lily Crimson Gradient -->
-    <linearGradient id="lilyRed" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f87171" />
-      <stop offset="50%" stop-color="#dc2626" />
-      <stop offset="100%" stop-color="#7f1d1d" />
+    <!-- Top Half: Crimson Red Spider Lily & Kakugan -->
+    <linearGradient id="topCrimson" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7f1d1d" />
+      <stop offset="100%" stop-color="#dc2626" />
     </linearGradient>
-    
-    <radialGradient id="kakuganGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff2222" />
-      <stop offset="60%" stop-color="#991b1b" />
+
+    <!-- Bottom Half: Violet Witch / Magic Glow -->
+    <linearGradient id="bottomViolet" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#2e1065" />
+    </linearGradient>
+
+    <radialGradient id="portalGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="40%" stop-color="#ec4899" />
+      <stop offset="80%" stop-color="#8b5cf6" />
       <stop offset="100%" stop-color="#000000" />
     </radialGradient>
-    
-    <linearGradient id="monoCanvas" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#121214" />
-      <stop offset="100%" stop-color="#050507" />
-    </linearGradient>
 
-    <linearGradient id="whiteHair" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff" />
-      <stop offset="100%" stop-color="#d4d4d8" />
-    </linearGradient>
-
-    <filter id="bloodGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="15" result="blur" />
+    <filter id="epicGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -33,40 +29,36 @@
   </defs>
 
   <!-- Deep Obsidian Canvas -->
-  <rect width="500" height="500" rx="110" fill="url(#monoCanvas)" stroke="#27272a" stroke-width="4" />
+  <rect width="500" height="500" rx="110" fill="#09090b" stroke="#27272a" stroke-width="4" />
 
-  <!-- Red Spider Lily (Higanbana) Field at the bottom -->
-  <g fill="url(#lilyRed)" filter="url(#bloodGlow)" opacity="0.85">
-    <!-- Stylized Spider Lily Petals / Field Wave -->
-    <path d="M0,420 Q50,380 100,410 Q150,370 200,400 Q250,360 300,390 Q350,360 400,400 Q450,370 500,410 L500,500 L0,500 Z" />
-    <path d="M0,450 Q70,410 140,440 Q210,400 280,430 Q350,400 420,440 Q470,420 500,440 L500,500 L0,500 Z" opacity="0.7" />
+  <!-- Vertical Split-Screen Mirror Background -->
+  <g clip-path="url(#roundedBox)">
+    <!-- Top Half (Crimson) -->
+    <path d="M0,0 L500,0 L500,250 L0,250 Z" fill="url(#topCrimson)" opacity="0.3" />
+    <!-- Bottom Half (Violet) -->
+    <path d="M0,250 L500,250 L500,500 L0,500 Z" fill="url(#bottomViolet)" opacity="0.3" />
   </g>
 
-  <!-- Individual Spider Lily Stamen / Filaments floating -->
-  <g stroke="#f87171" stroke-width="2" opacity="0.7">
-    <path d="M120,400 Q130,340 110,300" fill="none" />
-    <path d="M130,410 Q145,350 135,310" fill="none" />
-    <path d="M370,400 Q360,340 380,300" fill="none" />
-    <path d="M385,410 Q370,350 395,310" fill="none" />
-    <circle cx="110" cy="300" r="3" fill="#ef4444" />
-    <circle cx="135" cy="310" r="3" fill="#ef4444" />
-    <circle cx="380" cy="300" r="3" fill="#ef4444" />
-    <circle cx="395" cy="310" r="3" fill="#ef4444" />
+  <!-- Red Spider Lily Silhouettes (Top & Bottom framing) -->
+  <g fill="#ef4444" opacity="0.6" filter="url(#epicGlow)">
+    <path d="M50,0 Q80,60 120,30 Q160,80 200,40 Q250,70 300,40 Q350,80 400,30 Q440,60 450,0 Z" />
+  </g>
+  <g fill="#a855f7" opacity="0.6" filter="url(#epicGlow)">
+    <path d="M50,500 Q80,440 120,470 Q160,420 200,460 Q250,430 300,460 Q350,420 400,470 Q440,440 450,500 Z" />
   </g>
 
-  <!-- The "N" Monogram - White Hair Kaneki -->
-  <g transform="translate(250, 230)">
-    <!-- N Letterform -->
-    <path d="M-90,110 L-90,-110 L-40,-110 L40,60 L40,-110 L90,-110 L90,110 L40,110 L-40,-60 L-40,110 Z" fill="url(#whiteHair)" stroke="#09090b" stroke-width="6" stroke-linejoin="round" />
-    
-    <!-- Shadow depth on N -->
-    <path d="M-40,-60 L40,60 L40,110 L-40,110 Z" fill="#71717a" opacity="0.3" />
+  <!-- Central Bridge / Glowing Portal Eye (Bridging the split halves) -->
+  <g transform="translate(250, 250)" filter="url(#epicGlow)">
+    <!-- Outer Portal Ring -->
+    <circle cx="0" cy="0" r="85" fill="none" stroke="#f43f5e" stroke-width="4" stroke-dasharray="10 5" />
+    <circle cx="0" cy="0" r="75" fill="none" stroke="#a855f7" stroke-width="4" stroke-dasharray="8 8" />
 
-    <!-- Kakugan Red Eye -->
-    <g filter="url(#bloodGlow)">
-      <circle cx="65" cy="-50" r="28" fill="url(#kakuganGlow)" />
-      <circle cx="65" cy="-50" r="11" fill="#fca5a5" />
-      <circle cx="65" cy="-50" r="4" fill="#ffffff" />
-    </g>
+    <!-- Central Glowing Eye Core -->
+    <circle cx="0" cy="0" r="50" fill="url(#portalGlow)" />
+    <ellipse cx="0" cy="0" rx="15" ry="35" fill="#000000" />
+    <ellipse cx="0" cy="0" rx="6" ry="20" fill="#ffffff" />
   </g>
+
+  <!-- Center Horizon Divider Line -->
+  <line x1="100" y1="250" x2="400" y2="250" stroke="#ffffff" stroke-width="3" opacity="0.8" filter="url(#epicGlow)" />
 </svg>

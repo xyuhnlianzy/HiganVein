@@ -1,10 +1,10 @@
-# NexusArch
+# HiganveinOS
 
 An elite, performance-focused Arch Linux derivative combining the raw speed of the **CachyOS Kernel**, the fluid window management of **Hyprland**, and a distinct Dark Fantasy aesthetic.
 
 ## Legal & Compliance Notice
 
-NexusArch is an independent derivative work built upon open-source software:
+HiganveinOS is an independent derivative work built upon open-source software:
 - **Arch Linux**: Licensed under GPL / various open-source licenses.
 - **CachyOS**: Kernel and optimizations provided under their respective open-source terms.
 - **Hyprland & Caelestia**: BSD / open-source licenses.

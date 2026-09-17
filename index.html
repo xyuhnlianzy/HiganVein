@@ -44,140 +44,38 @@
                 <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-white to-purple-500 bg-clip-text text-transparent">HiganveinOS</span>
             </div>
             <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="#features" class="hover:text-red-400 transition">Features</a>
-                <a href="#preview" class="hover:text-red-400 transition">Preview</a>
-                <a href="#about" class="hover:text-red-400 transition">About</a>
-                <a href="#download" class="hover:text-red-400 transition">Download</a>
+                <a href="index.html" class="text-red-400 font-semibold transition">Home</a>
+                <a href="features.html" class="hover:text-red-400 transition">Features</a>
+                <a href="docs.html" class="hover:text-red-400 transition">Docs</a>
+                <a href="about.html" class="hover:text-red-400 transition">About</a>
             </div>
             <div>
-                <a href="#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get HiganveinOS</a>
+                <a href="index.html#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get ISO</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section with Signature N Logo Centerpiece -->
+    <!-- Hero Section -->
     <section class="pt-32 pb-24 px-6 relative">
         <div class="max-w-5xl mx-auto text-center space-y-8">
-            <!-- Signature N Logo as Central Focal Point -->
             <div class="relative flex justify-center mb-6">
                 <div class="absolute -inset-4 bg-gradient-to-r from-red-600 to-purple-600 rounded-[2.5rem] blur-xl opacity-50 portal-glow"></div>
-                <img src="logo.svg" alt="HiganveinOS Signature N Logo" class="relative w-44 h-44 rounded-3xl shadow-2xl shadow-black/80 border-2 border-zinc-700 hover:scale-105 transition duration-500">
+                <img src="logo.svg" alt="HiganveinOS Emblem" class="relative w-44 h-44 rounded-3xl shadow-2xl shadow-black/80 border-2 border-zinc-700 hover:scale-105 transition duration-500">
             </div>
 
             <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-semibold text-rose-400 shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                <span>Signature N Edition • Dark Fantasy Split-Screen</span>
+                <span>Higanbana Edition • Dark Fantasy Split-Screen</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
                 Blazing Fast. <span class="bg-gradient-to-r from-red-500 via-purple-400 to-white bg-clip-text text-transparent">Stunningly Riced.</span>
             </h1>
             <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
-                An elite Arch Linux derivative combining CachyOS raw performance, Hyprland Wayland compositor, Caelestia shell, and Limine bootloader.
+                An elite Arch Linux derivative combining CachyOS raw performance, Hyprland Wayland compositor, Caelestia shell, and universal BIOS/UEFI boot support.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <a href="#download" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-purple-600/30">Download ISO</a>
-                <a href="#preview" class="px-8 py-4 font-bold bg-zinc-900 border border-zinc-800 text-slate-200 rounded-xl hover:bg-zinc-800 transition">See Preview</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Preview / Screenshot / Ricing Showcase Section -->
-    <section id="preview" class="py-20 px-6 max-w-6xl mx-auto">
-        <div class="text-center space-y-4 mb-16">
-            <div class="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-semibold uppercase tracking-wider">Visual Showcase</div>
-            <h2 class="text-3xl md:text-4xl font-extrabold">System Preview & Ricing</h2>
-            <p class="text-slate-400">A glimpse of what you get out-of-the-box with HiganveinOS.</p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-8">
-            <!-- Preview Card 1: Fastfetch & Terminal -->
-            <div class="p-6 rounded-3xl bg-cardbg border border-zinc-800/80 shadow-xl space-y-4">
-                <div class="flex items-center space-x-2 pb-2 border-b border-zinc-800">
-                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span class="text-xs text-slate-500 font-mono ml-2">kitty — fastfetch</span>
-                </div>
-                <div class="bg-zinc-950 p-4 rounded-2xl font-mono text-xs text-slate-300 leading-relaxed border border-zinc-800/50">
-                    <p class="text-red-400 font-bold">      /\       <span>  root@nexusarch</span></p>
-                    <p class="text-red-400 font-bold">     /  \      <span>  ─────────────</span></p>
-                    <p class="text-red-400 font-bold">    /|\  \     <span>  OS: HiganveinOS x86_64</span></p>
-                    <p class="text-red-400 font-bold">   / | \  \    <span>  Kernel: Linux CachyOS</span></p>
-                    <p class="text-red-400 font-bold">  /  |  \  \   <span>  WM: Hyprland (Wayland)</span></p>
-                    <p class="text-red-400 font-bold"> /   |   \  \  <span>  Shell: Caelestia + Waybar</span></p>
-                    <p class="text-red-400 font-bold">/_-''     ''-_\<span> Uptime: 10 mins</span></p>
-                    <p class="text-slate-500 mt-2">Preinstalled: btop, cmatrix, cava, zram</p>
-                </div>
-                <h3 class="text-lg font-semibold text-slate-200">Custom "N" Fastfetch & Tiling WM</h3>
-                <p class="text-slate-400 text-sm">Signature Arch-rhyming "N" logo powered by CachyOS raw speed and Hyprland window management.</p>
-            </div>
-
-            <!-- Preview Card 2: Preinstalled Tools Showcase -->
-            <div class="p-6 rounded-3xl bg-cardbg border border-zinc-800/80 shadow-xl space-y-4">
-                <div class="flex items-center space-x-2 pb-2 border-b border-zinc-800">
-                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span class="text-xs text-slate-500 font-mono ml-2">btop & cava</span>
-                </div>
-                <div class="bg-zinc-950 p-4 rounded-2xl font-mono text-xs text-purple-300 leading-relaxed border border-zinc-800/50 space-y-2">
-                    <div class="flex justify-between text-slate-400 border-b border-zinc-900 pb-1">
-                        <span>CPU: CachyOS Optimized</span>
-                        <span class="text-green-400">1.2% [ || ]</span>
-                    </div>
-                    <div class="flex justify-between text-slate-400 border-b border-zinc-900 pb-1">
-                        <span>RAM: ZRAM (zstd active)</span>
-                        <span class="text-cyan-400">1.1G / 7.7G</span>
-                    </div>
-                    <div class="text-center text-red-400 py-3 font-bold tracking-widest">[ CAVA AUDIO VISUALIZER ACTIVE ]</div>
-                </div>
-                <h3 class="text-lg font-semibold text-slate-200">Preloaded Productivity & Ricing</h3>
-                <p class="text-slate-400 text-sm">Comes fully equipped with btop system monitor, cmatrix, cava visualizer, and automatic ZRAM compression.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why We Created HiganveinOS / About Section -->
-    <section id="about" class="py-20 px-6 max-w-5xl mx-auto">
-        <div class="p-10 md:p-14 rounded-3xl bg-cardbg border border-zinc-800/80 shadow-2xl space-y-6 relative overflow-hidden">
-            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-red-600/10 blur-3xl pointer-events-none rounded-full"></div>
-            <div class="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold uppercase tracking-wider">Our Philosophy</div>
-            <h2 class="text-3xl md:text-4xl font-extrabold">Why We Created HiganveinOS</h2>
-            <div class="space-y-4 text-slate-300 text-base md:text-lg leading-relaxed">
-                <p>
-                    Most Linux distributions force you to choose between blistering gaming performance and a gorgeous, modern desktop aesthetic. We refused that compromise.
-                </p>
-                <p>
-                    <strong>HiganveinOS</strong> was built for developers, gamers, and ricing enthusiasts who demand absolute raw speed without sacrificing visual identity. By fusing the compiler optimizations of the <span class="text-red-400 font-semibold">CachyOS Kernel</span> with the fluid tiling power of <span class="text-purple-400 font-semibold">Hyprland</span> and an iconic Dark Fantasy aesthetic, HiganveinOS delivers a turnkey powerhouse straight out of the box.
-                </p>
-                <p>
-                    No bloat, universal hardware compatibility (Legacy & UEFI), built-in ZRAM optimization for portable USB drives, and an instant GUI installer via Calamares. It's Arch Linux perfected for the modern era.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Grid -->
-    <section id="features" class="py-20 px-6 max-w-7xl mx-auto">
-        <div class="text-center space-y-4 mb-16">
-            <h2 class="text-3xl font-bold">Engineered for Extremes</h2>
-            <p class="text-slate-400">Everything you love about Arch, supercharged.</p>
-        </div>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-red-500/50 transition shadow-xl">
-                <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-xl mb-6">⚡</div>
-                <h3 class="text-xl font-semibold mb-3">CachyOS Kernel</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Optimized scheduler and compiler flags designed for maximum FPS in games and lightning-fast responsiveness.</p>
-            </div>
-            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-purple-500/50 transition shadow-xl">
-                <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-xl mb-6">🪟</div>
-                <h3 class="text-xl font-semibold mb-3">Hyprland & Caelestia</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Dynamic tiling Wayland compositor paired with the sleek Caelestia shell for an unmatched desktop experience.</p>
-            </div>
-            <div class="p-8 rounded-2xl bg-cardbg border border-zinc-800/80 hover:border-pink-500/50 transition shadow-xl">
-                <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center font-bold text-xl mb-6">🚀</div>
-                <h3 class="text-xl font-semibold mb-3">Limine Bootloader</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Blazing fast modern bootloader replacing legacy GRUB for instant and reliable system boot times.</p>
+                <a href="#download" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-purple-600/30">Download ISO (3.3 GB)</a>
+                <a href="features.html" class="px-8 py-4 font-bold bg-zinc-900 border border-zinc-800 text-slate-200 rounded-xl hover:bg-zinc-800 transition">Explore Features</a>
             </div>
         </div>
     </section>
@@ -189,9 +87,9 @@
             <h2 class="text-3xl font-bold">Get HiganveinOS ISO</h2>
             <p class="text-slate-400 max-w-xl mx-auto">Flash to a USB drive, boot into the live Hyprland environment, and install via Calamares in minutes.</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <a href="https://huggingface.co/datasets/fryss/HiganveinOS-ISO/resolve/main/higanvein-x86_64.iso" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl hover:opacity-90 transition shadow-lg shadow-purple-600/30">Download Latest ISO (x86_64)</a>
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/nexusarch-x86_64.iso" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl hover:opacity-90 transition shadow-lg shadow-purple-600/30">Download Latest ISO (x86_64)</a>
             </div>
-            <p class="text-xs text-slate-500 pt-2">SHA256 checksum verified • Rolling release</p>
+            <p class="text-xs text-slate-500 pt-2">SHA256 checksum verified • Rolling release • Universal BIOS & UEFI</p>
         </div>
     </section>
 

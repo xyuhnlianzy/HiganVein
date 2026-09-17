@@ -10,4 +10,8 @@ airootfs_image_type="squashfs"
 airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '3')
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
+  ["/etc/sudoers.d"]="0:0:750"
+  ["/etc/sudoers.d/00-wheel-nopasswd"]="0:0:440"
+  ["/home/higan"]="1000:1000:755"
+  ["/home/higan/.profile"]="1000:1000:644"
 )

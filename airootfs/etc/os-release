@@ -1,0 +1,10 @@
+NAME="HiganveinOS"
+PRETTY_NAME="HiganveinOS Linux"
+ID=higanveinos
+ID_LIKE="cachyos arch"
+BUILD_ID=rolling
+ANSI_COLOR="38;2;220;38;38"
+HOME_URL="https://github.com/xyuhnlianzy/HiganveinOS"
+SUPPORT_URL="https://github.com/xyuhnlianzy/HiganveinOS/issues"
+BUG_REPORT_URL="https://github.com/xyuhnlianzy/HiganveinOS/issues"
+LOGO=higanveinos

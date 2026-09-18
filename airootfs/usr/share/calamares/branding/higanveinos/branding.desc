@@ -1,0 +1,30 @@
+---
+componentName: higanveinos
+welcomeStyleCalamares: false
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 1000px,620px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+strings:
+    productName: HiganveinOS
+    shortProductName: HiganveinOS
+    version: Development Build
+    shortVersion: Development
+    versionedName: HiganveinOS Development Build
+    shortVersionedName: HiganveinOS Development
+    bootloaderEntryName: HiganveinOS
+    supportUrl: ""
+    knownIssuesUrl: ""
+    releaseNotesUrl: ""
+    donateUrl: ""
+images:
+    productLogo: logo.svg
+    productIcon: logo.svg
+    productWelcome: logo.svg
+style:
+    SidebarBackground: "#12090c"
+    SidebarText: "#f4f4f5"
+    SidebarTextCurrent: "#ffffff"
+    SidebarBackgroundCurrent: "#991b1b"

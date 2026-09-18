@@ -105,10 +105,12 @@ class WelcomeDialog(QWidget):
         self.setLayout(layout)
 
     def launch_installer(self):
+        # Calamares policy authorizes this exact binary for GUI pkexec.
         try:
-            subprocess.Popen(["calamares_polkit"])
-        except Exception:
-            subprocess.Popen(["pkexec", "calamares"])
+            subprocess.Popen(["pkexec", "/usr/bin/calamares"])
+        except OSError as error:
+            self.setWindowTitle(f"Installer failed to start: {error}")
+            return
         self.close()
 
 if __name__ == "__main__":

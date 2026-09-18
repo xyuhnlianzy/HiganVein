@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">HiganveinOS H-Arch emblem</title>
+  <desc id="desc">A crimson H monogram framed by an Arch-inspired mountain peak.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#18181b"/>
+      <stop offset="1" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="crimson" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fb7185"/>
+      <stop offset="0.45" stop-color="#ef4444"/>
+      <stop offset="1" stop-color="#991b1b"/>
+    </linearGradient>
+    <linearGradient id="peak" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f4f5"/>
+      <stop offset="1" stop-color="#a1a1aa"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="12" y="12" width="488" height="488" rx="100" fill="none" stroke="#3f3f46" stroke-width="4"/>
+
+  <!-- Higanbana crimson aura -->
+  <path d="M256 58 445 405H67L256 58Z" fill="#dc2626" opacity=".13" filter="url(#glow)"/>
+
+  <!-- Arch-inspired outer peak; original geometric rendering -->
+  <path d="M256 66 454 421h-76L256 198 134 421H58L256 66Z" fill="url(#peak)" opacity=".92"/>
+  <path d="M256 120 327 248l-71-47-71 47 71-128Z" fill="#fafafa"/>
+
+  <!-- Higanvein H monogram -->
+  <g fill="url(#crimson)" stroke="#fecdd3" stroke-width="3" stroke-linejoin="round" filter="url(#glow)">
+    <path d="M144 248h58v-78h50v78h58v-78h50v172h-50v-50h-58v50h-50v-50h-58v50H94V170h50v78Zm58 0v44h58v-44h-58Z"/>
+  </g>
+
+  <!-- Small red spider-lily inspired marks -->
+  <g stroke="#ef4444" stroke-width="5" stroke-linecap="round" opacity=".85">
+    <path d="M88 397c19-24 39-24 58 0M102 410c17-14 31-14 44 0M366 397c19-24 39-24 58 0M366 410c17-14 31-14 44 0"/>
+  </g>
+</svg>

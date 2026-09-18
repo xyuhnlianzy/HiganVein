@@ -21,4 +21,5 @@ file_permissions=(
   ["/etc/passwd"]="0:0:644"
   ["/etc/issue"]="0:0:644"
   ["/etc/os-release"]="0:0:644"
+  ["/home/higan/.config/fastfetch/config.jsonc"]="1000:1000:644"
 )

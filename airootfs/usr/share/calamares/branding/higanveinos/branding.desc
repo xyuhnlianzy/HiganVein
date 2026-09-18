@@ -22,7 +22,9 @@ strings:
 images:
     productLogo: logo.svg
     productIcon: logo.svg
-    productWelcome: logo.svg
+    productBanner: banner.jpg
+    productWelcome: welcome.jpg
+    productWallpaper: wallpaper.jpg
 style:
     SidebarBackground: "#12090c"
     SidebarText: "#f4f4f5"

@@ -1,0 +1,27 @@
+QWidget {
+    color: #f4f4f5;
+    background-color: #090709;
+}
+QFrame#sidebarApp, QWidget#sidebarApp {
+    background-color: #12090c;
+    border-right: 1px solid #5f171f;
+}
+QPushButton {
+    background-color: #7f1d1d;
+    color: #ffffff;
+    border: 1px solid #ef4444;
+    border-radius: 6px;
+    min-height: 30px;
+    padding: 4px 14px;
+}
+QPushButton:hover {
+    background-color: #991b1b;
+}
+QPushButton:disabled {
+    background-color: #27272a;
+    color: #71717a;
+    border-color: #3f3f46;
+}
+QLabel#productName {
+    color: #fca5a5;
+}

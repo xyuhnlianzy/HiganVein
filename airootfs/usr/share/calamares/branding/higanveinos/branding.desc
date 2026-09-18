@@ -30,3 +30,4 @@ style:
     SidebarText: "#f4f4f5"
     SidebarTextCurrent: "#ffffff"
     SidebarBackgroundCurrent: "#991b1b"
+slideshow: "show.qml"

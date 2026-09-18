@@ -17,4 +17,8 @@ file_permissions=(
   ["/usr/local/bin/higan-welcome"]="0:0:755"
   ["/usr/local/bin/pacman"]="0:0:755"
   ["/usr/local/bin/neofetch"]="0:0:755"
+  ["/etc/group"]="0:0:644"
+  ["/etc/passwd"]="0:0:644"
+  ["/etc/issue"]="0:0:644"
+  ["/etc/os-release"]="0:0:644"
 )

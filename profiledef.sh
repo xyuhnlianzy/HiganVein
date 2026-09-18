@@ -14,4 +14,6 @@ file_permissions=(
   ["/etc/sudoers.d/00-wheel-nopasswd"]="0:0:440"
   ["/home/higan"]="1000:1000:755"
   ["/home/higan/.profile"]="1000:1000:644"
+  ["/usr/local/bin/higan-welcome"]="0:0:755"
+  ["/usr/local/bin/pacman"]="0:0:755"
 )

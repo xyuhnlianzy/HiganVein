@@ -15,24 +15,15 @@ cava
 git
 networkmanager
 
-# --- Window Managers & Desktops ---
-hyprland
-sway
-i3-wm
+# --- Desktop Environment (KDE Plasma Only) ---
 plasma-meta
-gnome
-
-# --- Shell, Panel & Utilities ---
-waybar
-wofi
-rofi
-kitty
-alacritty
-firefox
 sddm
-gdm
+
+# --- Graphical Installer & System Tools ---
 calamares
 zram-generator
+firefox
+kitty
 
 # --- Audio & Multimedia ---
 alsa-utils
@@ -60,7 +51,7 @@ tar
 zip
 unzip
 
-# --- Ricing & Aesthetics ---
+# --- Aesthetics & Fonts ---
 papirus-icon-theme
 ttf-jetbrains-mono-nerd
 ttf-fira-code
@@ -69,21 +60,11 @@ kvantum
 qt5ct
 qt6ct
 
-# --- Caelestia Shell & Dev Deps ---
-brightnessctl
-playerctl
-grim
-slurp
-wl-clipboard
-jq
-typescript
-nodejs
-npm
+# --- GUI Apps & Pop-up Helper Deps ---
+python-pyqt6
 python-gobject
 gtk3
 gtk4
 libadwaita
-gst-plugins-good
-gst-plugins-bad
-gst-libav
+jq
 uv

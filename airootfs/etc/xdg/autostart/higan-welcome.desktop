@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=HiganveinOS Welcome
+Comment=Welcome to HiganveinOS
+Exec=/usr/local/bin/higan-welcome
+Icon=preferences-desktop
+Terminal=false
+Categories=System;

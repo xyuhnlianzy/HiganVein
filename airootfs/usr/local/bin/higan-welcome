@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+import sys
+import subprocess
+from PyQt6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QFrame
+)
+from PyQt6.QtCore import Qt
+
+class WelcomeDialog(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        self.setWindowTitle("Welcome to HiganveinOS")
+        self.setFixedSize(540, 420)
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #0c0c0e;
+                color: #f4f4f5;
+                font-family: sans-serif;
+            }
+            QLabel#title {
+                font-size: 24px;
+                font-weight: 800;
+                color: #ef4444;
+            }
+            QLabel#subtitle {
+                font-size: 13px;
+                color: #a1a1aa;
+            }
+            QFrame#card {
+                background-color: #18181b;
+                border: 1px solid #27272a;
+                border-radius: 12px;
+                padding: 16px;
+            }
+            QPushButton#install_btn {
+                background-color: #dc2626;
+                color: white;
+                font-weight: 700;
+                font-size: 15px;
+                padding: 12px 20px;
+                border-radius: 8px;
+                border: none;
+            }
+            QPushButton#install_btn:hover {
+                background-color: #b91c1c;
+            }
+            QPushButton#close_btn {
+                background-color: #27272a;
+                color: #d4d4d8;
+                font-size: 13px;
+                padding: 8px 16px;
+                border-radius: 6px;
+                border: none;
+            }
+            QPushButton#close_btn:hover {
+                background-color: #3f3f46;
+            }
+        """)
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(28, 28, 28, 28)
+        layout.setSpacing(16)
+
+        title = QLabel("HiganveinOS Live Session")
+        title.setObjectName("title")
+        subtitle = QLabel("Engineered on CachyOS Kernel & Arch Linux foundation.")
+        subtitle.setObjectName("subtitle")
+        layout.addWidget(title)
+        layout.addWidget(subtitle)
+
+        card = QFrame()
+        card.setObjectName("card")
+        card_layout = QVBoxLayout(card)
+        card_layout.setSpacing(10)
+
+        info_text = QLabel(
+            "<b>Live Environment Notice:</b><br>"
+            "This environment is read-only for evaluation. Package installation and system "
+            "modifications via terminal are restricted.<br><br>"
+            "To unlock full package management, custom desktop environments, user accounts, "
+            "and persistent ricing, install HiganveinOS to your hard drive using the installer below."
+        )
+        info_text.setWordWrap(True)
+        info_text.setStyleSheet("font-size: 12px; color: #d4d4d8; line-height: 1.4;")
+        card_layout.addWidget(info_text)
+        layout.addWidget(card)
+
+        btn_box = QHBoxLayout()
+        btn_box.setSpacing(12)
+
+        install_btn = QPushButton("Install HiganveinOS Now")
+        install_btn.setObjectName("install_btn")
+        install_btn.clicked.connect(self.launch_installer)
+        btn_box.addWidget(install_btn)
+
+        close_btn = QPushButton("Explore Live Desktop")
+        close_btn.setObjectName("close_btn")
+        close_btn.clicked.connect(self.close)
+        btn_box.addWidget(close_btn)
+
+        layout.addLayout(btn_box)
+        self.setLayout(layout)
+
+    def launch_installer(self):
+        try:
+            subprocess.Popen(["calamares_polkit"])
+        except Exception:
+            subprocess.Popen(["pkexec", "calamares"])
+        self.close()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = WelcomeDialog()
+    window.show()
+    sys.exit(app.exec())

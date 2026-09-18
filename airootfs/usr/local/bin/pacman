@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "HiganveinOS Live Environment is read-only."
+echo "Please install HiganveinOS to your disk to install/remove packages."
+exit 1

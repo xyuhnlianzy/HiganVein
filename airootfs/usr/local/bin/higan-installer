@@ -46,7 +46,12 @@ class InstallWorker(QThread):
 
             self.progress.emit(60, "Menyalin sistem HiganveinOS ke disk (rsync)...")
             # Salin live airootfs ke target
-            subprocess.run(["rsync", "-aAXH", "/run/archiso/bootmnt/arch/x86_64/airootfs/", "/mnt/higan-target/"], check=True)
+            subprocess.run([
+                "rsync", "-aAXH", 
+                "--exclude=/dev/*", "--exclude=/proc/*", "--exclude=/sys/*", 
+                "--exclude=/run/*", "--exclude=/tmp/*", "--exclude=/mnt/*",
+                "/", "/mnt/higan-target/"
+            ], check=True)
 
             self.progress.emit(80, "Konfigurasi fstab & bootloader (GRUB)...")
             with open("/mnt/higan-target/etc/fstab", "w") as f:

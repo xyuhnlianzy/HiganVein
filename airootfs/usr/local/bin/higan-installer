@@ -50,6 +50,7 @@ class InstallWorker(QThread):
                 "rsync", "-aAXH", 
                 "--exclude=/dev/*", "--exclude=/proc/*", "--exclude=/sys/*", 
                 "--exclude=/run/*", "--exclude=/tmp/*", "--exclude=/mnt/*",
+                "--exclude=/mnt/higan-target/*", "--exclude=/lost+found",
                 "/", "/mnt/higan-target/"
             ], check=True)
 

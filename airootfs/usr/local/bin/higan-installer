@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+import sys, os, subprocess, shutil
+from PyQt6.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QStackedWidget, QComboBox, QLineEdit, QProgressBar, QMessageBox, QFrame
+)
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
+
+class InstallWorker(QThread):
+    progress = pyqtSignal(int, str)
+    finished = pyqtSignal(bool, str)
+
+    def __init__(self, target_disk, username, password):
+        super().__init__()
+        self.target_disk = target_disk
+        self.username = username
+        self.password = password
+
+    def run(self):
+        try:
+            self.progress.emit(10, f"Memformat disk {self.target_disk}...")
+            # Partisi disk menggunakan sfdisk / mkfs
+            subprocess.run(["sgdisk", "--zap-all", self.target_disk], check=True)
+            subprocess.run(["parted", "-s", self.target_disk, "mklabel", "gpt"], check=True)
+            subprocess.run(["parted", "-s", self.target_disk, "mkpart", "esp", "fat32", "1MiB", "512MiB"], check=True)
+            subprocess.run(["parted", "-s", self.target_disk, "set", "1", "esp", "on"], check=True)
+            subprocess.run(["parted", "-s", self.target_disk, "mkpart", "root", "ext4", "512MiB", "100%"], check=True)
+            
+            # Format partisi
+            esp_part = f"{self.target_disk}1" if "nvme" in self.target_disk or "loop" in self.target_disk else f"{self.target_disk}1"
+            root_part = f"{self.target_disk}2" if "nvme" in self.target_disk or "loop" in self.target_disk else f"{self.target_disk}2"
+            
+            # Sesuaikan format nama partisi jika pakai angka
+            if "nvme" in self.target_disk or "loop" in self.target_disk or "mmcblk" in self.target_disk:
+                esp_part = f"{self.target_disk}p1"
+                root_part = f"{self.target_disk}p2"
+
+            self.progress.emit(30, "Memformat filesystem (FAT32 & EXT4)...")
+            subprocess.run(["mkfs.fat", "-F32", esp_part], check=True)
+            subprocess.run(["mkfs.ext4", "-F", root_part], check=True)
+
+            self.progress.emit(50, "Mounting target root & ESP...")
+            os.makedirs("/mnt/higan-target", exist_ok=True)
+            subprocess.run(["mount", root_part, "/mnt/higan-target"], check=True)
+            os.makedirs("/mnt/higan-target/boot/efi", exist_ok=True)
+            subprocess.run(["mount", esp_part, "/mnt/higan-target/boot/efi"], check=True)
+
+            self.progress.emit(60, "Menyalin sistem HiganveinOS ke disk (rsync)...")
+            # Salin live airootfs ke target
+            subprocess.run(["rsync", "-aAXH", "/run/archiso/bootmnt/arch/x86_64/airootfs/", "/mnt/higan-target/"], check=True)
+
+            self.progress.emit(80, "Konfigurasi fstab & bootloader (GRUB)...")
+            with open("/mnt/higan-target/etc/fstab", "w") as f:
+                f.write(f"# HiganveinOS Fstab\nUUID=$(blkid -s UUID -o value {root_part}) / ext4 defaults 0 1\n")
+                f.write(f"UUID=$(blkid -s UUID -o value {esp_part}) /boot/efi vfat umask=0077 0 2\n")
+
+            # Chroot install grub
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi", "--bootloader-id=HiganveinOS", "--recheck"], check=True)
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
+
+            self.progress.emit(95, "Membuat user & set password...")
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "useradd", "-m", "-G", "wheel", self.username], check=True)
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "chpasswd"], input=f"{self.username}:{self.password}\nroot:root\n".encode(), check=True)
+
+            self.progress.emit(100, "Instalasi Selesai!")
+            self.finished.emit(True, "HiganveinOS berhasil diinstal ke disk!")
+        except Exception as e:
+            self.finished.emit(False, str(e))
+
+class HiganInstallerApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+
+    def init_ui(self):
+        self.setWindowTitle("HiganveinOS Native Installer")
+        self.setFixedSize(700, 500)
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #0c0c0e;
+                color: #f4f4f5;
+                font-family: sans-serif;
+            }
+            QLabel#title {
+                font-size: 22px;
+                font-weight: 800;
+                color: #ef4444;
+            }
+            QFrame#card {
+                background-color: #18181b;
+                border: 1px solid #27272a;
+                border-radius: 12px;
+                padding: 16px;
+            }
+            QPushButton {
+                background-color: #dc2626;
+                color: white;
+                font-weight: 700;
+                padding: 10px 20px;
+                border-radius: 6px;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #b91c1c;
+            }
+            QLineEdit, QComboBox {
+                background-color: #27272a;
+                color: white;
+                border: 1px solid #3f3f46;
+                padding: 8px;
+                border-radius: 4px;
+            }
+        """)
+
+        layout = QVBoxLayout()
+        layout.setContentsMargins(30, 30, 30, 30)
+        layout.setSpacing(20)
+
+        title = QLabel("HiganveinOS Native Installer")
+        title.setObjectName("title")
+        layout.addWidget(title)
+
+        self.stack = QStackedWidget()
+        
+        # Step 1: Welcome & Disk Selection
+        page1 = QWidget()
+        p1_layout = QVBoxLayout(page1)
+        p1_layout.addWidget(QLabel("Pilih Target Disk Instalasi:"))
+        self.disk_combo = QComboBox()
+        # Deteksi disk lokal
+        disks = [f"/dev/{d}" for d in os.listdir("/sys/block") if d.startswith("sd") or d.startswith("nvme") or d.startswith("vd")]
+        if not disks:
+            disks = ["/dev/sda"]
+        self.disk_combo.addItems(disks)
+        p1_layout.addWidget(self.disk_combo)
+        
+        p1_layout.addWidget(QLabel("\nNama Pengguna (Username):"))
+        self.user_input = QLineEdit("higan")
+        p1_layout.addWidget(self.user_input)
+
+        p1_layout.addWidget(QLabel("Password:"))
+        self.pass_input = QLineEdit()
+        self.pass_input.setEchoMode(QLineEdit.EchoMode.Password)
+        p1_layout.addWidget(self.pass_input)
+
+        next_btn = QPushButton("Mulai Instalasi")
+        next_btn.clicked.connect(self.start_installation)
+        p1_layout.addWidget(next_btn)
+        self.stack.addWidget(page1)
+
+        # Step 2: Progress
+        page2 = QWidget()
+        p2_layout = QVBoxLayout(page2)
+        self.status_label = QLabel("Mempersiapkan instalasi...")
+        p2_layout.addWidget(self.status_label)
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setValue(0)
+        p2_layout.addWidget(self.progress_bar)
+        self.stack.addWidget(page2)
+
+        layout.addWidget(self.stack)
+        self.setLayout(layout)
+
+    def start_installation(self):
+        disk = self.disk_combo.currentText()
+        user = self.user_input.text().strip()
+        pwd = self.pass_input.text().strip()
+        if not user or not pwd:
+            QMessageBox.warning(self, "Error", "Username dan password tidak boleh kosong!")
+            return
+        
+        self.stack.setCurrentIndex(1)
+        self.worker = InstallWorker(disk, user, pwd)
+        self.worker.progress.connect(self.update_progress)
+        self.worker.finished.connect(self.installation_finished)
+        self.worker.start()
+
+    def update_progress(self, val, msg):
+        self.progress_bar.setValue(val)
+        self.status_label.setText(msg)
+
+    def installation_finished(self, success, msg):
+        if success:
+            QMessageBox.information(self, "Sukses", msg + "\nSilakan restart komputer Anda.")
+            sys.exit(0)
+        else:
+            QMessageBox.critical(self, "Gagal", f"Instalasi gagal: {msg}")
+            self.stack.setCurrentIndex(0)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = HiganInstallerApp()
+    window.show()
+    sys.exit(app.exec())
+    

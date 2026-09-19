@@ -9,6 +9,7 @@ pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
 airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '3')
 file_permissions=(
+  ["/usr/local/bin/higan-installer"]="0:0:755"
   ["/usr/local/bin/higan-launch-calamares.sh"]="0:0:755"
   ["/etc/shadow"]="0:0:400"
   ["/etc/sudoers.d"]="0:0:750"

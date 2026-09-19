@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=HiganveinOS Installer
+Name=HiganveinOS Native Installer
 Comment=Install HiganveinOS
-Exec=/usr/local/bin/higan-launch-calamares.sh
+Exec=sudo /usr/local/bin/higan-installer
 Icon=drive-harddisk
 Terminal=false
 Categories=System;

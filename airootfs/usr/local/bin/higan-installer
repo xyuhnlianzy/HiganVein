@@ -96,7 +96,7 @@ class InstallWorker(QThread):
 
             self.current_pct = 85
             self.current_msg = "Install Bootloader (GRUB) & User..."
-            subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi", "--bootloader-id=HiganveinOS", "--recheck"], check=True)
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi", "--bootloader-id=HiganveinOS", "--removable", "--recheck"], check=True)
             subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
 
             # User setup

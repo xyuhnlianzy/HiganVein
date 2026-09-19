@@ -44,6 +44,11 @@ edk2-shell
 mtools
 dosfstools
 ntfs-3g
+btrfs-progs
+xfsprogs
+gptfdisk
+intel-ucode
+amd-ucode
 curl
 wget
 rsync

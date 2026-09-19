@@ -2,7 +2,7 @@
 Type=Application
 Name=HiganveinOS Installer
 Comment=Install HiganveinOS
-Exec=sudo /usr/bin/calamares
+Exec=/usr/local/bin/higan-launch-calamares.sh
 Icon=drive-harddisk
 Terminal=false
 Categories=System;

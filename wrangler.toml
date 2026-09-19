@@ -1,4 +1,5 @@
-main = "workers-site/index.js"
+name = "higanveinos"
+compatibility_date = "2026-01-01"
 
-[site]
-bucket = "public"
+[assets]
+directory = "./public"

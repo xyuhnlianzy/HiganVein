@@ -1,108 +1,70 @@
-
-
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <title>HiganveinOS — Performance & Ricing Perfected</title>
+    <title>HiganveinOS — Blazing Fast, Stunningly Riced Linux Distro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#09090b',
-                        cardbg: '#121214',
-                        accent: '#ef4444',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .split-bg {
-            background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(9, 9, 11, 0.96) 45%, rgba(9, 9, 11, 0.96) 55%, rgba(124, 58, 237, 0.2) 100%);
-        }
-        @keyframes portalPulse {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-        }
-        .portal-glow {
-            animation: portalPulse 6s ease-in-out infinite;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden split-bg">
-    <!-- Central Portal Glow Bridging Top & Bottom -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gradient-to-r from-red-600/25 via-pink-500/15 to-purple-600/25 blur-[150px] pointer-events-none -z-10 portal-glow rounded-full"></div>
-
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <img src="logo.svg" alt="HiganveinOS Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-600/30 border border-zinc-700">
-                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-white to-purple-500 bg-clip-text text-transparent">HiganveinOS</span>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-zinc-900 flex items-center justify-center border border-red-500/30 text-white font-extrabold text-lg">H</div>
+                <span class="text-xl font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="index.html" class="text-red-400 font-semibold transition">Home</a>
-                <a href="features.html" class="hover:text-red-400 transition">Features</a>
-                <a href="docs.html" class="hover:text-red-400 transition">Docs</a>
-                <a href="about.html" class="hover:text-red-400 transition">About</a>
-            </div>
-            <div>
-                <a href="index.html#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get ISO</a>
-            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-zinc-400">
+                <a href="index.html" class="text-white font-semibold transition">Home</a>
+                <a href="features.html" class="hover:text-white transition">Features</a>
+                <a href="changes.html" class="hover:text-white transition">Changelog</a>
+                <a href="docs.html" class="hover:text-white transition">Docs</a>
+                <a href="about.html" class="hover:text-white transition">About</a>
+            </nav>
+            <span class="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-xl font-semibold text-sm border border-zinc-700">Alpha In Testing</span>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-24 px-6 relative">
-        <div class="max-w-5xl mx-auto text-center space-y-8">
-            <div class="relative flex justify-center mb-6">
-                <div class="absolute -inset-4 bg-gradient-to-r from-red-600 to-purple-600 rounded-[2.5rem] blur-xl opacity-50 portal-glow"></div>
-                <img src="logo.svg" alt="HiganveinOS Emblem" class="relative w-44 h-44 rounded-3xl shadow-2xl shadow-black/80 border-2 border-zinc-700 hover:scale-105 transition duration-500">
+    <main class="max-w-5xl mx-auto px-6 py-20 text-center flex-grow">
+        <!-- Alpha Notice Banner -->
+        <div class="max-w-3xl mx-auto mb-12 bg-gradient-to-br from-red-950/60 to-zinc-900/90 border border-red-600/40 rounded-2xl p-6 text-left shadow-2xl">
+            <div class="flex items-center space-x-3 mb-3">
+                <span class="bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider">Alpha Notice</span>
+                <h3 class="text-red-400 font-bold text-lg">HiganveinOS Alpha Version Coming Soon</h3>
             </div>
-
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-semibold text-rose-400 shadow-lg">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                <span>Development Build • Not Stable • Testing In Progress</span>
-            </div>
-            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
-                Blazing Fast. <span class="bg-gradient-to-r from-red-500 via-purple-400 to-white bg-clip-text text-transparent">Stunningly Riced.</span>
-            </h1>
-            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
-                A custom Linux distribution built on Arch Linux and CachyOS kernel foundations, with KDE Plasma and universal BIOS/UEFI boot support. Still under active testing.
+            <p class="text-zinc-300 text-sm leading-relaxed mb-3">
+                Kami mohon maaf jika Anda menemui kendala stabilitas. Saat ini kami sedang melakukan pengujian ketat UEFI, Legacy BIOS, VirtualBox, QEMU, dan <strong>Native Python Installer</strong> baru kami sebelum rilis publik resmi.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <a href="#download" class="px-8 py-4 font-bold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl hover:opacity-90 transition shadow-xl shadow-purple-600/30">Development Status</a>
-                <a href="features.html" class="px-8 py-4 font-bold bg-zinc-900 border border-zinc-800 text-slate-200 rounded-xl hover:bg-zinc-800 transition">Explore Features</a>
-            </div>
+            <a href="changes.html" class="inline-flex items-center text-xs font-bold text-red-400 hover:text-red-300 transition">
+                Lihat detail Changelog & Perbaikan &rarr;
+            </a>
         </div>
-    </section>
 
-    <!-- Download Section -->
-    <section id="download" class="py-20 px-6 max-w-4xl mx-auto text-center">
-        <div class="p-10 md:p-16 rounded-3xl bg-gradient-to-b from-cardbg to-zinc-900 border border-zinc-800 space-y-6 shadow-2xl relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-r from-red-600/10 via-transparent to-purple-600/10 pointer-events-none"></div>
-            <div class="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-300">Public release paused</div>
-            <h2 class="text-3xl font-bold">HiganveinOS Is In Development</h2>
-            <p class="text-slate-400 max-w-xl mx-auto">Current ISO builds are internal testing images. Do not install them on a main machine. Public download returns after UEFI, Legacy BIOS, VirtualBox, QEMU, and full Calamares disk-install tests pass.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                <span aria-disabled="true" class="cursor-not-allowed px-8 py-4 font-bold bg-zinc-800 text-zinc-400 rounded-xl border border-zinc-700">Public ISO — Not Available Yet</span>
-            </div>
-            <div class="mx-auto max-w-2xl rounded-xl border border-red-500/20 bg-red-950/20 px-5 py-4 text-left text-sm leading-relaxed text-slate-300">
-                <strong class="text-red-300">Kami minta maaf.</strong> HiganveinOS belum stabil untuk penggunaan publik. Kami sedang menguji dan memperbaiki setiap build sampai boot, jaringan, installer, dan pengalaman desktop benar-benar siap dipakai dengan aman. Terima kasih sudah menunggu.
-            </div>
-            <p class="text-xs text-slate-500 pt-2">Testing milestones: UEFI boot • Legacy BIOS boot • QEMU • VirtualBox • Calamares installation</p>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
+            Blazing Fast. <span class="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">Stunningly Riced.</span>
+        </h1>
+        <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+            Custom Linux distribution engineered on top of the ultra-optimized CachyOS Kernel & Arch Linux foundation, featuring KDE Plasma, ZRAM 2x compression, and custom Higan Void aesthetics.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <span class="bg-red-600/30 border border-red-500/50 text-red-300 px-8 py-4 rounded-2xl font-bold text-base cursor-not-allowed">
+                Public Release Paused (Testing)
+            </span>
+            <a href="changes.html" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 px-8 py-4 rounded-2xl font-bold text-base transition">
+                View Changelog
+            </a>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-zinc-800 text-center text-sm text-slate-500">
-        <p>&copy; 2026 HiganveinOS Project. Built with Arch Linux & CachyOS.</p>
+    <footer class="border-t border-zinc-800 bg-zinc-950/50 py-8 text-center text-xs text-zinc-500">
+        <p>&copy; 2026 HiganveinOS Project. Powered by CachyOS Kernel & Arch Linux base.</p>
     </footer>
 </body>
 </html>

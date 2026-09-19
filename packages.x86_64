@@ -69,3 +69,6 @@ libadwaita
 jq
 uv
 limine
+gdisk
+parted
+e2fsprogs

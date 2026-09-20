@@ -6,7 +6,7 @@ linux-cachyos
 linux-cachyos-headers
 linux-firmware
 sof-firmware
-broadcom-wl
+broadcom-wl-dkms
 bluez
 bluez-utils
 gamemode

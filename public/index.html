@@ -25,7 +25,24 @@
                 <a href="docs.html" class="hover:text-white transition">Docs</a>
                 <a href="about.html" class="hover:text-white transition">About</a>
             </nav>
-            <span class="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-xl font-semibold text-sm border border-zinc-700">Alpha In Testing</span>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition shadow-lg shadow-red-600/30">
+                    Get ISO
+                </a>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-6 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-3">
+            <a href="index.html" class="block text-white font-semibold py-1">Home</a>
+            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
+            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
+            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
+            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="block text-center bg-red-600 text-white py-2.5 rounded-xl font-bold mt-2">Get ISO</a>
         </div>
     </header>
 
@@ -45,26 +62,34 @@
             </a>
         </div>
 
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
+        <h1 class="text-4xl md:text-7xl font-extrabold text-white tracking-tight mb-6">
             Blazing Fast. <span class="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">Stunningly Riced.</span>
         </h1>
-        <p class="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p class="text-base md:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
             Custom Linux distribution engineered on top of the ultra-optimized CachyOS Kernel & Arch Linux foundation, featuring KDE Plasma, ZRAM 2x compression, and custom Higan Void aesthetics.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-bold text-base transition shadow-lg shadow-red-600/30">
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-2xl font-bold text-base transition shadow-lg shadow-red-600/30 text-center">
                 Download ISO (Beta)
             </a>
-            <a href="changes.html" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 px-8 py-4 rounded-2xl font-bold text-base transition">
+            <a href="changes.html" class="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 px-8 py-4 rounded-2xl font-bold text-base transition text-center">
                 View Changelog
             </a>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/50 py-8 text-center text-xs text-zinc-500">
+    <footer class="border-t border-zinc-800 bg-zinc-950/50 py-8 text-center text-xs text-zinc-500 px-6">
         <p>&copy; 2026 HiganveinOS Project. Powered by CachyOS Kernel & Arch Linux base.</p>
     </footer>
+
+    <script>
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

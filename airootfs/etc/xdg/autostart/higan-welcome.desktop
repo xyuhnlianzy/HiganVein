@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=HiganveinOS Native Installer
+Name=HiganveinOS Installer
 Comment=Install HiganveinOS
 Exec=sudo /usr/local/bin/higan-installer
 Icon=drive-harddisk

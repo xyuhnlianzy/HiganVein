@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Install HiganveinOS
+GenericName=Live System Installer
+Comment=Install HiganveinOS to hard drive, SSD, or USB drive
+Exec=sudo /usr/local/bin/higan-installer
+Icon=drive-harddisk
+Terminal=false
+Categories=System;
+StartupNotify=true

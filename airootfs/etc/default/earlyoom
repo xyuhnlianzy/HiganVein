@@ -1,0 +1,2 @@
+# Options for earlyoom
+EARLYOOM_ARGS="-m 5 -s 10 -r 60 --avoid '(^|/)(systemd|sddm|kwin|plasma|Xorg)$' --prefer '(^|/)(Web Content|firefox|chrome|electron)$'"

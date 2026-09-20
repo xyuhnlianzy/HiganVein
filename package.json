@@ -4,5 +4,8 @@
   "private": true,
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.3.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.135.0"
   }
 }

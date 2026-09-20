@@ -2,4 +2,7 @@
 /out/
 .DS_Store
 upload_hf.py
-upload_hf.py
+node_modules/
+disk.img
+changelog_full.txt
+.env

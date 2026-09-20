@@ -1,5 +1,3 @@
 #!/bin/bash
-# Tunggu sebentar sampai KWin/Wayland & Polkit agent siap
 sleep 3
-# Jalankan calamares (user higan sudoers nopasswd atau langsung root jika via sddm autologin root)
-sudo /usr/bin/calamares || /usr/bin/calamares
+sudo /usr/bin/calamares -b /etc/calamares/branding/higanveinos/branding.desc || /usr/bin/calamares -b /etc/calamares/branding/higanveinos/branding.desc

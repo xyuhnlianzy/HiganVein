@@ -5,94 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation — HiganveinOS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#09090b',
-                        cardbg: '#121214',
-                        accent: '#ef4444',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .split-bg {
-            background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(9, 9, 11, 0.96) 45%, rgba(9, 9, 11, 0.96) 55%, rgba(124, 58, 237, 0.2) 100%);
-        }
+        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden split-bg">
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <img src="logo.svg" alt="HiganveinOS Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-600/30 border border-zinc-700">
-                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-white to-purple-500 bg-clip-text text-transparent">HiganveinOS</span>
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
+                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="index.html" class="hover:text-red-400 transition">Home</a>
-                <a href="features.html" class="hover:text-red-400 transition">Features</a>
-                <a href="docs.html" class="text-red-400 font-semibold transition">Docs</a>
-                <a href="about.html" class="hover:text-red-400 transition">About</a>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
+                <a href="index.html" class="hover:text-white transition">Home</a>
+                <a href="features.html" class="hover:text-white transition">Features</a>
+                <a href="changes.html" class="hover:text-white transition">Changelog</a>
+                <a href="docs.html" class="text-white font-semibold">Docs</a>
+                <a href="about.html" class="hover:text-white transition">About</a>
+            </nav>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                    Download ISO
+                </a>
             </div>
-            <div>
-                <a href="index.html#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get ISO</a>
-            </div>
+            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
-    </nav>
-
-    <!-- Docs Section -->
-    <section class="pt-32 pb-20 px-6 max-w-4xl mx-auto space-y-12">
-        <div class="text-center space-y-4">
-            <div class="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-semibold uppercase tracking-wider">Installation & Guide</div>
-            <h1 class="text-4xl md:text-5xl font-extrabold">Documentation</h1>
-            <p class="text-slate-400">Documentation is being prepared alongside testing. HiganveinOS is not stable yet.</p>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
+            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
+            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
+            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
+            <a href="docs.html" class="block text-white font-semibold py-1">Docs</a>
+            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
         </div>
+    </header>
 
-        <!-- Step 1 -->
-        <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold">1</div>
-                <h3 class="text-xl font-semibold">Flashing the ISO to a Flash Drive</h3>
-            </div>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Public ISO downloads are not available yet. When stable release is announced, use <strong class="text-white">Ventoy</strong> (recommended for multi-boot), Rufus (DD mode), or <code class="text-red-400">dd</code> in Linux.
-            </p>
-            <div class="bg-zinc-950 p-4 rounded-xl font-mono text-xs text-red-300 border border-zinc-800">
-                sudo dd if=higanveinos-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync
-            </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
-                <h3 class="text-xl font-semibold">Booting into Live Environment</h3>
-            </div>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Plug your USB drive into your target PC/Laptop (supports both Legacy BIOS and UEFI). Enter your BIOS/Boot Menu during startup and select the USB drive. You will be greeted by our custom bootloader with the HiganveinOS live entry.
-            </p>
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 py-14 flex-grow space-y-10">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Installation Guide</h1>
+            <p class="text-zinc-400 text-sm">Step-by-step instructions for flashing and installing HiganveinOS.</p>
         </div>
 
-        <!-- Step 3 -->
-        <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-pink-600 text-white flex items-center justify-center font-bold">3</div>
-                <h3 class="text-xl font-semibold">Installing via Higan-Installer</h3>
+        <div class="space-y-6 text-sm">
+            <!-- Step 1 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-3">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 1</div>
+                <h3 class="text-white font-bold text-base">Write ISO to USB Media</h3>
+                <p class="text-zinc-400 leading-relaxed text-xs">
+                    Flash the downloaded ISO image using Ventoy, Rufus (in DD image mode), or directly via Linux terminal:
+                </p>
+                <div class="bg-zinc-950 p-3 rounded-lg font-mono text-xs text-zinc-300 border border-zinc-800 overflow-x-auto">
+                    sudo dd if=higanveinos-2026.09.20-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync
+                </div>
             </div>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Once stable release is announced, boot into the KDE Plasma live desktop and start Calamares from HiganveinOS Welcome. It will guide partitioning, user account setup, password setup, and installation.
-            </p>
+
+            <!-- Step 2 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-3">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 2</div>
+                <h3 class="text-white font-bold text-base">Booting Live Environment</h3>
+                <p class="text-zinc-400 leading-relaxed text-xs">
+                    Insert the USB drive into your target machine. Select the drive in your BIOS/UEFI boot selector. 
+                    Both standard UEFI and Legacy BIOS hardware platforms are supported out of the box.
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-3">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 3</div>
+                <h3 class="text-white font-bold text-base">Running Higan-Installer</h3>
+                <p class="text-zinc-400 leading-relaxed text-xs">
+                    Double-click the <b>Install HiganveinOS</b> icon on the desktop or launch it from the application menu. 
+                    Select your target drive and pick either:
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-xs text-zinc-400 pl-2">
+                    <li><b>Dual-Boot:</b> Adjust the slider to choose how many gigabytes to allocate without erasing your existing OS.</li>
+                    <li><b>Clean Wipe:</b> Dedicate 100% of the selected drive exclusively to HiganveinOS.</li>
+                </ul>
+            </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-zinc-800 text-center text-sm text-slate-500">
-        <p>&copy; 2026 HiganveinOS Project. Built with Arch Linux & CachyOS.</p>
+    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
+        <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>
     </footer>
+
+    <script>
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

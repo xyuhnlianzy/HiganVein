@@ -3,86 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HiganveinOS — Changes, Improvements & Fixes</title>
+    <title>Changelog — HiganveinOS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
+        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
     <!-- Navbar -->
     <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-zinc-900 flex items-center justify-center border border-red-500/30 text-white font-extrabold text-lg">H</div>
-                <span class="text-xl font-bold tracking-tight text-white">HiganveinOS</span>
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
+                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-zinc-400">
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
                 <a href="index.html" class="hover:text-white transition">Home</a>
                 <a href="features.html" class="hover:text-white transition">Features</a>
-                <a href="changes.html" class="text-red-500 font-semibold transition">Changelog</a>
+                <a href="changes.html" class="text-white font-semibold">Changelog</a>
                 <a href="docs.html" class="hover:text-white transition">Docs</a>
                 <a href="about.html" class="hover:text-white transition">About</a>
             </nav>
-            <a href="index.html" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-lg shadow-red-600/25">Back to Home</a>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                    Download ISO
+                </a>
+            </div>
+            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
+            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
+            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
+            <a href="changes.html" class="block text-white font-semibold py-1">Changelog</a>
+            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
+            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-16 flex-grow">
-        <div class="mb-12">
-            <span class="bg-red-950/80 text-red-400 border border-red-600/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Changelog & Status</span>
-            <h1 class="text-4xl font-extrabold text-white mt-4 tracking-tight">Changes, Improvements & Fixes</h1>
-            <p class="text-zinc-400 mt-2 text-base">Tracking all engineering milestones, core fixes, and custom implementations for HiganveinOS.</p>
+    <main class="max-w-3xl mx-auto px-6 py-14 flex-grow space-y-8">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Changelog & Technical Milestones</h1>
+            <p class="text-zinc-400 text-sm">Documenting core fixes, package changes, and installer architecture updates.</p>
         </div>
 
-        <div class="space-y-8">
-            <!-- Milestone Alpha v1.0 -->
-            <div class="bg-zinc-900/90 border border-zinc-800/80 rounded-2xl p-8 relative overflow-hidden shadow-xl">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-red-400 font-bold text-lg">Alpha Build v1.0-2026.09.19</span>
-                    <span class="bg-zinc-800 text-zinc-300 px-3 py-1 rounded-lg text-xs font-semibold">Latest Release</span>
+        <div class="space-y-6">
+            <!-- 2026.09.20 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-white font-bold text-base">Release 2026.09.20 (Public Beta)</span>
+                    <span class="bg-zinc-800 text-zinc-400 text-xs px-2.5 py-1 rounded">Current</span>
                 </div>
-                
-                <div class="space-y-6 text-sm text-zinc-300">
-                    <div>
-                        <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-red-500"></span> Native Python Installer (`higan-installer`)
-                        </h3>
-                        <p class="text-zinc-400 leading-relaxed">
-                            Menggantikan Calamares yang sering mengalami konflik dependensi C++ / Boost version mismatch. Installer baru ditulis kustom dengan PyQt6, mendeteksi disk lokal, mempartisi GPT/ESP, memformat partisi, rsync root dengan aman (mengecualikan virtual filesystem /dev, /proc, /sys), serta otomatis menginstal GRUB ke UEFI dan mendaftarkan user baru.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-red-500"></span> Graphical GRUB Bootloader & Legacy BIOS Rebranding
-                        </h3>
-                        <p class="text-zinc-400 leading-relaxed">
-                            Menghilangkan seluruh jejak identitas "Arch Linux" pada menu boot. Menambahkan custom graphical GRUB theme dengan background artwork Higan Void & Red Spider Lily, lengkap dengan startup banner eksklusif HiganveinOS Core v1.0.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-red-500"></span> Performance & Stability Improvements
-                        </h3>
-                        <ul class="list-disc list-inside space-y-1 text-zinc-400">
-                            <li>Integrasi otomatis ZRAM swap sebesar 2× RAM fisik dengan algoritma kompresi `zstd`.</li>
-                            <li>Mengaktifkan NetworkManager secara default pada systemd target live session.</li>
-                            <li>KDE Plasma sebagai satu-satunya default desktop environment yang di-rice dengan wallpaper eksklusif Higan Void.</li>
-                        </ul>
-                    </div>
-                </div>
+                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
+                    <li><b class="text-zinc-200">Higan-Installer v4.0 Pro:</b> Rewritten native PyQt6 wizard with interactive Dual-Boot storage slider, dynamic drive model queries, and live system safety filters.</li>
+                    <li><b class="text-zinc-200">Multi-Boot Integration:</b> Added os-prober and universal GRUB configuration supporting automated Windows, Linux, and BSD detection.</li>
+                    <li><b class="text-zinc-200">Kernel & Memory:</b> Upgraded to CachyOS BORE scheduler with earlyoom daemon protection and zstd ZRAM (2× RAM size).</li>
+                    <li><b class="text-zinc-200">Windows Compatibility Stack:</b> Integrated Wine runtime with 32-bit and 64-bit Vulkan drivers for out-of-the-box .exe execution.</li>
+                    <li><b class="text-zinc-200">Hardware Firmware:</b> Added Broadcom wireless DKMS, SOF audio firmware, and power-profiles-daemon for laptop battery management.</li>
+                </ul>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/50 py-8 text-center text-xs text-zinc-500">
-        <p>&copy; 2026 HiganveinOS Project. Powered by CachyOS Kernel & Arch Linux base.</p>
+    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
+        <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>
     </footer>
+
+    <script>
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

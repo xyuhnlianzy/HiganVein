@@ -5,91 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Features — HiganveinOS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#09090b',
-                        cardbg: '#121214',
-                        accent: '#ef4444',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .split-bg {
-            background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(9, 9, 11, 0.96) 45%, rgba(9, 9, 11, 0.96) 55%, rgba(124, 58, 237, 0.2) 100%);
-        }
+        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden split-bg">
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <img src="logo.svg" alt="HiganveinOS Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-600/30 border border-zinc-700">
-                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-white to-purple-500 bg-clip-text text-transparent">HiganveinOS</span>
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
+                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="index.html" class="hover:text-red-400 transition">Home</a>
-                <a href="features.html" class="text-red-400 font-semibold transition">Features</a>
-                <a href="docs.html" class="hover:text-red-400 transition">Docs</a>
-                <a href="about.html" class="hover:text-red-400 transition">About</a>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
+                <a href="index.html" class="hover:text-white transition">Home</a>
+                <a href="features.html" class="text-white font-semibold">Features</a>
+                <a href="changes.html" class="hover:text-white transition">Changelog</a>
+                <a href="docs.html" class="hover:text-white transition">Docs</a>
+                <a href="about.html" class="hover:text-white transition">About</a>
+            </nav>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                    Download ISO
+                </a>
             </div>
-            <div>
-                <a href="index.html#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get ISO</a>
-            </div>
+            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
-    </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
+            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
+            <a href="features.html" class="block text-white font-semibold py-1">Features</a>
+            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
+            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
+            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
+        </div>
+    </header>
 
-    <!-- Features Section -->
-    <section class="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-        <div class="text-center space-y-4 mb-16">
-            <div class="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold uppercase tracking-wider">Engineered for Extremes</div>
-            <h1 class="text-4xl md:text-6xl font-extrabold">System Features</h1>
-            <p class="text-slate-400 max-w-xl mx-auto">Development-build features. Interfaces and package selection may change before stable release.</p>
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-14 flex-grow space-y-8">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">System Specifications & Features</h1>
+            <p class="text-zinc-400 text-sm">Detailed components and technical choices in current HiganveinOS builds.</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-xl">⚡</div>
-                <h3 class="text-xl font-semibold">CachyOS Kernel</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Built with optimized compiler flags (-O3, BORE scheduler) for maximum FPS, lower latency, and blistering responsiveness.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">CachyOS Linux Kernel</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Custom x86-64-v3 optimized kernel with BORE (Burst-Oriented Response Enhancer) scheduler. Prioritizes desktop interactivity, input latency, and consistent frame rates under heavy background compilations or gaming.
+                </p>
             </div>
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold text-xl">🪟</div>
-                <h3 class="text-xl font-semibold">KDE Plasma Default</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">KDE Plasma is the only desktop environment included by default: familiar, complete, and practical for new Linux users.</p>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Native Python Installer (`higan-installer`)</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    In-house PyQt6 installer replacing Calamares. Includes interactive Dual-Boot storage allocation slider, drive model discovery, automatic GPT/ESP partition creation, rsync root installation, and multi-OS GRUB configuration.
+                </p>
             </div>
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center font-bold text-xl">🚀</div>
-                <h3 class="text-xl font-semibold">Preinstalled Tools for Larping & More</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Equipped with <code class="text-red-400">btop</code>, <code class="text-red-400">cava</code>, <code class="text-red-400">cmatrix</code>, and custom fastfetch with our Higanvein H-Arch logo.</p>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Memory & Swap Configuration</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Compressed RAM swap via zstd (2× physical RAM) configured via systemd-zram-generator. Paired with earlyoom daemon to prevent system lockups when physical memory reaches 90% threshold.
+                </p>
             </div>
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold text-xl">💾</div>
-                <h3 class="text-xl font-semibold">ZRAM Optimization</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Pre-configured ZRAM with zstd compression (50% RAM size) for butter-smooth multitasking, especially on portable USB drives.</p>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Windows Compatibility Layer</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Pre-installed Wine runtime with full 32-bit and 64-bit Vulkan graphics libraries (Mesa, Intel, AMD). MIME associations allow direct double-click execution of .exe and .msi binaries from Dolphin.
+                </p>
             </div>
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold text-xl">💿</div>
-                <h3 class="text-xl font-semibold">Higan-Installer v3 (Native PyQt6)</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Simple, click-through graphical installer to set up HiganveinOS onto your laptop or PC in minutes.</p>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Desktop & User Interface</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    KDE Plasma 6 on Wayland/X11 configured with a unified dark color scheme. Includes power-profiles-daemon for laptop battery switching, Kitty terminal, and pre-configured development toolchains.
+                </p>
             </div>
-            <div class="p-8 rounded-3xl bg-cardbg border border-zinc-800 shadow-xl space-y-4">
-                <div class="w-12 h-12 rounded-2xl bg-green-500/10 text-green-400 flex items-center justify-center font-bold text-xl">🛡️</div>
-                <h3 class="text-xl font-semibold">Universal Boot Support</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Full compatibility with both Legacy BIOS (Syslinux) and modern UEFI systems.</p>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Hardware & Network Support</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Broadcom wireless DKMS drivers, SOF modern audio firmware, active Bluetooth stack, and systemd-timesyncd with automatic IP geolocation timezone detection on initial setup.
+                </p>
             </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-zinc-800 text-center text-sm text-slate-500">
-        <p>&copy; 2026 HiganveinOS Project. Built with Arch Linux & CachyOS.</p>
+    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
+        <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>
     </footer>
+
+    <script>
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

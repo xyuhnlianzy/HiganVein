@@ -5,84 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About — HiganveinOS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#09090b',
-                        cardbg: '#121214',
-                        accent: '#ef4444',
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        .split-bg {
-            background: linear-gradient(180deg, rgba(220, 38, 38, 0.2) 0%, rgba(9, 9, 11, 0.96) 45%, rgba(9, 9, 11, 0.96) 55%, rgba(124, 58, 237, 0.2) 100%);
-        }
+        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 font-sans antialiased selection:bg-red-600 selection:text-white relative overflow-x-hidden split-bg">
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-darkbg/80 backdrop-blur-md border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <img src="logo.svg" alt="HiganveinOS Logo" class="w-10 h-10 rounded-xl shadow-lg shadow-red-600/30 border border-zinc-700">
-                <span class="text-xl font-extrabold tracking-wider bg-gradient-to-r from-red-500 via-white to-purple-500 bg-clip-text text-transparent">HiganveinOS</span>
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
+                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-slate-300">
-                <a href="index.html" class="hover:text-red-400 transition">Home</a>
-                <a href="features.html" class="hover:text-red-400 transition">Features</a>
-                <a href="docs.html" class="hover:text-red-400 transition">Docs</a>
-                <a href="about.html" class="text-red-400 font-semibold transition">About</a>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
+                <a href="index.html" class="hover:text-white transition">Home</a>
+                <a href="features.html" class="hover:text-white transition">Features</a>
+                <a href="changes.html" class="hover:text-white transition">Changelog</a>
+                <a href="docs.html" class="hover:text-white transition">Docs</a>
+                <a href="about.html" class="text-white font-semibold">About</a>
+            </nav>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                    Download ISO
+                </a>
             </div>
-            <div>
-                <a href="index.html#download" class="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:opacity-90 transition shadow-lg shadow-purple-600/20">Get ISO</a>
-            </div>
+            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
-    </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
+            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
+            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
+            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
+            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
+            <a href="about.html" class="block text-white font-semibold py-1">About</a>
+            <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
+        </div>
+    </header>
 
-    <!-- About Section -->
-    <section class="pt-32 pb-20 px-6 max-w-4xl mx-auto space-y-12">
-        <div class="text-center space-y-4">
-            <div class="inline-block px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-semibold uppercase tracking-wider">Our Identity & Philosophy</div>
-            <h1 class="text-4xl md:text-5xl font-extrabold">About HiganveinOS</h1>
-            <p class="text-slate-400">Born from solitude, dark fantasy aesthetics, and blistering performance.</p>
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 py-14 flex-grow space-y-8 text-zinc-300">
+        <div class="space-y-2">
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">About the Project</h1>
+            <p class="text-zinc-400 text-sm">Design goals, upstream acknowledgments, and development context.</p>
         </div>
 
-        <div class="p-10 md:p-14 rounded-3xl bg-cardbg border border-zinc-800 shadow-2xl space-y-6 leading-relaxed text-slate-300">
-            <h3 class="text-2xl font-bold text-white">The Origin of Higanvein</h3>
+        <div class="space-y-4 text-sm leading-relaxed">
+            <h2 class="text-white font-bold text-lg">Project Background</h2>
             <p>
-                <strong>HiganveinOS</strong> is forged for those who prefer quiet isolation, dark rooms bathed in minimal ambient light, and a system that operates with absolute precision without unnecessary noise. 
+                HiganveinOS is an independent operating system project created by Yu Dyan. The project started from a simple goal: 
+                having an Arch Linux installation with CachyOS kernel optimizations, predictable low-latency desktop responsiveness, 
+                and a clean multi-boot installer that does not break existing Windows partitions.
             </p>
             <p>
-                Taking inspiration from the quiet beauty of <span class="text-red-400 font-semibold">Red Spider Lilies (Higanbana)</span> and deep psychological anime narratives, HiganveinOS is built as a sanctuary away from social noise. It's a high-performance Arch-based operating system designed to give developers, gamers, and ricing enthusiasts total control over their hardware.
+                Rather than bundling dozens of default applications or marketing gimmicks, HiganveinOS focuses strictly on 
+                system-level tuning: BORE CPU scheduler, earlyoom memory protection, ZRAM swap, Wine binary associations, and hardware firmware.
             </p>
-            
-            <h3 class="text-2xl font-bold text-white pt-4">Upstream Acknowledgments & Credits</h3>
-            <p>
-                HiganveinOS stands firmly on the shoulders of incredible open-source engineering communities:
-            </p>
-            <ul class="list-disc list-inside space-y-2 text-slate-400 pl-4">
-                <li><strong class="text-white">Arch Linux Team:</strong> For providing the ultimate, modular rolling-release foundation (<a href="https://archlinux.org" target="_blank" class="text-red-400 hover:underline">archlinux.org</a>).</li>
-                <li><strong class="text-white">CachyOS Developers:</strong> For their extraordinary kernel optimizations, custom schedulers, and scheduler tuning that deliver extreme gaming and system performance (<a href="https://cachyos.org" target="_blank" class="text-red-400 hover:underline">cachyos.org</a>).</li>
-                <li><strong class="text-white">Hyprland & Wayland Ecosystem:</strong> For crafting the most fluid, modern tiling window manager.</li>
-                <li><strong class="text-white">Archiso Maintainers:</strong> For making customized live ISO creation accessible.</li>
+        </div>
+
+        <div class="space-y-4 text-sm leading-relaxed border-t border-zinc-800/80 pt-6">
+            <h2 class="text-white font-bold text-lg">Upstream Acknowledgments</h2>
+            <p class="text-zinc-400">HiganveinOS relies on the work of foundational open-source projects:</p>
+            <ul class="space-y-2 list-disc list-inside text-zinc-400">
+                <li><b class="text-white">Arch Linux</b> — Core rolling release package repository, packaging standards, and archiso tools.</li>
+                <li><b class="text-white">CachyOS</b> — Kernel patches, BORE CPU scheduler, and high-performance compiler optimizations.</li>
+                <li><b class="text-white">KDE Community</b> — KDE Plasma 6 desktop environment, KWin Wayland compositor, and Qt6 frameworks.</li>
+                <li><b class="text-white">Wine & Valve Proton</b> — Windows application binary compatibility layer and DXVK/VKD3D Vulkan translation.</li>
             </ul>
-
-            <h3 class="text-2xl font-bold text-white pt-4">Built by Passion</h3>
-            <p>
-                Created independently as a passion project, HiganveinOS reflects an inner focus: fast, silent, and flawlessly riced.
-            </p>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-zinc-800 text-center text-sm text-slate-500">
-        <p>&copy; 2026 HiganveinOS Project. Built with Arch Linux & CachyOS.</p>
+    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
+        <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>
     </footer>
+
+    <script>
+        const btn = document.getElementById('menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

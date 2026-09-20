@@ -441,36 +441,43 @@ class HiganInstallerV4(QWidget):
     def init_welcome(self):
         page = QWidget()
         l = QVBoxLayout(page)
-        l.setSpacing(16)
+        l.setSpacing(18)
 
-        l.addWidget(QLabel("<h1 style='color: white; font-size: 20pt;'>HiganveinOS // Zero Compromise</h1>"))
-        
-        manifesto_box = QFrame()
-        manifesto_box.setStyleSheet("background-color: #141418; border-left: 3px solid #ef4444; border-radius: 6px; padding: 14px;")
-        ml = QVBoxLayout(manifesto_box)
-        ml.setSpacing(6)
-        ml.addWidget(QLabel("<b style='color: #ef4444;'>WHY HIGANVEINOS EXISTS:</b>"))
-        ml.addWidget(QLabel(
-            "Mainstream operating systems are bloated, intrusive, and sluggish. We engineered HiganveinOS "
-            "to bring uncompromising raw speed: CachyOS BORE kernel scheduler, aggressive memory optimization (ZRAM 2x), "
-            "instant out-of-the-box Windows application (.exe) support, and refined Dark Void aesthetics."
-        ))
-        l.addWidget(manifesto_box)
+        title = QLabel("HiganveinOS")
+        title.setStyleSheet("color: #ffffff; font-size: 26pt; font-weight: 800; letter-spacing: -0.5px;")
+        l.addWidget(title)
 
-        report_box = QFrame()
-        report_box.setStyleSheet("background-color: #1a1515; border: 1px solid #7f1d1d; border-radius: 6px; padding: 12px;")
-        rl = QVBoxLayout(report_box)
-        rl.setSpacing(4)
-        rl.addWidget(QLabel("<b style='color: #f87171;'>COMMUNITY & BUG REPORTING POLICY:</b>"))
-        rl.addWidget(QLabel(
-            "Found a defect, kernel panic, or storage bug? Report it directly to our GitHub repository.<br>"
-            "<b>Note:</b> Issue reporting is strictly for actionable technical defects. Include your exact hardware specs, "
-            "logs, and reproduction steps. <i>No trolling or spam—this project is built with serious engineering intent.</i>"
+        subtitle = QLabel("Fast, minimal Arch-based distribution with CachyOS kernel optimizations and KDE Plasma.")
+        subtitle.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(subtitle)
+
+        info_box = QFrame()
+        info_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 16px;")
+        ib_l = QVBoxLayout(info_box)
+        ib_l.setSpacing(8)
+
+        ib_l.addWidget(QLabel("<b style='color: #f4f4f5;'>System Highlights:</b>"))
+        ib_l.addWidget(QLabel("• <b>Kernel:</b> Linux CachyOS with BORE CPU scheduler & optimized sysctl defaults"))
+        ib_l.addWidget(QLabel("• <b>Desktop:</b> KDE Plasma with dark aesthetic, ZRAM 2× RAM compression, earlyoom"))
+        ib_l.addWidget(QLabel("• <b>Dual-Boot:</b> Installs alongside Windows/Linux with automatic GRUB configuration"))
+        ib_l.addWidget(QLabel("• <b>Windows Apps:</b> Pre-configured Wine & 32/64-bit Vulkan drivers for .exe execution"))
+        ib_l.addWidget(QLabel("• <b>Hardware:</b> Built-in Broadcom Wi-Fi, modern audio firmware, and power profiles"))
+        l.addWidget(info_box)
+
+        notice_box = QFrame()
+        notice_box.setStyleSheet("background-color: #161214; border: 1px solid #3f2022; border-radius: 8px; padding: 14px;")
+        nb_l = QVBoxLayout(notice_box)
+        nb_l.setSpacing(6)
+        nb_l.addWidget(QLabel("<b style='color: #ef4444;'>Beta Release & Issue Reporting:</b>"))
+        nb_l.addWidget(QLabel(
+            "This is an active beta build. If you encounter bugs, partition errors, or hardware issues, "
+            "please report them on our GitHub (<b>xyuhnlianzy/HiganVein</b>) with your hardware specifications "
+            "and installer logs. Valid technical reports are reviewed and fixed directly by the maintainer."
         ))
-        l.addWidget(report_box)
+        l.addWidget(notice_box)
 
         l.addStretch()
-        btn = QPushButton("Accept & Proceed to Setup →")
+        btn = QPushButton("Next: Select Storage →")
         btn.clicked.connect(lambda: self.set_step(1))
         l.addWidget(btn, alignment=Qt.AlignmentFlag.AlignRight)
         self.stack.addWidget(page)

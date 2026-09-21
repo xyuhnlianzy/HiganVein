@@ -55,6 +55,8 @@ memtest86+
 edk2-shell
 
 # --- Filesystem & Tools ---
+partitionmanager
+kpmcore
 mtools
 dosfstools
 ntfs-3g

@@ -544,35 +544,76 @@ class HiganInstallerApp(QWidget):
         l.addWidget(st)
 
         map_card = QFrame()
-        map_card.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 8px; padding: 24px;")
+        map_card.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 8px; padding: 20px;")
         ml = QVBoxLayout(map_card)
         ml.setSpacing(8)
-        map_pin = QLabel("📍 <b>Region Selected:</b> Asia / Jakarta")
-        map_pin.setStyleSheet("color: #ef4444; font-size: 13pt; font-weight: bold;")
-        ml.addWidget(map_pin)
-        map_desc = QLabel("Automatic network time synchronization (SNTP timesyncd) is pre-configured.")
+        self.lbl_selected_tz = QLabel("📍 <b>Selected Timezone:</b> Asia/Jakarta")
+        self.lbl_selected_tz.setStyleSheet("color: #ef4444; font-size: 12pt; font-weight: bold;")
+        ml.addWidget(self.lbl_selected_tz)
+        map_desc = QLabel("Automatic network time synchronization (systemd-timesyncd) is enabled.")
         map_desc.setStyleSheet("color: #71717a; font-size: 9pt;")
         ml.addWidget(map_desc)
         l.addWidget(map_card)
 
         row = QHBoxLayout()
         col1 = QVBoxLayout()
-        col1.addWidget(QLabel("Region:"))
+        col1.addWidget(QLabel("Region / Continent:"))
         self.combo_region = QComboBox()
-        self.combo_region.addItems(["Asia", "America", "Europe", "Australia", "Africa", "Pacific"])
         col1.addWidget(self.combo_region)
-        row.addLayout(col1)
+        row.addLayout(col1, stretch=1)
 
         col2 = QVBoxLayout()
-        col2.addWidget(QLabel("Zone:"))
+        col2.addWidget(QLabel("Zone / City:"))
         self.combo_zone = QComboBox()
-        self.combo_zone.addItems(["Jakarta", "Makassar", "Jayapura", "Singapore", "Tokyo", "London", "New_York"])
         col2.addWidget(self.combo_zone)
-        row.addLayout(col2)
+        row.addLayout(col2, stretch=2)
         l.addLayout(row)
+
+        self.populate_timezones()
+        self.combo_region.currentTextChanged.connect(self.on_region_changed)
+        self.combo_zone.currentTextChanged.connect(self.on_zone_changed)
 
         l.addStretch()
         self.stack.addWidget(page)
+
+    def populate_timezones(self):
+        self.tz_data = {}
+        base = "/usr/share/zoneinfo"
+        if os.path.exists(base):
+            for reg in sorted(os.listdir(base)):
+                reg_path = os.path.join(base, reg)
+                if os.path.isdir(reg_path) and reg not in ("posix", "right", "SystemV"):
+                    cities = []
+                    for root, _, files in os.walk(reg_path):
+                        for f in files:
+                            if not f.endswith(".tab") and not f.endswith(".list"):
+                                rel = os.path.relpath(os.path.join(root, f), reg_path)
+                                cities.append(rel)
+                    if cities:
+                        self.tz_data[reg] = sorted(cities)
+
+        if not self.tz_data:
+            self.tz_data = {"Asia": ["Jakarta", "Makassar", "Jayapura", "Singapore", "Tokyo"]}
+
+        self.combo_region.addItems(sorted(self.tz_data.keys()))
+        if "Asia" in self.tz_data:
+            self.combo_region.setCurrentText("Asia")
+        self.on_region_changed(self.combo_region.currentText())
+
+        # Auto select Jakarta if available
+        if "Asia" in self.tz_data and "Jakarta" in self.tz_data["Asia"]:
+            self.combo_zone.setCurrentText("Jakarta")
+
+    def on_region_changed(self, region):
+        self.combo_zone.clear()
+        cities = self.tz_data.get(region, [])
+        self.combo_zone.addItems(cities)
+        self.on_zone_changed(self.combo_zone.currentText())
+
+    def on_zone_changed(self, zone):
+        reg = self.combo_region.currentText()
+        if reg and zone:
+            self.lbl_selected_tz.setText(f"📍 <b>Selected Timezone:</b> {reg}/{zone}")
 
     # ---------------- PAGE 3: KEYBOARD ----------------
     def init_page_keyboard(self):

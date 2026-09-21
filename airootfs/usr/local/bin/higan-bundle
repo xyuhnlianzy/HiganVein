@@ -26,11 +26,18 @@ fi
 USER_NAME="${SUDO_USER:-$USER}"
 
 install_gamer() {
-    echo -e "${RED}==>${NC} ${WHITE}Installing Gaming Stack...${NC}"
-    pacman -S --needed --noconfirm steam lutris mangohud gamemode gamescope wine-staging vulkan-tools lib32-mesa
-    echo -e "${GRAY}[+] Enabling gamemoded service...${NC}"
+    echo -e "${RED}==>${NC} ${WHITE}Installing Gaming Stack (Steam, Heroic, ProtonUp, GameMode)...${NC}"
+    pacman -S --needed --noconfirm steam lutris heroic-games-launcher protonup-qt mangohud gamemode gamescope wine-staging vulkan-tools lib32-mesa xpadneo-dkms
+    
+    echo -e "${GRAY}[+] Enabling gamemoded daemon...${NC}"
     systemctl enable --now gamemoded 2>/dev/null || true
-    echo -e "${WHITE}[✓] Gaming Stack installed successfully.${NC}\n"
+    
+    echo -e "${GRAY}[+] Setting kernel vm.max_map_count=1048576 (anti-crash for UE5/heavy games)...${NC}"
+    mkdir -p /etc/sysctl.d
+    echo "vm.max_map_count=1048576" > /etc/sysctl.d/99-higan-gaming.conf
+    sysctl -w vm.max_map_count=1048576 2>/dev/null || true
+    
+    echo -e "${WHITE}[✓] Gaming Stack (Steam + Epic/GOG + Controller + Kernel Tweaks) installed.${NC}\n"
 }
 
 install_dev() {
@@ -49,13 +56,14 @@ install_dev() {
 }
 
 install_ricer() {
-    echo -e "${RED}==>${NC} ${WHITE}Installing Ricing Enthusiast Stack...${NC}"
-    pacman -S --needed --noconfirm hyprland waybar rofi-wayland cava starship kitty zsh-syntax-highlighting zsh-autosuggestions
+    echo -e "${RED}==>${NC} ${WHITE}Installing Ricing Enthusiast Stack (Hyprland Suite)...${NC}"
+    pacman -S --needed --noconfirm hyprland waybar rofi-wayland cava starship kitty zsh-syntax-highlighting zsh-autosuggestions hyprpaper waypaper mako grim slurp wl-clipboard hyprlock
+    
     echo -e "${GRAY}[+] Integrating Starship prompt to default shell...${NC}"
     if ! grep -q "starship init" /home/"$USER_NAME"/.bashrc 2>/dev/null; then
         echo 'eval "$(starship init bash)"' >> /home/"$USER_NAME"/.bashrc
     fi
-    echo -e "${WHITE}[✓] Ricing Stack installed successfully.${NC}\n"
+    echo -e "${WHITE}[✓] Ricing Stack (WM + Bar + Wallpaper + Notification + Screenshot Toolchain) installed.${NC}\n"
 }
 
 install_cyber() {

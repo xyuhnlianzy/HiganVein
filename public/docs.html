@@ -79,13 +79,31 @@
                 <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 3</div>
                 <h3 class="text-white font-bold text-base">Running Higan-Installer</h3>
                 <p class="text-zinc-400 leading-relaxed text-xs">
-                    Double-click the <b>Install HiganveinOS</b> icon on the desktop or launch it from the application menu. 
-                    Select your target drive and pick either:
+                    Launch <b>HiganveinOS Setup</b> from the desktop. Follow the 8-step wizard:
                 </p>
                 <ul class="list-disc list-inside space-y-1 text-xs text-zinc-400 pl-2">
-                    <li><b>Dual-Boot:</b> Adjust the slider to choose how many gigabytes to allocate without erasing your existing OS.</li>
-                    <li><b>Clean Wipe:</b> Dedicate 100% of the selected drive exclusively to HiganveinOS.</li>
+                    <li><b>Partitioning:</b> Pick <i>Erase Disk</i>, <i>Dual-Boot</i> (with storage slider), or <i>Manual Partitioning</i> via KDE Partition Manager.</li>
+                    <li><b>Bootloader:</b> Choose between <i>Limine</i> (fast modern EFI), <i>GRUB</i> (universal dual-boot with Windows auto-detect), or <i>systemd-boot</i>.</li>
+                    <li><b>Filesystem:</b> Select <i>Btrfs</i> (recommended, auto-creates @, @home, @snapshots subvolumes with ZSTD compression) or <i>Ext4</i>.</li>
                 </ul>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-3">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 4</div>
+                <h3 class="text-white font-bold text-base">Post-Installation: Customize via Bundles</h3>
+                <p class="text-zinc-400 leading-relaxed text-xs">
+                    After rebooting into your fresh install, tailor your environment using the built-in profile manager:
+                </p>
+                <div class="bg-zinc-950 p-3 rounded-lg font-mono text-xs text-zinc-300 border border-zinc-800 space-y-2">
+                    <p class="text-zinc-500"># Interactive menu:</p>
+                    <p class="text-red-400">sudo higan-bundle</p>
+                    <p class="text-zinc-500 pt-1"># Or install specific stacks directly:</p>
+                    <p class="text-zinc-200">sudo higan-bundle --dev --gamer</p>
+                </div>
+                <p class="text-zinc-400 text-xs">
+                    Visit our interactive <a href="bundles.html" class="text-red-400 hover:underline font-semibold">Bundles Configurator</a> to generate your custom installation command.
+                </p>
             </div>
         </div>
     </main>

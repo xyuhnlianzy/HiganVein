@@ -444,42 +444,55 @@ class HiganInstallerV4(QWidget):
         l.setSpacing(18)
 
         title = QLabel("HiganveinOS")
-        title.setStyleSheet("color: #ffffff; font-size: 26pt; font-weight: 800; letter-spacing: -0.5px;")
+        title.setStyleSheet("color: #ffffff; font-size: 24pt; font-weight: 800; letter-spacing: -0.5px;")
         l.addWidget(title)
 
-        subtitle = QLabel("Fast, minimal Arch-based distribution with CachyOS kernel optimizations and KDE Plasma.")
+        subtitle = QLabel("Arch-based Linux optimized with CachyOS BORE kernel, proactive memory management, and KDE Plasma.")
         subtitle.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        subtitle.setWordWrap(True)
         l.addWidget(subtitle)
 
         info_box = QFrame()
-        info_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 16px;")
+        info_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 14px;")
         ib_l = QVBoxLayout(info_box)
-        ib_l.setSpacing(8)
-
-        ib_l.addWidget(QLabel("<b style='color: #f4f4f5;'>System Highlights:</b>"))
-        ib_l.addWidget(QLabel("• <b>Kernel:</b> Linux CachyOS with BORE CPU scheduler & optimized sysctl defaults"))
-        ib_l.addWidget(QLabel("• <b>Desktop:</b> KDE Plasma with dark aesthetic, ZRAM 2× RAM compression, earlyoom"))
-        ib_l.addWidget(QLabel("• <b>Dual-Boot:</b> Installs alongside Windows/Linux with automatic GRUB configuration"))
-        ib_l.addWidget(QLabel("• <b>Windows Apps:</b> Pre-configured Wine & 32/64-bit Vulkan drivers for .exe execution"))
-        ib_l.addWidget(QLabel("• <b>Hardware:</b> Built-in Broadcom Wi-Fi, modern audio firmware, and power profiles"))
+        ib_l.setSpacing(6)
+        ib_l.addWidget(QLabel("<b style='color: #f4f4f5;'>System Specifications:</b>"))
+        ib_l.addWidget(QLabel("• <b>Kernel:</b> Linux CachyOS with BORE task scheduler & sysctl throughput tuning"))
+        ib_l.addWidget(QLabel("• <b>Desktop:</b> KDE Plasma on Wayland/X11, ZRAM 2× RAM compression, earlyoom daemon"))
+        ib_l.addWidget(QLabel("• <b>Multi-Boot:</b> GRUB UEFI & Legacy BIOS support, automated Windows/Linux detection"))
+        ib_l.addWidget(QLabel("• <b>Windows Layer:</b> Out-of-the-box Wine execution and 32/64-bit Vulkan graphics drivers"))
+        ib_l.addWidget(QLabel("• <b>Hardware:</b> Broadcom Wi-Fi DKMS, SOF laptop audio firmware, power-profiles-daemon"))
         l.addWidget(info_box)
 
+        req_box = QFrame()
+        req_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 14px;")
+        rb_l = QVBoxLayout(req_box)
+        rb_l.setSpacing(6)
+        rb_l.addWidget(QLabel("<b style='color: #f4f4f5;'>Hardware Requirements:</b>"))
+        rb_l.addWidget(QLabel("• <b>Processor:</b> 64-bit x86_64 processor (Intel Core / AMD Athlon 64 or newer)"))
+        rb_l.addWidget(QLabel("• <b>Memory:</b> 2 GB RAM minimum (4 GB recommended for multitasking & gaming)"))
+        rb_l.addWidget(QLabel("• <b>Storage:</b> Minimum 15 GB free disk space (Dual-Boot or dedicated drive)"))
+        l.addWidget(req_box)
+
         notice_box = QFrame()
-        notice_box.setStyleSheet("background-color: #161214; border: 1px solid #3f2022; border-radius: 8px; padding: 14px;")
+        notice_box.setStyleSheet("background-color: #161214; border: 1px solid #3f2022; border-radius: 8px; padding: 12px;")
         nb_l = QVBoxLayout(notice_box)
-        nb_l.setSpacing(6)
-        nb_l.addWidget(QLabel("<b style='color: #ef4444;'>Beta Release & Issue Reporting:</b>"))
-        nb_l.addWidget(QLabel(
-            "This is an active beta build. If you encounter bugs, partition errors, or hardware issues, "
-            "please report them on our GitHub (<b>xyuhnlianzy/HiganVein</b>) with your hardware specifications "
-            "and installer logs. Valid technical reports are reviewed and fixed directly by the maintainer."
-        ))
+        nb_l.setSpacing(4)
+        nb_l.addWidget(QLabel("<b style='color: #ef4444;'>Beta Notice & Reporting:</b>"))
+        notice_txt = QLabel(
+            "This is a public beta release. Report partition issues, driver errors, or boot bugs "
+            "directly to <b>github.com/xyuhnlianzy/HiganVein</b> with your hardware specs and installer logs."
+        )
+        notice_txt.setWordWrap(True)
+        nb_l.addWidget(notice_txt)
         l.addWidget(notice_box)
 
-        l.addStretch()
+        hb = QHBoxLayout()
+        hb.addStretch()
         btn = QPushButton("Next: Select Storage →")
         btn.clicked.connect(lambda: self.set_step(1))
-        l.addWidget(btn, alignment=Qt.AlignmentFlag.AlignRight)
+        hb.addWidget(btn)
+        l.addLayout(hb)
         self.stack.addWidget(page)
 
     def init_storage(self):

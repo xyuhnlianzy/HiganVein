@@ -21,6 +21,7 @@
             <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
                 <a href="index.html" class="text-white font-semibold">Home</a>
                 <a href="features.html" class="hover:text-white transition">Features</a>
+                <a href="bundles.html" class="hover:text-white transition">Bundles</a>
                 <a href="changes.html" class="hover:text-white transition">Changelog</a>
                 <a href="docs.html" class="hover:text-white transition">Docs</a>
                 <a href="about.html" class="hover:text-white transition">About</a>
@@ -37,6 +38,7 @@
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
             <a href="index.html" class="block text-white font-semibold py-1">Home</a>
             <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
+            <a href="bundles.html" class="block text-zinc-400 hover:text-white py-1">Bundles</a>
             <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
             <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
             <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
@@ -70,11 +72,11 @@
         </div>
 
         <!-- System Architecture Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
                 <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Kernel & I/O</div>
                 <h3 class="text-white font-bold text-base">CachyOS BORE Kernel</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">Burst-Oriented Response Enhancer (BORE) scheduler prioritizing active desktop and interactive tasks with reduced frame jitter.</p>
+                <p class="text-zinc-400 text-xs leading-relaxed">Burst-Oriented Response Enhancer scheduler prioritizing interactive desktop tasks with reduced frame jitter.</p>
             </div>
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
                 <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Memory Control</div>
@@ -82,9 +84,14 @@
                 <p class="text-zinc-400 text-xs leading-relaxed">Compressed RAM swap using zstd paired with earlyoom daemon to prevent system locks during high memory workloads.</p>
             </div>
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
-                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Compatibility</div>
-                <h3 class="text-white font-bold text-base">Wine & 32/64-bit Vulkan</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">Pre-configured Wine execution environment with 32-bit and 64-bit Vulkan drivers for seamless Windows software deployment.</p>
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Storage Layout</div>
+                <h3 class="text-white font-bold text-base">Btrfs Subvolumes</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Automated subvolume topology (@, @home, @snapshots) with native transparent ZSTD filesystem compression.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-zinc-900/60 border border-red-900/50 bg-red-950/10 space-y-2">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Modular Profiles</div>
+                <h3 class="text-white font-bold text-base">Higan-Bundle CLI</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Zero-bloat ISO. Choose and install Gamer, Developer, or Ricing software stacks with one terminal command.</p>
             </div>
         </div>
 

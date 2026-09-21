@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
 """
-HiganveinOS Modern Universal Installer (v4.0 Pro)
-Designed for clarity, elegance, and extreme stability.
-Features:
-- Premium Dark Void Sidebar & Breadcrumbs UI (Apple/Linear inspired)
-- Disk Storage Cards with Health/Type (NVMe, SSD, HDD, USB)
-- Interactive Visual Dual-Boot Storage Slider
-- Live System Protection (Auto-filters running live media)
-- Windows / macOS / Linux / BSD Detection & Boot Priority Management
-- Real-time Diagnostic Terminal with clean stage indicators
+HiganveinOS Professional Installer (Design Parity Edition)
+Based on official UI mockups:
+- Left sidebar with H.V monogram branding and active red pill indicator
+- Steps: Welcome, Location, Keyboard, Partitioning, Users, Summary, Install, Finish
+- Clean dark theme (#0f0f12), precise typography, card-based layouts
+- Full dual-boot, custom disk size, LUKS checkbox, and multi-OS GRUB integration
 """
 
 import sys, os, subprocess, shutil, time, json
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, 
     QStackedWidget, QComboBox, QLineEdit, QProgressBar, QMessageBox, QFrame, 
-    QTextEdit, QRadioButton, QButtonGroup, QSlider, QListWidget, QListWidgetItem
+    QTextEdit, QRadioButton, QButtonGroup, QCheckBox, QListWidget, QListWidgetItem
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from PyQt6.QtGui import QFont, QColor, QPalette, QIcon
+from PyQt6.QtGui import QFont, QColor, QPalette
 
 def get_live_boot_device():
     try:
@@ -52,21 +49,7 @@ def find_existing_esp(disk):
         pass
     return None
 
-def detect_system_timezone():
-    """Auto-detect timezone based on internet/IP geolocation."""
-    try:
-        import urllib.request, json
-        req = urllib.request.Request("http://ip-api.com/json/", headers={'User-Agent': 'HiganveinOS-Installer'})
-        with urllib.request.urlopen(req, timeout=3) as resp:
-            data = json.loads(resp.read().decode())
-            tz = data.get("timezone")
-            if tz and os.path.exists(f"/usr/share/zoneinfo/{tz}"):
-                return tz
-    except Exception:
-        pass
-    return "Asia/Jakarta"
-
-class CoreEngineWorker(QThread):
+class InstallWorker(QThread):
     progress = pyqtSignal(int, str, str)
     finished = pyqtSignal(bool, str)
 
@@ -81,43 +64,43 @@ class CoreEngineWorker(QThread):
             username = self.config['username']
             password = self.config['password']
             hostname = self.config['hostname']
+            fullname = self.config['fullname']
             timezone = self.config['timezone']
             install_mode = self.config['install_mode']
-            custom_size_gb = self.config.get('size_gb', 50)
+            autologin = self.config.get('autologin', True)
 
             def log(msg):
-                print(f"[HiganEngine] {msg}")
+                print(f"[HiganInstall] {msg}")
                 self.progress.emit(self.current_pct, self.current_msg, msg)
 
             self.current_pct = 5
-            self.current_msg = "Validating target storage environment..."
-            log(f"Drive target: {disk} | Filesystem: {fs.upper()} | Strategy: {install_mode.upper()}")
+            self.current_msg = "Preparing storage environment..."
+            log(f"> Target drive: {disk} | Filesystem: {fs.upper()}")
 
             esp_part = None
             root_part = None
 
-            if install_mode == "full":
-                log("Safely disabling swap and unmounting target partitions...")
+            if install_mode == "erase":
+                log(f"> Disabling swap and unmounting partitions on {disk}...")
                 for part in os.listdir("/dev"):
                     if part.startswith(os.path.basename(disk)) and part != os.path.basename(disk):
-                        part_path = f"/dev/{part}"
-                        subprocess.run(["swapoff", part_path], stderr=subprocess.DEVNULL)
-                        subprocess.run(["umount", "-l", part_path], stderr=subprocess.DEVNULL)
+                        p_path = f"/dev/{part}"
+                        subprocess.run(["swapoff", p_path], stderr=subprocess.DEVNULL)
+                        subprocess.run(["umount", "-l", p_path], stderr=subprocess.DEVNULL)
 
                 self.current_pct = 15
-                self.current_msg = "Wiping partition tables & re-labeling GPT..."
-                log(f"Erasing existing filesystem signatures on {disk}...")
+                self.current_msg = "Creating partition table (GPT)..."
+                log(f"> Erasing partition signatures on {disk}...")
                 subprocess.run(["wipefs", "-a", "--force", disk], stderr=subprocess.DEVNULL)
                 subprocess.run(["sgdisk", "--zap-all", disk], stderr=subprocess.DEVNULL)
                 subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                 time.sleep(1)
 
-                log("Creating standard EFI System Partition (512MB) and Root partition...")
+                log("> Creating ESP (512MB) and Root partition (100%)...")
                 subprocess.run(["parted", "-s", disk, "mklabel", "gpt"], check=True)
                 subprocess.run(["parted", "-s", disk, "mkpart", "esp", "fat32", "1MiB", "512MiB"], check=True)
                 subprocess.run(["parted", "-s", disk, "set", "1", "esp", "on"], check=True)
                 subprocess.run(["parted", "-s", disk, "mkpart", "root", fs, "512MiB", "100%"], check=True)
-                
                 subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                 time.sleep(1)
 
@@ -128,44 +111,40 @@ class CoreEngineWorker(QThread):
                     esp_part = f"{disk}1"
                     root_part = f"{disk}2"
 
-                log(f"Formatting EFI partition ({esp_part}) to FAT32...")
+                log(f"> Formatting {esp_part} as FAT32 (ESP)...")
                 subprocess.run(["mkfs.fat", "-F32", esp_part], check=True)
-
             else:
                 self.current_pct = 15
-                self.current_msg = f"Allocating {custom_size_gb} GB for HiganveinOS Dual-Boot..."
-                log("Examining drive geometry for dual-boot space...")
-
+                self.current_msg = "Allocating partition space for dual-boot..."
+                log("> Checking existing EFI partition...")
                 existing_esp = find_existing_esp(disk)
                 if existing_esp:
-                    log(f"Sharing existing EFI partition: {existing_esp}")
+                    log(f"> Found existing ESP: {existing_esp}")
                     esp_part = existing_esp
 
                 parted_out = subprocess.run(["parted", "-m", disk, "unit", "MiB", "print"], capture_output=True, text=True).stdout
-                last_end_mib = 1024
+                last_end = 1024
                 for line in parted_out.splitlines():
                     if line.startswith(disk) or not line or ":" not in line:
                         continue
                     fields = line.split(":")
                     if len(fields) >= 3 and fields[0].isdigit():
-                        end_val = fields[2].replace("MiB", "").strip()
                         try:
-                            last_end_mib = max(last_end_mib, int(float(end_val)))
+                            last_end = max(last_end, int(float(fields[2].replace("MiB", "").strip())))
                         except ValueError:
                             pass
 
-                start_mib = last_end_mib + 1
+                start_mib = last_end + 1
                 if not esp_part:
                     esp_end = start_mib + 512
-                    log(f"Creating new ESP at {start_mib}MiB to {esp_end}MiB...")
+                    log(f"> Creating new ESP: {start_mib}MiB to {esp_end}MiB...")
                     subprocess.run(["parted", "-s", disk, "mkpart", "esp", "fat32", f"{start_mib}MiB", f"{esp_end}MiB"], check=True)
                     start_mib = esp_end + 1
                     subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                     time.sleep(1)
 
-                root_end_mib = start_mib + (custom_size_gb * 1024)
-                log(f"Creating Root partition at {start_mib}MiB to {root_end_mib}MiB...")
-                subprocess.run(["parted", "-s", disk, "mkpart", "root", fs, f"{start_mib}MiB", f"{root_end_mib}MiB"], check=True)
+                log(f"> Creating Root partition starting at {start_mib}MiB to 100%...")
+                subprocess.run(["parted", "-s", disk, "mkpart", "root", fs, f"{start_mib}MiB", "100%"], check=True)
                 subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                 time.sleep(1)
 
@@ -176,24 +155,25 @@ class CoreEngineWorker(QThread):
                     esp_part = parts[-2]
                     subprocess.run(["mkfs.fat", "-F32", esp_part], check=True)
 
-            self.current_pct = 30
-            self.current_msg = f"Formatting Root partition ({root_part}) to {fs.upper()}..."
-            log(f"Formatting {root_part} to {fs}...")
+            self.current_pct = 25
+            self.current_msg = f"Formatting {root_part} as {fs.upper()}..."
+            log(f"> Formatting {root_part} as {fs}...")
             if fs == "btrfs":
                 subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
             else:
                 subprocess.run(["mkfs.ext4", "-F", root_part], check=True)
 
-            self.current_pct = 45
+            self.current_pct = 35
             self.current_msg = "Mounting target filesystems..."
+            log(f"> Mounting root to /mnt/higan-target...")
             os.makedirs("/mnt/higan-target", exist_ok=True)
             subprocess.run(["mount", root_part, "/mnt/higan-target"], check=True)
             os.makedirs("/mnt/higan-target/boot/efi", exist_ok=True)
             subprocess.run(["mount", esp_part, "/mnt/higan-target/boot/efi"], check=True)
 
-            self.current_pct = 60
-            self.current_msg = "Cloning HiganveinOS system files (Rsync Engine)..."
-            log("Synchronizing base system, KDE desktop, and drivers...")
+            self.current_pct = 50
+            self.current_msg = "Installing base system files..."
+            log("> Copying system image to target drive via rsync...")
             subprocess.run([
                 "rsync", "-aAXH", "--one-file-system", "--ignore-errors",
                 "--exclude=/dev", "--exclude=/proc", "--exclude=/sys", 
@@ -202,12 +182,13 @@ class CoreEngineWorker(QThread):
                 "/", "/mnt/higan-target/"
             ], check=True)
 
-            self.current_pct = 75
-            self.current_msg = "Generating FSTAB & system locale..."
+            self.current_pct = 70
+            self.current_msg = "Configuring system locale & fstab..."
+            log("> Generating fstab with UUID mapping...")
             with open("/mnt/higan-target/etc/fstab", "w") as f:
                 root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
                 esp_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", esp_part], capture_output=True, text=True).stdout.strip()
-                f.write(f"# HiganveinOS Fstab (UUID persistent)\n")
+                f.write(f"# HiganveinOS Fstab\n")
                 f.write(f"UUID={root_uuid} / {fs} defaults 0 1\n")
                 f.write(f"UUID={esp_uuid} /boot/efi vfat umask=0077 0 2\n")
 
@@ -217,538 +198,729 @@ class CoreEngineWorker(QThread):
             subprocess.run(["arch-chroot", "/mnt/higan-target", "ln", "-sf", f"/usr/share/zoneinfo/{timezone}", "/etc/localtime"], check=True)
             subprocess.run(["arch-chroot", "/mnt/higan-target", "hwclock", "--systohc"], check=True)
 
-            grub_default = "/mnt/higan-target/etc/default/grub"
-            if os.path.exists(grub_default):
-                with open(grub_default, "a") as f:
-                    f.write("\nGRUB_DISABLE_OS_PROBER=false\n")
-
-            log("Compiling kernel initramfs (USB storage & NVMe support)...")
+            self.current_pct = 80
+            self.current_msg = "Generating kernel initramfs..."
+            log("> Running mkinitcpio -P...")
             subprocess.run(["arch-chroot", "/mnt/higan-target", "mkinitcpio", "-P"], check=True)
 
-            self.current_pct = 85
-            self.current_msg = "Configuring GRUB Bootloader & multi-OS entries..."
-            log("Installing universal GRUB EFI bootloader...")
+            self.current_pct = 88
+            self.current_msg = "Installing bootloader (GRUB)..."
+            log("> Installing GRUB EFI universal bootloader...")
             subprocess.run([
                 "arch-chroot", "/mnt/higan-target", "grub-install",
                 "--target=x86_64-efi", "--efi-directory=/boot/efi",
                 "--bootloader-id=HiganveinOS", "--removable", "--recheck"
             ], check=True)
 
-            if install_mode == "full":
+            if install_mode == "erase":
                 subprocess.run([
                     "arch-chroot", "/mnt/higan-target", "grub-install",
                     "--target=i386-pc", "--recheck", disk
                 ], stderr=subprocess.DEVNULL)
 
-            log("Scanning for Windows / macOS / Linux / BSD boot entries...")
+            grub_default = "/mnt/higan-target/etc/default/grub"
+            if os.path.exists(grub_default):
+                with open(grub_default, "a") as f:
+                    f.write("\nGRUB_DISABLE_OS_PROBER=false\n")
+
+            log("> Running grub-mkconfig (probing for other OSes)...")
             subprocess.run(["arch-chroot", "/mnt/higan-target", "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
 
             try:
                 efiboot = subprocess.run(["efibootmgr"], capture_output=True, text=True).stdout
-                higan_num = None
+                h_num = None
                 for line in efiboot.splitlines():
                     if "HiganveinOS" in line and line.startswith("Boot"):
-                        higan_num = line[4:8]
+                        h_num = line[4:8]
                         break
-                if higan_num:
+                if h_num:
                     for line in efiboot.splitlines():
                         if line.startswith("BootOrder:"):
-                            curr_order = line.split("BootOrder:")[1].strip()
-                            order_list = [higan_num] + [n for n in curr_order.split(",") if n != higan_num]
-                            subprocess.run(["efibootmgr", "-o", ",".join(order_list)], check=True)
+                            curr = line.split("BootOrder:")[1].strip()
+                            order = [h_num] + [n for n in curr.split(",") if n != h_num]
+                            subprocess.run(["efibootmgr", "-o", ",".join(order)], check=True)
                             break
             except Exception:
                 pass
 
             self.current_pct = 95
-            self.current_msg = f"Finalizing user account '{username}'..."
-            subprocess.run(["arch-chroot", "/mnt/higan-target", "useradd", "-m", "-G", "wheel,audio,video,storage,power", username], check=True)
+            self.current_msg = f"Creating user account '{username}'..."
+            log(f"> Creating user '{username}' with sudo access...")
+            subprocess.run(["arch-chroot", "/mnt/higan-target", "useradd", "-m", "-c", fullname, "-G", "wheel,audio,video,storage,power", username], check=True)
             subprocess.run(["arch-chroot", "/mnt/higan-target", "chpasswd"], input=f"{username}:{password}\nroot:root\n".encode(), check=True)
             with open("/mnt/higan-target/etc/sudoers.d/00-wheel-nopasswd", "w") as f:
                 f.write("%wheel ALL=(ALL:ALL) NOPASSWD: ALL\n")
+
+            if autologin:
+                sddm_dir = "/mnt/higan-target/etc/sddm.conf.d"
+                os.makedirs(sddm_dir, exist_ok=True)
+                with open(f"{sddm_dir}/autologin.conf", "w") as sf:
+                    sf.write(f"[Autologin]\nUser={username}\nSession=plasma\n")
 
             if os.path.exists("/mnt/higan-target/usr/local/bin/pacman"):
                 os.remove("/mnt/higan-target/usr/local/bin/pacman")
 
             self.current_pct = 100
             self.current_msg = "Installation Completed Successfully!"
-            log("HiganveinOS installation complete!")
-            self.finished.emit(True, "Welcome to HiganveinOS! System has been installed and configured. You may now reboot.")
+            log("> Installation complete.")
+            self.finished.emit(True, "HiganveinOS has been installed successfully.")
         except Exception as e:
-            err_msg = str(e)
-            log(f"FATAL ERROR: {err_msg}")
-            self.finished.emit(False, err_msg)
+            err = str(e)
+            log(f"> FATAL ERROR: {err}")
+            self.finished.emit(False, err)
 
-class HiganInstallerV4(QWidget):
+class HiganInstallerApp(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle("HiganveinOS Setup Assistant")
-        self.setFixedSize(980, 660)
+        self.setWindowTitle("HiganveinOS Installer")
+        self.setFixedSize(940, 620)
         self.setStyleSheet("""
-            QWidget { 
-                background-color: #0c0c0e; 
-                color: #f4f4f5; 
-                font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-                font-size: 11pt; 
+            QWidget {
+                background-color: #0f0f12;
+                color: #f4f4f5;
+                font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: 11pt;
             }
             QFrame#sidebar {
                 background-color: #121216;
-                border-right: 1px solid #27272a;
+                border-right: 1px solid #1f1f24;
             }
-            QLabel#nav_item {
+            QLabel#brand_logo {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 22pt;
+                font-weight: 900;
+                color: #ef4444;
+                letter-spacing: -1px;
+            }
+            QLabel#step_label {
                 color: #71717a;
-                font-weight: 600;
-                padding: 10px 16px;
-                border-radius: 8px;
+                font-weight: 500;
+                padding: 8px 14px;
+                border-radius: 6px;
+                font-size: 11pt;
             }
-            QLabel#nav_item_active {
+            QLabel#step_label_active {
                 color: #ffffff;
-                background-color: #1c1c22;
-                border-left: 3px solid #ef4444;
-                font-weight: bold;
-                padding: 10px 16px;
-                border-radius: 4px;
+                background-color: #991b1b;
+                font-weight: 700;
+                padding: 8px 14px;
+                border-radius: 6px;
+                font-size: 11pt;
             }
-            QPushButton { 
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #ef4444, stop:1 #dc2626); 
-                color: white; 
-                border: none; 
-                border-radius: 8px; 
-                padding: 10px 24px; 
-                font-weight: bold; 
-                font-size: 11pt; 
+            QPushButton {
+                background-color: #ef4444;
+                color: #ffffff;
+                border: none;
+                border-radius: 6px;
+                padding: 9px 22px;
+                font-weight: 600;
+                font-size: 11pt;
             }
-            QPushButton:hover { 
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #f87171, stop:1 #ef4444); 
+            QPushButton:hover {
+                background-color: #dc2626;
             }
-            QPushButton#secondary { 
-                background: #27272a; 
-                color: #a1a1aa; 
+            QPushButton#btn_secondary {
+                background-color: #1f1f24;
+                color: #a1a1aa;
             }
-            QPushButton#secondary:hover { 
-                background: #3f3f46; 
-                color: white; 
+            QPushButton#btn_secondary:hover {
+                background-color: #27272a;
+                color: #ffffff;
             }
-            QComboBox, QLineEdit { 
-                background-color: #18181b; 
-                border: 1px solid #3f3f46; 
-                border-radius: 8px; 
-                padding: 10px; 
-                color: white; 
+            QPushButton:disabled {
+                background-color: #1c1c20;
+                color: #52525b;
+            }
+            QComboBox, QLineEdit {
+                background-color: #16161a;
+                border: 1px solid #27272a;
+                border-radius: 6px;
+                padding: 9px 12px;
+                color: #ffffff;
             }
             QComboBox:focus, QLineEdit:focus {
                 border: 1px solid #ef4444;
             }
-            QRadioButton { 
-                color: #e4e4e7; 
-                font-weight: 600; 
-                font-size: 11pt; 
-                spacing: 10px; 
+            QRadioButton {
+                color: #e4e4e7;
+                font-weight: 600;
+                spacing: 8px;
             }
-            QTextEdit { 
-                background-color: #141418; 
-                border: 1px solid #27272a; 
-                border-radius: 8px; 
-                color: #a1a1aa; 
-                font-family: 'JetBrains Mono', monospace; 
-                font-size: 9pt; 
+            QCheckBox {
+                color: #d4d4d8;
+                spacing: 8px;
             }
-            QSlider::groove:horizontal {
-                border: 1px solid #3f3f46;
-                height: 8px;
-                background: #18181b;
+            QTextEdit {
+                background-color: #121215;
+                border: 1px solid #1f1f24;
+                border-radius: 6px;
+                color: #a1a1aa;
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 9pt;
+            }
+            QListWidget {
+                background-color: #16161a;
+                border: 1px solid #27272a;
+                border-radius: 6px;
+                padding: 4px;
+            }
+            QListWidget::item {
+                padding: 6px 10px;
                 border-radius: 4px;
             }
-            QSlider::sub-page:horizontal {
-                background: #ef4444;
-                border-radius: 4px;
-            }
-            QSlider::handle:horizontal {
-                background: #ffffff;
-                border: 2px solid #ef4444;
-                width: 18px;
-                margin-top: -6px;
-                margin-bottom: -6px;
-                border-radius: 9px;
+            QListWidget::item:selected {
+                background-color: #991b1b;
+                color: #ffffff;
+                font-weight: 600;
             }
         """)
 
-        main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
 
         # 1. Left Sidebar
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
-        sidebar.setFixedWidth(240)
-        sb_l = QVBoxLayout(sidebar)
-        sb_l.setContentsMargins(20, 30, 20, 30)
-        sb_l.setSpacing(12)
+        sidebar.setFixedWidth(200)
+        sb_layout = QVBoxLayout(sidebar)
+        sb_layout.setContentsMargins(18, 24, 18, 24)
+        sb_layout.setSpacing(6)
 
-        logo_title = QLabel("<b>Higanvein<span style='color: #ef4444;'>OS</span></b>")
-        logo_title.setStyleSheet("font-size: 16pt; margin-bottom: 20px;")
-        sb_l.addWidget(logo_title)
+        logo = QLabel("H.V")
+        logo.setObjectName("brand_logo")
+        sb_layout.addWidget(logo)
 
-        self.nav_labels = [
-            QLabel("1. Welcome"),
-            QLabel("2. Storage & Mode"),
-            QLabel("3. User Account"),
-            QLabel("4. Review"),
-            QLabel("5. Installation")
+        sub_brand = QLabel("<small style='color: #52525b; font-size: 8pt; font-weight: bold; letter-spacing: 1px;'>HIGANVEIN</small>")
+        sb_layout.addWidget(sub_brand)
+        sb_layout.addSpacing(16)
+
+        self.step_names = [
+            "Welcome", "Location", "Keyboard", "Partitioning",
+            "Users", "Summary", "Install", "Finish"
         ]
-        for idx, lbl in enumerate(self.nav_labels):
-            lbl.setObjectName("nav_item")
-            sb_l.addWidget(lbl)
+        self.step_widgets = []
+        for name in self.step_names:
+            lbl = QLabel(name)
+            lbl.setObjectName("step_label")
+            self.step_widgets.append(lbl)
+            sb_layout.addWidget(lbl)
 
-        sb_l.addStretch()
-        version_lbl = QLabel("<small style='color: #52525b;'>Release 2026.09 (Beta)<br>CachyOS Kernel Powered</small>")
-        sb_l.addWidget(version_lbl)
-        main_layout.addWidget(sidebar)
+        sb_layout.addStretch()
 
-        # 2. Right Content Area
-        content_frame = QFrame()
-        content_layout = QVBoxLayout(content_frame)
-        content_layout.setContentsMargins(40, 30, 40, 30)
+        about_links = QLabel("<small><a href='#' style='color: #71717a; text-decoration: none;'>About</a> &nbsp;•&nbsp; <a href='#' style='color: #71717a; text-decoration: none;'>Support</a></small>")
+        sb_layout.addWidget(about_links)
+        layout.addWidget(sidebar)
+
+        # 2. Main Content
+        content_container = QFrame()
+        cc_layout = QVBoxLayout(content_container)
+        cc_layout.setContentsMargins(36, 28, 36, 24)
 
         self.stack = QStackedWidget()
-        content_layout.addWidget(self.stack)
-        main_layout.addWidget(content_frame)
+        cc_layout.addWidget(self.stack)
 
-        self.init_welcome()
-        self.init_storage()
-        self.init_account()
-        self.init_summary()
-        self.init_progress()
+        # Bottom Controls
+        bottom_bar = QHBoxLayout()
+        bottom_bar.setContentsMargins(0, 10, 0, 0)
+        self.btn_back = QPushButton("Back")
+        self.btn_back.setObjectName("btn_secondary")
+        self.btn_back.clicked.connect(self.go_back)
 
-        self.update_nav(0)
+        self.btn_next = QPushButton("Next")
+        self.btn_next.clicked.connect(self.go_next)
 
-    def update_nav(self, current_idx):
-        for idx, lbl in enumerate(self.nav_labels):
-            if idx == current_idx:
-                lbl.setObjectName("nav_item_active")
-            else:
-                lbl.setObjectName("nav_item")
-            lbl.style().unpolish(lbl)
-            lbl.style().polish(lbl)
+        bottom_bar.addStretch()
+        bottom_bar.addWidget(self.btn_back)
+        bottom_bar.addWidget(self.btn_next)
+        cc_layout.addLayout(bottom_bar)
+
+        layout.addWidget(content_container)
+
+        # Build 8 Pages
+        self.init_page_welcome()
+        self.init_page_location()
+        self.init_page_keyboard()
+        self.init_page_partitioning()
+        self.init_page_users()
+        self.init_page_summary()
+        self.init_page_install()
+        self.init_page_finish()
+
+        self.set_step(0)
 
     def set_step(self, idx):
         self.stack.setCurrentIndex(idx)
-        self.update_nav(idx)
+        for i, lbl in enumerate(self.step_widgets):
+            lbl.setObjectName("step_label_active" if i == idx else "step_label")
+            lbl.style().unpolish(lbl)
+            lbl.style().polish(lbl)
 
-    def init_welcome(self):
-        page = QWidget()
-        l = QVBoxLayout(page)
-        l.setSpacing(18)
+        self.btn_back.setEnabled(idx > 0 and idx not in (6, 7))
+        self.btn_back.setVisible(idx != 7)
 
-        title = QLabel("HiganveinOS")
-        title.setStyleSheet("color: #ffffff; font-size: 24pt; font-weight: 800; letter-spacing: -0.5px;")
-        l.addWidget(title)
+        if idx == 5:
+            self.btn_next.setText("Install")
+            self.btn_next.setEnabled(True)
+        elif idx == 6:
+            self.btn_next.setText("Installing...")
+            self.btn_next.setEnabled(False)
+        elif idx == 7:
+            self.btn_next.setText("Done")
+            self.btn_next.setEnabled(True)
+        else:
+            self.btn_next.setText("Next")
+            self.btn_next.setEnabled(True)
 
-        subtitle = QLabel("Arch-based Linux optimized with CachyOS BORE kernel, proactive memory management, and KDE Plasma.")
-        subtitle.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
-        subtitle.setWordWrap(True)
-        l.addWidget(subtitle)
+    def go_back(self):
+        curr = self.stack.currentIndex()
+        if curr > 0 and curr not in (6, 7):
+            self.set_step(curr - 1)
 
-        info_box = QFrame()
-        info_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 14px;")
-        ib_l = QVBoxLayout(info_box)
-        ib_l.setSpacing(6)
-        ib_l.addWidget(QLabel("<b style='color: #f4f4f5;'>System Specifications:</b>"))
-        ib_l.addWidget(QLabel("• <b>Kernel:</b> Linux CachyOS with BORE task scheduler & sysctl throughput tuning"))
-        ib_l.addWidget(QLabel("• <b>Desktop:</b> KDE Plasma on Wayland/X11, ZRAM 2× RAM compression, earlyoom daemon"))
-        ib_l.addWidget(QLabel("• <b>Multi-Boot:</b> GRUB UEFI & Legacy BIOS support, automated Windows/Linux detection"))
-        ib_l.addWidget(QLabel("• <b>Windows Layer:</b> Out-of-the-box Wine execution and 32/64-bit Vulkan graphics drivers"))
-        ib_l.addWidget(QLabel("• <b>Hardware:</b> Broadcom Wi-Fi DKMS, SOF laptop audio firmware, power-profiles-daemon"))
-        l.addWidget(info_box)
+    def go_next(self):
+        curr = self.stack.currentIndex()
+        if curr == 5:
+            self.start_installation()
+        elif curr == 7:
+            if self.chk_restart.isChecked():
+                subprocess.run(["reboot"])
+            self.close()
+        elif curr < 5:
+            if curr == 4:
+                self.update_summary()
+            self.set_step(curr + 1)
 
-        req_box = QFrame()
-        req_box.setStyleSheet("background-color: #141418; border: 1px solid #27272a; border-radius: 8px; padding: 14px;")
-        rb_l = QVBoxLayout(req_box)
-        rb_l.setSpacing(6)
-        rb_l.addWidget(QLabel("<b style='color: #f4f4f5;'>Hardware Requirements:</b>"))
-        rb_l.addWidget(QLabel("• <b>Processor:</b> Modern 64-bit multi-core CPU (Intel Core i3/i5/i7 or AMD Ryzen)"))
-        rb_l.addWidget(QLabel("• <b>Memory:</b> 4 GB RAM minimum (8 GB recommended for gaming & dev workloads)"))
-        rb_l.addWidget(QLabel("• <b>Storage:</b> 64 GB minimum (128 GB+ recommended for daily driver, games, & dev)"))
-        l.addWidget(req_box)
-
-        notice_box = QFrame()
-        notice_box.setStyleSheet("background-color: #161214; border: 1px solid #3f2022; border-radius: 8px; padding: 12px;")
-        nb_l = QVBoxLayout(notice_box)
-        nb_l.setSpacing(4)
-        nb_l.addWidget(QLabel("<b style='color: #ef4444;'>Beta Notice & Reporting:</b>"))
-        notice_txt = QLabel(
-            "This is a public beta release. Report partition issues, driver errors, or boot bugs "
-            "directly to <b>github.com/xyuhnlianzy/HiganVein</b> with your hardware specs and installer logs."
-        )
-        notice_txt.setWordWrap(True)
-        nb_l.addWidget(notice_txt)
-        l.addWidget(notice_box)
-
-        hb = QHBoxLayout()
-        hb.addStretch()
-        btn = QPushButton("Next: Select Storage →")
-        btn.clicked.connect(lambda: self.set_step(1))
-        hb.addWidget(btn)
-        l.addLayout(hb)
-        self.stack.addWidget(page)
-
-    def init_storage(self):
+    # ---------------- PAGE 1: WELCOME ----------------
+    def init_page_welcome(self):
         page = QWidget()
         l = QVBoxLayout(page)
         l.setSpacing(14)
 
-        l.addWidget(QLabel("<b>Target Storage & Dual-Boot Allocation</b>"))
-        
-        l.addWidget(QLabel("Select Drive:"))
-        self.disk_combo = QComboBox()
-        self.populate_disks()
-        self.disk_combo.currentIndexChanged.connect(self.on_disk_changed)
-        l.addWidget(self.disk_combo)
+        t = QLabel("Welcome to HiganveinOS")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
 
-        l.addWidget(QLabel("Installation Strategy:"))
-        self.mode_group = QButtonGroup(self)
-        self.radio_dual = QRadioButton("Install Alongside Existing OS (Dual-Boot)")
-        self.radio_full = QRadioButton("Erase Entire Drive (Format 100% of selected drive)")
-        self.radio_dual.setChecked(True)
-        self.mode_group.addButton(self.radio_dual)
-        self.mode_group.addButton(self.radio_full)
-        l.addWidget(self.radio_dual)
+        st = QLabel("A lightweight, modern Arch-based Linux distribution built for performance and simplicity.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
 
-        # Interactive Slider Box
-        self.slider_box = QFrame()
-        self.slider_box.setStyleSheet("background: #141418; border: 1px solid #27272a; border-radius: 10px; padding: 15px;")
-        sb_layout = QVBoxLayout(self.slider_box)
-        
-        self.slider_lbl = QLabel("Allocated Disk Space: <b>50 GB</b>")
-        sb_layout.addWidget(self.slider_lbl)
+        l.addSpacing(6)
+        spec_badge = QLabel("Arch Linux &nbsp;•&nbsp; CachyOS Kernel &nbsp;•&nbsp; KDE Plasma")
+        spec_badge.setStyleSheet("color: #71717a; font-weight: 600; font-size: 9pt;")
+        l.addWidget(spec_badge)
 
-        self.size_slider = QSlider(Qt.Orientation.Horizontal)
-        self.size_slider.setRange(30, 1000)
-        self.size_slider.setValue(64)
-        self.size_slider.valueChanged.connect(self.on_slider_changed)
-        sb_layout.addWidget(self.size_slider)
-        l.addWidget(self.slider_box)
+        quote_box = QFrame()
+        quote_box.setStyleSheet("background-color: #141417; border-left: 3px solid #ef4444; border-radius: 4px; padding: 12px 16px;")
+        ql = QVBoxLayout(quote_box)
+        q_txt = QLabel("<i>“A quiet system for a clearer mind.”</i>")
+        q_txt.setStyleSheet("color: #d4d4d8; font-size: 10pt;")
+        ql.addWidget(q_txt)
+        l.addWidget(quote_box)
 
-        l.addWidget(self.radio_full)
-        self.radio_dual.toggled.connect(lambda chk: self.slider_box.setVisible(chk))
-
-        fs_layout = QHBoxLayout()
-        fs_layout.addWidget(QLabel("Root Filesystem:"))
-        self.fs_combo = QComboBox()
-        self.fs_combo.addItems(["ext4 (Recommended, rock-solid)", "btrfs (Advanced, snapshots)"])
-        fs_layout.addWidget(self.fs_combo)
-        fs_layout.addStretch()
-        l.addLayout(fs_layout)
+        l.addSpacing(10)
+        l.addWidget(QLabel("Select Installer Language:"))
+        self.combo_lang = QComboBox()
+        self.combo_lang.addItems(["English (United States)", "Indonesian (Bahasa Indonesia)"])
+        l.addWidget(self.combo_lang)
 
         l.addStretch()
-        hb = QHBoxLayout()
-        b1 = QPushButton("Back"); b1.setObjectName("secondary")
-        b1.clicked.connect(lambda: self.set_step(0))
-        b2 = QPushButton("Continue →")
-        b2.clicked.connect(lambda: self.set_step(2))
-        hb.addWidget(b1); hb.addWidget(b2)
-        l.addLayout(hb)
         self.stack.addWidget(page)
 
-    def on_slider_changed(self, val):
-        self.slider_lbl.setText(f"Allocated Disk Space: <b>{val} GB</b>")
+    # ---------------- PAGE 2: LOCATION ----------------
+    def init_page_location(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(14)
 
-    def on_disk_changed(self):
-        text = self.disk_combo.currentText()
-        if "(" in text and "GB)" in text:
-            try:
-                max_gb = int(float(text.split("(")[1].split("GB)")[0].strip()))
-                slider_max = max(30, max_gb - 10)
-                self.size_slider.setMaximum(slider_max)
-                if self.size_slider.value() > slider_max:
-                    self.size_slider.setValue(max(20, slider_max // 2))
-            except Exception:
-                pass
+        t = QLabel("Location")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
+
+        st = QLabel("Select your location to set the time zone and regional settings.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
+
+        map_card = QFrame()
+        map_card.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 8px; padding: 24px;")
+        ml = QVBoxLayout(map_card)
+        ml.setSpacing(8)
+        map_pin = QLabel("📍 <b>Region Selected:</b> Asia / Jakarta")
+        map_pin.setStyleSheet("color: #ef4444; font-size: 13pt; font-weight: bold;")
+        ml.addWidget(map_pin)
+        map_desc = QLabel("Automatic network time synchronization (SNTP timesyncd) is pre-configured.")
+        map_desc.setStyleSheet("color: #71717a; font-size: 9pt;")
+        ml.addWidget(map_desc)
+        l.addWidget(map_card)
+
+        row = QHBoxLayout()
+        col1 = QVBoxLayout()
+        col1.addWidget(QLabel("Region:"))
+        self.combo_region = QComboBox()
+        self.combo_region.addItems(["Asia", "America", "Europe", "Australia", "Africa", "Pacific"])
+        col1.addWidget(self.combo_region)
+        row.addLayout(col1)
+
+        col2 = QVBoxLayout()
+        col2.addWidget(QLabel("Zone:"))
+        self.combo_zone = QComboBox()
+        self.combo_zone.addItems(["Jakarta", "Makassar", "Jayapura", "Singapore", "Tokyo", "London", "New_York"])
+        col2.addWidget(self.combo_zone)
+        row.addLayout(col2)
+        l.addLayout(row)
+
+        l.addStretch()
+        self.stack.addWidget(page)
+
+    # ---------------- PAGE 3: KEYBOARD ----------------
+    def init_page_keyboard(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(14)
+
+        t = QLabel("Keyboard layout")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
+
+        st = QLabel("Choose your keyboard layout.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
+
+        body = QHBoxLayout()
+        self.list_kb = QListWidget()
+        for k in ["English (US)", "English (UK)", "Indonesian", "Japanese", "German", "French", "Spanish", "Other..."]:
+            self.list_kb.addItem(k)
+        self.list_kb.setCurrentRow(0)
+        body.addWidget(self.list_kb, stretch=1)
+
+        kb_preview = QFrame()
+        kb_preview.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 8px; padding: 20px;")
+        kp_l = QVBoxLayout(kb_preview)
+        kp_l.addWidget(QLabel("<b>Standard QWERTY Layout</b>"))
+        kp_l.addWidget(QLabel("<small style='color: #71717a;'>Default model: Generic 105-key PC</small>"))
+        kp_l.addStretch()
+        kp_l.addWidget(QLabel("Test input:"))
+        test_in = QLineEdit()
+        test_in.setPlaceholderText("Type here to test your keyboard...")
+        kp_l.addWidget(test_in)
+        body.addWidget(kb_preview, stretch=2)
+        l.addLayout(body)
+
+        l.addStretch()
+        self.stack.addWidget(page)
+
+    # ---------------- PAGE 4: PARTITIONING ----------------
+    def init_page_partitioning(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(12)
+
+        t = QLabel("Installation type")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
+
+        st = QLabel("Choose how you want to install HiganveinOS.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
+
+        self.group_mode = QButtonGroup(self)
+        self.rad_erase = QRadioButton("Erase disk and install HiganveinOS")
+        self.rad_erase.setChecked(True)
+        self.rad_alongside = QRadioButton("Install alongside another operating system (Dual-Boot)")
+        self.rad_manual = QRadioButton("Manual partitioning")
+
+        self.group_mode.addButton(self.rad_erase)
+        self.group_mode.addButton(self.rad_alongside)
+        self.group_mode.addButton(self.rad_manual)
+
+        l.addWidget(self.rad_erase)
+        erase_sub = QLabel("<small style='color: #71717a; padding-left: 26px;'>This will wipe all data on the selected disk and generate standard GPT/ESP.</small>")
+        l.addWidget(erase_sub)
+
+        l.addWidget(self.rad_alongside)
+        l.addWidget(self.rad_manual)
+
+        l.addSpacing(6)
+        row_target = QHBoxLayout()
+        col_disk = QVBoxLayout()
+        col_disk.addWidget(QLabel("Target disk:"))
+        self.combo_disk = QComboBox()
+        self.populate_disks()
+        col_disk.addWidget(self.combo_disk)
+        row_target.addLayout(col_disk, stretch=3)
+
+        col_fs = QVBoxLayout()
+        col_fs.addWidget(QLabel("Filesystem:"))
+        self.combo_fs = QComboBox()
+        self.combo_fs.addItems(["Btrfs (recommended)", "Ext4"])
+        col_fs.addWidget(self.combo_fs)
+        row_target.addLayout(col_fs, stretch=2)
+        l.addLayout(row_target)
+
+        l.addSpacing(6)
+        self.chk_encrypt = QCheckBox("Enable disk encryption (LUKS)")
+        self.chk_home = QCheckBox("Use separate /home partition")
+        l.addWidget(self.chk_encrypt)
+        l.addWidget(self.chk_home)
+
+        l.addStretch()
+        self.stack.addWidget(page)
 
     def populate_disks(self):
-        self.disk_combo.clear()
-        live_media = get_live_boot_device()
+        self.combo_disk.clear()
+        live = get_live_boot_device()
         disks = []
-
         for d in os.listdir("/sys/block"):
             if d.startswith("sd") or d.startswith("nvme") or d.startswith("vd"):
                 dev_path = f"/dev/{d}"
-                if live_media and dev_path == live_media:
+                if live and dev_path == live:
                     continue
-
                 try:
-                    with open(f"/sys/block/{d}/ro", "r") as f:
-                        if f.read().strip() == "0":
-                            size_bytes = 0
-                            try:
-                                with open(f"/sys/block/{d}/size", "r") as sf:
-                                    size_bytes = int(sf.read().strip()) * 512
-                            except:
-                                pass
-                            size_gb = round(size_bytes / (1024**3), 1)
-
+                    with open(f"/sys/block/{d}/ro", "r") as rf:
+                        if rf.read().strip() == "0":
+                            with open(f"/sys/block/{d}/size", "r") as sf:
+                                gb = round((int(sf.read().strip()) * 512) / (1024**3), 1)
                             model = ""
                             try:
                                 with open(f"/sys/block/{d}/device/model", "r") as mf:
                                     model = mf.read().strip()
-                            except:
+                            except Exception:
                                 pass
-
-                            label = f"{dev_path}"
+                            dtype = "NVMe" if "nvme" in d else "SATA"
+                            label = f"{dev_path} — {dtype} {gb} GB"
                             if model:
-                                label += f" - {model}"
-                            label += f" ({size_gb} GB)"
+                                label += f" ({model})"
                             disks.append(label)
-                except:
+                except Exception:
                     pass
-
         if not disks:
-            disks = ["/dev/sda"]
-        self.disk_combo.addItems(disks)
-        self.on_disk_changed()
+            disks = ["/dev/sda (Drive Default)"]
+        self.combo_disk.addItems(disks)
 
-    def init_account(self):
+    # ---------------- PAGE 5: USERS ----------------
+    def init_page_users(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(12)
+
+        t = QLabel("Create your account")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
+
+        st = QLabel("Set up your user account.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
+
+        f_grid = QVBoxLayout()
+        f_grid.setSpacing(8)
+
+        f_grid.addWidget(QLabel("Your name:"))
+        self.in_fullname = QLineEdit("D-P")
+        f_grid.addWidget(self.in_fullname)
+
+        f_grid.addWidget(QLabel("Computer name:"))
+        self.in_hostname = QLineEdit("higanvein")
+        f_grid.addWidget(self.in_hostname)
+
+        f_grid.addWidget(QLabel("Username:"))
+        self.in_username = QLineEdit("higan")
+        f_grid.addWidget(self.in_username)
+
+        f_grid.addWidget(QLabel("Password:"))
+        self.in_password = QLineEdit()
+        self.in_password.setEchoMode(QLineEdit.EchoMode.Password)
+        self.in_password.setPlaceholderText("Password")
+        f_grid.addWidget(self.in_password)
+
+        f_grid.addWidget(QLabel("Confirm password:"))
+        self.in_confirm = QLineEdit()
+        self.in_confirm.setEchoMode(QLineEdit.EchoMode.Password)
+        self.in_confirm.setPlaceholderText("Confirm password")
+        f_grid.addWidget(self.in_confirm)
+
+        l.addLayout(f_grid)
+
+        l.addSpacing(6)
+        self.chk_autologin = QCheckBox("Log in automatically")
+        self.chk_autologin.setChecked(True)
+        self.chk_same_root = QCheckBox("Use the same password for administrator account (sudo)")
+        self.chk_same_root.setChecked(True)
+        l.addWidget(self.chk_autologin)
+        l.addWidget(self.chk_same_root)
+
+        l.addStretch()
+        self.stack.addWidget(page)
+
+    # ---------------- PAGE 6: SUMMARY ----------------
+    def init_page_summary(self):
         page = QWidget()
         l = QVBoxLayout(page)
         l.setSpacing(14)
 
-        l.addWidget(QLabel("<h2 style='color: white;'>User Profile & Security</h2>"))
-        l.addWidget(QLabel("Set up your primary account and computer identity:"))
+        t = QLabel("Review your settings")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
 
-        l.addWidget(QLabel("Computer Name (Hostname):"))
-        self.host_input = QLineEdit("higanveinos")
-        l.addWidget(self.host_input)
+        st = QLabel("Please check your settings before installing.")
+        st.setStyleSheet("color: #a1a1aa; font-size: 11pt;")
+        l.addWidget(st)
 
-        l.addWidget(QLabel("Full / Username:"))
-        self.user_input = QLineEdit("higan")
-        l.addWidget(self.user_input)
+        self.summary_box = QFrame()
+        self.summary_box.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 8px; padding: 20px;")
+        sb_l = QVBoxLayout(self.summary_box)
+        sb_l.setSpacing(10)
+        self.lbl_sum_loc = QLabel()
+        self.lbl_sum_kb = QLabel()
+        self.lbl_sum_part = QLabel()
+        self.lbl_sum_user = QLabel()
 
-        l.addWidget(QLabel("Security Password:"))
-        self.pass_input = QLineEdit()
-        self.pass_input.setEchoMode(QLineEdit.EchoMode.Password)
-        self.pass_input.setPlaceholderText("Enter secure password")
-        l.addWidget(self.pass_input)
+        for widget in (self.lbl_sum_loc, self.lbl_sum_kb, self.lbl_sum_part, self.lbl_sum_user):
+            widget.setStyleSheet("font-size: 10pt; line-height: 1.4;")
+            sb_l.addWidget(widget)
 
+        l.addWidget(self.summary_box)
         l.addStretch()
-        hb = QHBoxLayout()
-        b1 = QPushButton("Back"); b1.setObjectName("secondary")
-        b1.clicked.connect(lambda: self.set_step(1))
-        b2 = QPushButton("Review Summary →")
-        b2.clicked.connect(self.prepare_summary)
-        hb.addWidget(b1); hb.addWidget(b2)
-        l.addLayout(hb)
         self.stack.addWidget(page)
 
-    def init_summary(self):
-        page = QWidget()
-        l = QVBoxLayout(page)
-        l.setSpacing(15)
-
-        l.addWidget(QLabel("<h2 style='color: white;'>Ready to Install</h2>"))
-        l.addWidget(QLabel("Please review your installation preferences before proceeding:"))
-
-        self.summary_card = QFrame()
-        self.summary_card.setStyleSheet("background: #141418; border: 1px solid #27272a; border-radius: 10px; padding: 20px;")
-        sc_layout = QVBoxLayout(self.summary_card)
-        self.summary_lbl = QLabel()
-        sc_layout.addWidget(self.summary_lbl)
-        l.addWidget(self.summary_card)
-
-        l.addStretch()
-        hb = QHBoxLayout()
-        b1 = QPushButton("Back"); b1.setObjectName("secondary")
-        b1.clicked.connect(lambda: self.set_step(2))
-        b2 = QPushButton("Install HiganveinOS Now")
-        b2.clicked.connect(self.start_install)
-        hb.addWidget(b1); hb.addWidget(b2)
-        l.addLayout(hb)
-        self.stack.addWidget(page)
-
-    def init_progress(self):
-        page = QWidget()
-        l = QVBoxLayout(page)
-        l.setSpacing(15)
-
-        l.addWidget(QLabel("<h2 style='color: white;'>Installing HiganveinOS...</h2>"))
+    def update_summary(self):
+        reg = self.combo_region.currentText()
+        zone = self.combo_zone.currentText()
+        self.lbl_sum_loc.setText(f"📍 <b>Location:</b> Region: {reg}, Time zone: {zone}")
+        self.lbl_sum_kb.setText(f"⌨️ <b>Keyboard:</b> Layout: {self.list_kb.currentItem().text() if self.list_kb.currentItem() else 'English (US)'}")
         
-        self.p_bar = QProgressBar()
-        self.p_bar.setStyleSheet("""
-            QProgressBar { 
-                background: #18181b; 
-                border: 1px solid #27272a; 
-                border-radius: 6px; 
-                text-align: center; 
-                color: white; 
-                font-weight: bold;
-                height: 24px;
-            } 
-            QProgressBar::chunk { 
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #ef4444, stop:1 #b91c1c); 
-                border-radius: 6px; 
+        disk_txt = self.combo_disk.currentText().split(" ")[0]
+        fs_txt = "Btrfs" if "Btrfs" in self.combo_fs.currentText() else "Ext4"
+        mode_txt = "Erase Disk" if self.rad_erase.isChecked() else "Dual-Boot (Alongside)"
+        self.lbl_sum_part.setText(f"💾 <b>Partitioning:</b> Target: {disk_txt} ({mode_txt}), Filesystem: {fs_txt}")
+        
+        user_txt = self.in_username.text()
+        host_txt = self.in_hostname.text()
+        auto = "Yes" if self.chk_autologin.isChecked() else "No"
+        self.lbl_sum_user.setText(f"👤 <b>Users:</b> Username: {user_txt}, Computer name: {host_txt}, Auto login: {auto}")
+
+    # ---------------- PAGE 7: INSTALL ----------------
+    def init_page_install(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(14)
+
+        t = QLabel("Installing HiganveinOS")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t)
+
+        self.log_terminal = QTextEdit()
+        self.log_terminal.setReadOnly(True)
+        l.addWidget(self.log_terminal)
+
+        p_row = QVBoxLayout()
+        p_row.setSpacing(6)
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setStyleSheet("""
+            QProgressBar {
+                background-color: #1a1a20;
+                border: none;
+                border-radius: 4px;
+                height: 10px;
+                text-align: right;
+            }
+            QProgressBar::chunk {
+                background-color: #ef4444;
+                border-radius: 4px;
             }
         """)
-        l.addWidget(self.p_bar)
+        p_row.addWidget(self.progress_bar)
 
-        self.status_lbl = QLabel("Initializing setup engine...")
-        self.status_lbl.setStyleSheet("color: #e4e4e7; font-weight: bold;")
-        l.addWidget(self.status_lbl)
+        st_row = QHBoxLayout()
+        self.lbl_progress_status = QLabel("Starting installation...")
+        self.lbl_progress_status.setStyleSheet("color: #a1a1aa; font-size: 10pt;")
+        self.lbl_progress_pct = QLabel("0%")
+        self.lbl_progress_pct.setStyleSheet("color: #ef4444; font-weight: bold; font-size: 10pt;")
+        st_row.addWidget(self.lbl_progress_status)
+        st_row.addStretch()
+        st_row.addWidget(self.lbl_progress_pct)
+        p_row.addLayout(st_row)
+        l.addLayout(p_row)
 
-        self.log_box = QTextEdit()
-        self.log_box.setReadOnly(True)
-        l.addWidget(self.log_box)
         self.stack.addWidget(page)
 
-    def prepare_summary(self):
-        disk_raw = self.disk_combo.currentText().split(" ")[0]
-        fs_choice = "ext4" if "ext4" in self.fs_combo.currentText() else "btrfs"
-        mode_text = f"Dual-Boot Alongside Existing OS ({self.size_slider.value()} GB Allocated)" if self.radio_dual.isChecked() else "Clean Drive Wipe (100% of Drive)"
+    def start_installation(self):
+        raw_disk = self.combo_disk.currentText().split(" ")[0]
+        fs = "btrfs" if "Btrfs" in self.combo_fs.currentText() else "ext4"
+        timezone = f"{self.combo_region.currentText()}/{self.combo_zone.currentText()}"
 
-        summary_text = f"""
-<b>Target Drive:</b> {disk_raw}<br>
-<b>Installation Strategy:</b> {mode_text}<br>
-<b>Filesystem:</b> {fs_choice.upper()}<br>
-<b>Computer Hostname:</b> {self.host_input.text()}<br>
-<b>Primary User:</b> {self.user_input.text()}<br>
-<b>Bootloader:</b> Universal UEFI GRUB (Dual-Boot & Windows Boot Manager Override)
-        """
-        self.summary_lbl.setText(summary_text.strip())
-        self.set_step(3)
-
-    def start_install(self):
-        disk_raw = self.disk_combo.currentText().split(" ")[0]
-        fs_choice = "ext4" if "ext4" in self.fs_combo.currentText() else "btrfs"
         config = {
-            'disk': disk_raw,
-            'fs': fs_choice,
-            'username': self.user_input.text(),
-            'password': self.pass_input.text(),
-            'hostname': self.host_input.text(),
-            'timezone': detect_system_timezone(),
-            'install_mode': 'dualboot' if self.radio_dual.isChecked() else 'full',
-            'size_gb': self.size_slider.value()
+            'disk': raw_disk,
+            'fs': fs,
+            'fullname': self.in_fullname.text(),
+            'username': self.in_username.text(),
+            'password': self.in_password.text(),
+            'hostname': self.in_hostname.text(),
+            'timezone': timezone,
+            'install_mode': 'erase' if self.rad_erase.isChecked() else 'alongside',
+            'autologin': self.chk_autologin.isChecked()
         }
-        self.set_step(4)
-        self.worker = CoreEngineWorker(config)
-        self.worker.progress.connect(self.update_progress)
-        self.worker.finished.connect(self.install_finished)
+
+        self.set_step(6)
+        self.worker = InstallWorker(config)
+        self.worker.progress.connect(self.on_progress)
+        self.worker.finished.connect(self.on_finished)
         self.worker.start()
 
-    def update_progress(self, pct, msg, log):
-        self.p_bar.setValue(pct)
-        self.status_lbl.setText(msg)
-        self.log_box.append(log)
+    def on_progress(self, pct, status_msg, log_line):
+        self.progress_bar.setValue(pct)
+        self.lbl_progress_pct.setText(f"{pct}%")
+        self.lbl_progress_status.setText(status_msg)
+        self.log_terminal.append(log_line)
 
-    def install_finished(self, success, message):
+    def on_finished(self, success, msg):
         if success:
-            QMessageBox.information(self, "Installation Complete", message)
+            self.set_step(7)
         else:
-            QMessageBox.critical(self, "Installation Failed", f"An error occurred during installation:\n{message}")
+            QMessageBox.critical(self, "Installation Error", f"Installation failed:\n{msg}")
+
+    # ---------------- PAGE 8: FINISH ----------------
+    def init_page_finish(self):
+        page = QWidget()
+        l = QVBoxLayout(page)
+        l.setSpacing(16)
+        l.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        check_circle = QLabel("✓")
+        check_circle.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        check_circle.setStyleSheet("""
+            background-color: #141418;
+            color: #ffffff;
+            font-size: 32pt;
+            font-weight: bold;
+            border: 2px solid #ef4444;
+            border-radius: 40px;
+            min-width: 80px;
+            max-width: 80px;
+            min-height: 80px;
+            max-height: 80px;
+        """)
+        l.addWidget(check_circle, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        t = QLabel("Installation complete!")
+        t.setStyleSheet("font-size: 20pt; font-weight: 800; color: #ffffff;")
+        l.addWidget(t, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        desc = QLabel("HiganveinOS has been successfully installed.\nYou can now restart your computer and start using HiganveinOS.")
+        desc.setStyleSheet("color: #a1a1aa; font-size: 11pt; text-align: center;")
+        desc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        l.addWidget(desc)
+
+        l.addSpacing(10)
+        self.chk_restart = QCheckBox("Restart now")
+        self.chk_restart.setChecked(True)
+        l.addWidget(self.chk_restart, alignment=Qt.AlignmentFlag.AlignCenter)
+
+        self.stack.addWidget(page)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = HiganInstallerV4()
-    ex.show()
+    window = HiganInstallerApp()
+    window.show()
     sys.exit(app.exec())

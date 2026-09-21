@@ -34,12 +34,18 @@ install_gamer() {
 }
 
 install_dev() {
-    echo -e "${RED}==>${NC} ${WHITE}Installing Developer Stack...${NC}"
-    pacman -S --needed --noconfirm neovim git ripgrep fd bat eza fzf zoxide docker docker-compose
+    echo -e "${RED}==>${NC} ${WHITE}Installing Developer Toolchain & Compilers...${NC}"
+    # Modern IDE, Neovim, Docker, CLI rust tools
+    pacman -S --needed --noconfirm vscodium neovim git ripgrep fd bat eza fzf zoxide docker docker-compose
+    
+    # Core Compilers & Runtimes (C/C++, Rust, Go, Python, Node.js)
+    echo -e "${RED}==>${NC} ${WHITE}Installing Core Compilers (GCC, Clang, Rust, Go, Python, Node.js)...${NC}"
+    pacman -S --needed --noconfirm base-devel gcc clang make cmake rustup go python python-pip nodejs npm
+    
     echo -e "${GRAY}[+] Enabling Docker daemon and adding $USER_NAME to docker group...${NC}"
     systemctl enable --now docker 2>/dev/null || true
     usermod -aG docker "$USER_NAME" 2>/dev/null || true
-    echo -e "${WHITE}[✓] Developer Stack installed successfully.${NC}\n"
+    echo -e "${WHITE}[✓] Developer & Compilers Stack installed successfully.${NC}\n"
 }
 
 install_ricer() {

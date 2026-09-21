@@ -11,8 +11,8 @@ $1     :sssss-       `/++++++++++++++:        -sssss:
 $1     :sssss-      `/+++ooooooooooooo/`      -sssss:
 $1     :sssss-     ./ooosssso++osssssso+`     -sssss:
 $1     :sssss-    .oossssso-````/ossssss+`    -sssss:
-$1     :sssss-   -osssssso.══════:ssssssso.   -sssss:
-$1     :sssss-  :osssssss/════════osssso+++.  -sssss:
+$1     :sssss-════-osssssso.══════:ssssssso.══-sssss:
+$1     :sssss-    :osssssss/        osssso+++.-sssss:
 $1     :sssss- /ossssssss/        +ssssooo/-  -sssss:
 $1     :sssss-`/ossssso+/:-        -:/+osssso+-sssss:
 $1     :sssss- `+sso+:-`                 `.-/+osssss:

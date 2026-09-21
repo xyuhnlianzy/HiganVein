@@ -107,23 +107,27 @@
                 </div>
             </label>
 
-            <!-- 4. Security Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
+            <!-- 4. Security Stack (Coming Soon) -->
+            <div class="p-5 rounded-2xl bg-zinc-900/30 border border-zinc-800/60 relative space-y-3 block opacity-75">
                 <div class="flex items-start justify-between">
                     <div>
-                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 04</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Security & Recon</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-semibold text-zinc-500 font-mono tracking-wider">PROFILE 04</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-zinc-800 text-red-400 border border-red-900/40">Coming Soon</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-zinc-300 mt-0.5">Cybersecurity & Penetration Testing</h3>
                     </div>
-                    <input type="checkbox" id="chk-cyber" value="--cyber" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
+                    <span class="text-xs font-mono text-zinc-600">Phase 3</span>
                 </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">Network packet inspection, wireless auditing, port scanning, and diagnostic security toolchain (Phase 3 parity).</p>
+                <p class="text-xs text-zinc-500 leading-relaxed">Dedicated offensive security and network reconnaissance environment. Will feature pre-configured wireless auditing, packet analysis, and security toolchains in upcoming releases.</p>
                 <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Nmap</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Wireshark</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Aircrack-ng</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Tcpdump</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500 text-[11px] font-mono">Wireshark</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500 text-[11px] font-mono">Nmap</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500 text-[11px] font-mono">Metasploit</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500 text-[11px] font-mono">BurpSuite</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500 text-[11px] font-mono">Aircrack-ng</span>
                 </div>
-            </label>
+            </div>
         </div>
 
         <!-- Generated Command Console -->
@@ -149,18 +153,16 @@
             const gamer = document.getElementById('chk-gamer').checked;
             const dev = document.getElementById('chk-dev').checked;
             const ricer = document.getElementById('chk-ricer').checked;
-            const cyber = document.getElementById('chk-cyber').checked;
 
             let flags = [];
             if (gamer) flags.push('--gamer');
             if (dev) flags.push('--dev');
             if (ricer) flags.push('--ricer');
-            if (cyber) flags.push('--cyber');
 
             const display = document.getElementById('cmd-display');
             if (flags.length === 0) {
                 display.innerText = 'sudo higan-bundle';
-            } else if (flags.length === 4) {
+            } else if (flags.length === 3) {
                 display.innerText = 'sudo higan-bundle --all';
             } else {
                 display.innerText = 'sudo higan-bundle ' + flags.join(' ');

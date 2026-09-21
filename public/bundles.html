@@ -145,6 +145,38 @@
             </div>
             <p class="text-[11px] text-zinc-500">Run this directly inside your terminal on any running HiganveinOS machine.</p>
         </div>
+
+        <!-- Quick Terminal Cheatsheet / How It Works -->
+        <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono text-red-400">Quick Reference Guide</h3>
+            <p class="text-xs text-zinc-400">You can install any profile individually or combine multiple stacks using simple terminal commands:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Gaming only:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --gamer</p>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Developer & Compilers only:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --dev</p>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Ricing (Hyprland) only:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --ricer</p>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Gaming + Developer combined:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --gamer --dev</p>
+                </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-xs font-mono flex items-center justify-between">
+                <div>
+                    <span class="text-zinc-500 text-[10px]"># Interactive Mode (shows terminal menu with choices 1-5):</span>
+                    <p class="text-red-400 select-all font-semibold">sudo higan-bundle</p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->

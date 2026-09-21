@@ -544,7 +544,7 @@ class HiganInstallerApp(QWidget):
         l.addWidget(st)
 
         l.addSpacing(6)
-        spec_badge = QLabel("Arch Linux &nbsp;•&nbsp; CachyOS Kernel &nbsp;•&nbsp; KDE Plasma")
+        spec_badge = QLabel("Arch Linux • CachyOS Kernel • KDE Plasma")
         spec_badge.setStyleSheet("color: #71717a; font-weight: 600; font-size: 9pt;")
         l.addWidget(spec_badge)
 
@@ -713,37 +713,95 @@ class HiganInstallerApp(QWidget):
         self.group_mode.addButton(self.rad_manual)
 
         l.addWidget(self.rad_erase)
-        erase_sub = QLabel("<small style='color: #71717a; padding-left: 26px;'>This will wipe all data on the selected disk and generate standard GPT/ESP.</small>")
-        l.addWidget(erase_sub)
+        self.erase_sub = QLabel("<small style='color: #71717a; padding-left: 26px;'>This will wipe all data on the selected disk and generate standard GPT/ESP.</small>")
+        l.addWidget(self.erase_sub)
 
         l.addWidget(self.rad_alongside)
+
+        # Dual-boot size slider container
+        self.dual_box = QFrame()
+        self.dual_box.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 6px; padding: 12px; margin-left: 20px;")
+        db_l = QVBoxLayout(self.dual_box)
+        db_l.setSpacing(6)
+        self.lbl_slider = QLabel("Allocated HiganveinOS Partition Size: 64 GB")
+        self.lbl_slider.setStyleSheet("color: #ef4444; font-weight: bold; font-size: 10pt;")
+        db_l.addWidget(self.lbl_slider)
+        from PyQt6.QtWidgets import QSlider
+        self.slider_size = QSlider(Qt.Orientation.Horizontal)
+        self.slider_size.setRange(30, 1000)
+        self.slider_size.setValue(64)
+        self.slider_size.valueChanged.connect(lambda v: self.lbl_slider.setText(f"Allocated HiganveinOS Partition Size: {v} GB"))
+        db_l.addWidget(self.slider_size)
+        self.dual_box.setVisible(False)
+        l.addWidget(self.dual_box)
+
         l.addWidget(self.rad_manual)
 
+        # Manual partitioning container info
+        self.manual_box = QFrame()
+        self.manual_box.setStyleSheet("background-color: #141417; border: 1px solid #27272a; border-radius: 6px; padding: 10px; margin-left: 20px;")
+        mb_l = QVBoxLayout(self.manual_box)
+        btn_gparted = QPushButton("Launch Partition Manager (GParted / KDE Partition Manager)")
+        btn_gparted.setObjectName("btn_secondary")
+        btn_gparted.clicked.connect(self.launch_gparted)
+        mb_l.addWidget(btn_gparted)
+        self.manual_box.setVisible(False)
+        l.addWidget(self.manual_box)
+
+        self.rad_erase.toggled.connect(self.on_mode_changed)
+        self.rad_alongside.toggled.connect(self.on_mode_changed)
+        self.rad_manual.toggled.connect(self.on_mode_changed)
+
         l.addSpacing(6)
-        row_target = QHBoxLayout()
+        self.row_target = QFrame()
+        row_target_l = QVBoxLayout(self.row_target)
+        row_target_l.setContentsMargins(0, 0, 0, 0)
+        row_target_l.setSpacing(6)
+
+        sub_row = QHBoxLayout()
         col_disk = QVBoxLayout()
         col_disk.addWidget(QLabel("Target disk:"))
         self.combo_disk = QComboBox()
         self.populate_disks()
         col_disk.addWidget(self.combo_disk)
-        row_target.addLayout(col_disk, stretch=3)
+        sub_row.addLayout(col_disk, stretch=3)
 
         col_fs = QVBoxLayout()
         col_fs.addWidget(QLabel("Filesystem:"))
         self.combo_fs = QComboBox()
         self.combo_fs.addItems(["Btrfs (recommended)", "Ext4"])
         col_fs.addWidget(self.combo_fs)
-        row_target.addLayout(col_fs, stretch=2)
-        l.addLayout(row_target)
+        sub_row.addLayout(col_fs, stretch=2)
+        row_target_l.addLayout(sub_row)
 
-        l.addSpacing(6)
         self.chk_encrypt = QCheckBox("Enable disk encryption (LUKS)")
         self.chk_home = QCheckBox("Use separate /home partition")
-        l.addWidget(self.chk_encrypt)
-        l.addWidget(self.chk_home)
+        row_target_l.addWidget(self.chk_encrypt)
+        row_target_l.addWidget(self.chk_home)
+
+        l.addWidget(self.row_target)
 
         l.addStretch()
         self.stack.addWidget(page)
+
+    def on_mode_changed(self):
+        is_erase = self.rad_erase.isChecked()
+        is_along = self.rad_alongside.isChecked()
+        is_manual = self.rad_manual.isChecked()
+
+        self.erase_sub.setVisible(is_erase)
+        self.dual_box.setVisible(is_along)
+        self.manual_box.setVisible(is_manual)
+
+        # In manual mode, target disk and fs are managed by external tool or user
+        self.row_target.setVisible(not is_manual)
+
+    def launch_gparted(self):
+        for tool in ["partitionmanager", "gparted"]:
+            if shutil.which(tool):
+                subprocess.Popen([tool])
+                return
+        QMessageBox.information(self, "Partition Manager", "Please use KDE Partition Manager from the application menu.")
 
     def populate_disks(self):
         self.combo_disk.clear()
@@ -869,7 +927,12 @@ class HiganInstallerApp(QWidget):
         
         disk_txt = self.combo_disk.currentText().split(" ")[0]
         fs_txt = "Btrfs" if "Btrfs" in self.combo_fs.currentText() else "Ext4"
-        mode_txt = "Erase Disk" if self.rad_erase.isChecked() else "Dual-Boot (Alongside)"
+        if self.rad_erase.isChecked():
+            mode_txt = "Erase Entire Disk"
+        elif self.rad_alongside.isChecked():
+            mode_txt = f"Dual-Boot Alongside ({self.slider_size.value()} GB)"
+        else:
+            mode_txt = "Manual Partitioning"
         self.lbl_sum_part.setText(f"💾 <b>Partitioning:</b> Target: {disk_txt} ({mode_txt}), Filesystem: {fs_txt}")
         
         user_txt = self.in_username.text()
@@ -927,6 +990,13 @@ class HiganInstallerApp(QWidget):
         fs = "btrfs" if "Btrfs" in self.combo_fs.currentText() else "ext4"
         timezone = f"{self.combo_region.currentText()}/{self.combo_zone.currentText()}"
 
+        if self.rad_erase.isChecked():
+            imode = 'erase'
+        elif self.rad_alongside.isChecked():
+            imode = 'alongside'
+        else:
+            imode = 'manual'
+
         config = {
             'disk': raw_disk,
             'fs': fs,
@@ -935,7 +1005,8 @@ class HiganInstallerApp(QWidget):
             'password': self.in_password.text(),
             'hostname': self.in_hostname.text(),
             'timezone': timezone,
-            'install_mode': 'erase' if self.rad_erase.isChecked() else 'alongside',
+            'install_mode': imode,
+            'allocated_gb': self.slider_size.value() if hasattr(self, 'slider_size') else 64,
             'autologin': self.chk_autologin.isChecked()
         }
 

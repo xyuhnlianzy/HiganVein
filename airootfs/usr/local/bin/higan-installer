@@ -471,7 +471,7 @@ class HiganInstallerV4(QWidget):
         rb_l.addWidget(QLabel("<b style='color: #f4f4f5;'>Hardware Requirements:</b>"))
         rb_l.addWidget(QLabel("• <b>Processor:</b> Modern 64-bit multi-core CPU (Intel Core i3/i5/i7 or AMD Ryzen)"))
         rb_l.addWidget(QLabel("• <b>Memory:</b> 4 GB RAM minimum (8 GB recommended for gaming & dev workloads)"))
-        rb_l.addWidget(QLabel("• <b>Storage:</b> 20 GB free disk space (SSD recommended for optimal responsiveness)"))
+        rb_l.addWidget(QLabel("• <b>Storage:</b> 30 GB minimum (50 GB+ recommended for games, Wine, & dev tooling)"))
         l.addWidget(req_box)
 
         notice_box = QFrame()

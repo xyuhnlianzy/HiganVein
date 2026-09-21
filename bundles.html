@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modular Bundles — HiganveinOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
+    <!-- Navbar -->
+    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
+                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
+                <a href="index.html" class="hover:text-white transition">Home</a>
+                <a href="features.html" class="hover:text-white transition">Features</a>
+                <a href="bundles.html" class="text-white font-semibold">Bundles</a>
+                <a href="changes.html" class="hover:text-white transition">Changelog</a>
+                <a href="docs.html" class="hover:text-white transition">Docs</a>
+                <a href="about.html" class="hover:text-white transition">About</a>
+            </nav>
+            <div class="hidden md:block">
+                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                    Download ISO
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-14 flex-grow space-y-10">
+        <div class="space-y-3">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-950/50 border border-red-800/40 text-red-400 text-xs font-semibold">
+                <span>MODULAR PROFILE ARCHITECTURE</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Tailor HiganveinOS to Your Workflow</h1>
+            <p class="text-zinc-400 text-sm max-w-2xl leading-relaxed">Keep your core ISO ultra-light (2.8 GB). Select the specialized packages you need below to generate your personalized setup command.</p>
+        </div>
+
+        <!-- Bundle Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- 1. Gamer Stack -->
+            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 01</span>
+                        <h3 class="text-lg font-bold text-white mt-0.5">Gaming Suite</h3>
+                    </div>
+                    <input type="checkbox" id="chk-gamer" value="--gamer" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
+                </div>
+                <p class="text-xs text-zinc-400 leading-relaxed">Full graphics & gaming runtime with automatic GameMode daemon integration and 32-bit Vulkan libraries.</p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Steam</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Lutris</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">GameMode</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">MangoHud</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Wine-Staging</span>
+                </div>
+            </label>
+
+            <!-- 2. Developer Stack -->
+            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 02</span>
+                        <h3 class="text-lg font-bold text-white mt-0.5">Developer Toolchain</h3>
+                    </div>
+                    <input type="checkbox" id="chk-dev" value="--dev" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()" checked>
+                </div>
+                <p class="text-xs text-zinc-400 leading-relaxed">Modern CLI utilities, high-performance editors, and Docker engine with automatic non-root group assignment.</p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Neovim</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Docker</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">ripgrep</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">eza</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">fzf</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">bat</span>
+                </div>
+            </label>
+
+            <!-- 3. Ricing Stack -->
+            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 03</span>
+                        <h3 class="text-lg font-bold text-white mt-0.5">Ricing & Aesthetics</h3>
+                    </div>
+                    <input type="checkbox" id="chk-ricer" value="--ricer" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
+                </div>
+                <p class="text-xs text-zinc-400 leading-relaxed">Minimalist Wayland tiling window manager, Starship shell prompt, audio visualizers, and customizable dark bars.</p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Hyprland</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Waybar</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Starship</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Cava</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Kitty</span>
+                </div>
+            </label>
+
+            <!-- 4. Security Stack -->
+            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 04</span>
+                        <h3 class="text-lg font-bold text-white mt-0.5">Security & Recon</h3>
+                    </div>
+                    <input type="checkbox" id="chk-cyber" value="--cyber" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
+                </div>
+                <p class="text-xs text-zinc-400 leading-relaxed">Network packet inspection, wireless auditing, port scanning, and diagnostic security toolchain (Phase 3 parity).</p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Nmap</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Wireshark</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Aircrack-ng</span>
+                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Tcpdump</span>
+                </div>
+            </label>
+        </div>
+
+        <!-- Generated Command Console -->
+        <div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-zinc-400 font-mono">INSTALLATION COMMAND</span>
+                <button onclick="copyCommand()" id="copy-btn" class="text-xs font-semibold text-red-400 hover:text-red-300 transition">Copy to Clipboard</button>
+            </div>
+            <div class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 font-mono text-xs md:text-sm text-zinc-200 overflow-x-auto flex items-center justify-between">
+                <span id="cmd-display">sudo higan-bundle --dev</span>
+            </div>
+            <p class="text-[11px] text-zinc-500">Run this directly inside your terminal on any running HiganveinOS machine.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
+        <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>
+    </footer>
+
+    <script>
+        function updateCommand() {
+            const gamer = document.getElementById('chk-gamer').checked;
+            const dev = document.getElementById('chk-dev').checked;
+            const ricer = document.getElementById('chk-ricer').checked;
+            const cyber = document.getElementById('chk-cyber').checked;
+
+            let flags = [];
+            if (gamer) flags.push('--gamer');
+            if (dev) flags.push('--dev');
+            if (ricer) flags.push('--ricer');
+            if (cyber) flags.push('--cyber');
+
+            const display = document.getElementById('cmd-display');
+            if (flags.length === 0) {
+                display.innerText = 'sudo higan-bundle';
+            } else if (flags.length === 4) {
+                display.innerText = 'sudo higan-bundle --all';
+            } else {
+                display.innerText = 'sudo higan-bundle ' + flags.join(' ');
+            }
+        }
+
+        function copyCommand() {
+            const text = document.getElementById('cmd-display').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerText = 'Copied!';
+                setTimeout(() => { btn.innerText = 'Copy to Clipboard'; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

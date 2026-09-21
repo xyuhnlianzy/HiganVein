@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# HiganveinOS Modular Profile Installer (higan-bundle)
+# Installs specialized stacks: gamer, dev, ricer, security
+
+set -e
+
+RED='\033[0;31m'
+WHITE='\033[1;37m'
+GRAY='\033[0;90m'
+NC='\033[0m'
+
+echo -e "${RED}"
+echo "    O       /\\       O"
+echo "    |      /  \\      |"
+echo "    | *o* /    \\ *o* |"
+echo "    |/__//      \\\\__|"
+echo -e "${NC}"
+echo -e "${WHITE}HiganveinOS Profile Bundle Manager${NC}"
+echo -e "${GRAY}Modular software stack installer for gamers, developers, and ricers.${NC}\n"
+
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${RED}[!] Jalankan perintah ini dengan sudo.${NC}" 
+   exit 1
+fi
+
+USER_NAME="${SUDO_USER:-$USER}"
+
+install_gamer() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Gaming Stack...${NC}"
+    pacman -S --needed --noconfirm steam lutris mangohud gamemode gamescope wine-staging vulkan-tools lib32-mesa
+    echo -e "${GRAY}[+] Enabling gamemoded service...${NC}"
+    systemctl enable --now gamemoded 2>/dev/null || true
+    echo -e "${WHITE}[✓] Gaming Stack installed successfully.${NC}\n"
+}
+
+install_dev() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Developer Stack...${NC}"
+    pacman -S --needed --noconfirm neovim git ripgrep fd bat eza fzf zoxide docker docker-compose
+    echo -e "${GRAY}[+] Enabling Docker daemon and adding $USER_NAME to docker group...${NC}"
+    systemctl enable --now docker 2>/dev/null || true
+    usermod -aG docker "$USER_NAME" 2>/dev/null || true
+    echo -e "${WHITE}[✓] Developer Stack installed successfully.${NC}\n"
+}
+
+install_ricer() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Ricing Enthusiast Stack...${NC}"
+    pacman -S --needed --noconfirm hyprland waybar rofi-wayland cava starship kitty zsh-syntax-highlighting zsh-autosuggestions
+    echo -e "${GRAY}[+] Integrating Starship prompt to default shell...${NC}"
+    if ! grep -q "starship init" /home/"$USER_NAME"/.bashrc 2>/dev/null; then
+        echo 'eval "$(starship init bash)"' >> /home/"$USER_NAME"/.bashrc
+    fi
+    echo -e "${WHITE}[✓] Ricing Stack installed successfully.${NC}\n"
+}
+
+install_cyber() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Cybersecurity Tools...${NC}"
+    pacman -S --needed --noconfirm nmap wireshark-qt tcpdump aircrack-ng hydra john whois
+    usermod -aG wireshark "$USER_NAME" 2>/dev/null || true
+    echo -e "${WHITE}[✓] Cybersecurity Stack installed successfully.${NC}\n"
+}
+
+show_menu() {
+    echo -e "${WHITE}Pilih bundle yang ingin di-install:${NC}"
+    echo -e "  ${RED}1)${NC} Gamer Stack       ${GRAY}(Steam, Lutris, MangoHud, GameMode, Wine)${NC}"
+    echo -e "  ${RED}2)${NC} Developer Stack   ${GRAY}(Neovim, Docker, eza, bat, ripgrep, fzf)${NC}"
+    echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Cava, Starship, Rofi)${NC}"
+    echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Aircrack-ng, Hydra)${NC}"
+    echo -e "  ${RED}5)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
+    echo -e "  ${RED}q)${NC} Keluar\n"
+    read -rp "Pilihan Anda [1-5/q]: " choice
+    case "$choice" in
+        1) install_gamer ;;
+        2) install_dev ;;
+        3) install_ricer ;;
+        4) install_cyber ;;
+        5) install_gamer; install_dev; install_ricer; install_cyber ;;
+        q|Q) exit 0 ;;
+        *) echo "Pilihan tidak valid."; exit 1 ;;
+    esac
+}
+
+# CLI Flags support
+if [ "$#" -eq 0 ]; then
+    show_menu
+else
+    for arg in "$@"; do
+        case "$arg" in
+            --gamer) install_gamer ;;
+            --dev) install_dev ;;
+            --ricer) install_ricer ;;
+            --cyber) install_cyber ;;
+            --all) install_gamer; install_dev; install_ricer; install_cyber ;;
+            *) echo "Unknown flag: $arg"; exit 1 ;;
+        esac
+    done
+fi
+
+echo -e "${WHITE}Proses selesai. Restart session jika diperlukan untuk memuat grup baru (docker/wireshark).${NC}"

@@ -52,11 +52,27 @@
         </div>
 
         <div class="space-y-6">
+            <!-- 2026.09.21 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0)</span>
+                    <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
+                </div>
+                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
+                    <li><b class="text-zinc-200">Higan-Installer v5.0:</b> Full UI overhaul inspired by Calamares, Anaconda, and Pop!_OS research. Features color-coded partition bars, clean zinc-red dark mode, and zero marketing fluff.</li>
+                    <li><b class="text-zinc-200">Multi-Bootloader Choice:</b> Added interactive bootloader selection supporting Limine (modern/fast default), GRUB (universal dual-boot with os-prober), and systemd-boot (minimal native UEFI).</li>
+                    <li><b class="text-zinc-200">Default Live & Installed Wallpaper:</b> Apocalyptic red spider lily landscape ("彼岸 HIGAN / THE VOID REMAINS") forced as native default across KDE Plasma and SDDM.</li>
+                    <li><b class="text-zinc-200">Partition Manager Tooling:</b> Added KDE Partition Manager (<code class="text-zinc-300">kpmcore</code> + <code class="text-zinc-300">partitionmanager</code>) with direct launcher for advanced manual disk partitioning.</li>
+                    <li><b class="text-zinc-200">Btrfs Subvolumes by Default:</b> Automated subvolume topology (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD compression.</li>
+                    <li><b class="text-zinc-200">New ASCII Sigil:</b> Geometric orb-pillar fastfetch branding logo replacing legacy generic artwork.</li>
+                </ul>
+            </div>
+
             <!-- 2026.09.20 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4">
                 <div class="flex items-center justify-between">
                     <span class="text-white font-bold text-base">Release 2026.09.20 (Public Beta)</span>
-                    <span class="bg-zinc-800 text-zinc-400 text-xs px-2.5 py-1 rounded">Current</span>
+                    <span class="bg-zinc-800 text-zinc-400 text-xs px-2.5 py-1 rounded">Previous</span>
                 </div>
                 <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
                     <li><b class="text-zinc-200">Higan-Installer v4.0 Pro:</b> Rewritten native PyQt6 wizard with interactive Dual-Boot storage slider, dynamic drive model queries, and live system safety filters.</li>

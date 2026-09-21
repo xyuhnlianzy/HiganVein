@@ -1,21 +1,37 @@
-# HiganveinOS GRUB Theme (Higan Void)
-title-text: "HiganveinOS Core"
+# HiganveinOS Dark Void GRUB Theme
+title-text: ""
 desktop-image: "background.jpg"
-desktop-color: "#0c0c0e"
-terminal-font: "Unifont Regular 16"
+desktop-color: "#09090b"
+terminal-font: "Terminus Regular 14"
+terminal-box: "terminal_box_*.png"
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
 
 + boot_menu {
-    left = 15%
-    top = 35%
-    width = 70%
-    height = 50%
-    item_color = "#d4d4d8"
-    item_selected_color = "#ffffff"
-    item_background_color = "#18181b"
-    item_selected_background_color = "#991b1b"
-    item_font = "Unifont Regular 16"
-    selected_item_font = "Unifont Regular 16"
-    icon_width = 32
-    icon_height = 32
-    item_spacing = 10
+  left = 25%
+  top = 35%
+  width = 50%
+  height = 45%
+  item_font = "Unifont Regular 16"
+  item_color = "#71717a"
+  selected_item_color = "#ffffff"
+  item_height = 36
+  item_padding = 8
+  item_spacing = 10
+  selected_item_pixmap_style = "blob_*.png"
+  menu_pixmap_style = "boot_menu_*.png"
+}
+
++ progress_bar {
+  id = "__timeout__"
+  left = 25%
+  top = 85%
+  width = 50%
+  height = 6
+  show_text = false
+  bg_color = "#18181b"
+  fg_color = "#ef4444"
 }

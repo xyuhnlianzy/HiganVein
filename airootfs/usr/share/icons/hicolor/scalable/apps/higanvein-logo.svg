@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="spiderGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Circle Void -->
+  <circle cx="128" cy="128" r="120" fill="#09090b" stroke="#27272a" stroke-width="4"/>
+  <!-- Inner Sacred Ring -->
+  <circle cx="128" cy="128" r="108" fill="none" stroke="#ef4444" stroke-width="2" stroke-opacity="0.4" stroke-dasharray="6,6"/>
+  <!-- Left Pillar -->
+  <line x1="68" y1="56" x2="68" y2="200" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="68" cy="46" r="6" fill="#ef4444"/>
+  <!-- Right Pillar -->
+  <line x1="188" y1="56" x2="188" y2="200" stroke="#ef4444" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="188" cy="46" r="6" fill="#ef4444"/>
+  <!-- Arch Delta / Monogram Core -->
+  <path d="M 128 40 L 88 190 L 108 190 L 128 100 L 148 190 L 168 190 Z" fill="url(#spiderGlow)"/>
+  <!-- Bridge Horizontal Line -->
+  <line x1="56" y1="140" x2="200" y2="140" stroke="#ef4444" stroke-width="3" stroke-opacity="0.8"/>
+  <circle cx="128" cy="140" r="4" fill="#ffffff"/>
+  <!-- Bottom Sigil Arch Base -->
+  <path d="M 112 170 Q 128 155 144 170" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+</svg>

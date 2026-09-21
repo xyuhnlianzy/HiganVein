@@ -46,6 +46,7 @@ xorg-server-xwayland
 
 # --- Bootloader & Archiso Req ---
 syslinux
+limine
 grub
 efibootmgr
 os-prober

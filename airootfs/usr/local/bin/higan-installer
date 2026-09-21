@@ -204,8 +204,43 @@ class InstallWorker(QThread):
             subprocess.run(["arch-chroot", "/mnt/higan-target", "mkinitcpio", "-P"], check=True)
 
             self.current_pct = 88
-            self.current_msg = "Installing bootloader (GRUB)..."
-            log("> Installing GRUB EFI universal bootloader...")
+            self.current_msg = "Installing bootloader (Limine & GRUB)..."
+            log("> Installing Limine & GRUB universal bootloader...")
+            
+            # Limine EFI installation
+            try:
+                os.makedirs("/mnt/higan-target/boot/efi/EFI/BOOT", exist_ok=True)
+                os.makedirs("/mnt/higan-target/boot/limine", exist_ok=True)
+                if os.path.exists("/usr/share/limine/BOOTX64.EFI"):
+                    shutil.copy2("/usr/share/limine/BOOTX64.EFI", "/mnt/higan-target/boot/efi/EFI/BOOT/BOOTX64.EFI")
+                
+                # Render limine.conf with target UUID
+                limine_cfg = f"""# Limine Bootloader - HiganveinOS
+timeout: 5
+interface_branding: H.V HiganveinOS
+default_entry: 1
+
+/HiganveinOS (Default)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    kernel_cmdline: root=UUID={root_uuid} rw quiet loglevel=3 splash
+    module_path: boot():/initramfs-linux-cachyos.img
+
+/HiganveinOS (Fallback)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    kernel_cmdline: root=UUID={root_uuid} rw
+    module_path: boot():/initramfs-linux-cachyos-fallback.img
+"""
+                with open("/mnt/higan-target/boot/limine/limine.conf", "w") as lf:
+                    lf.write(limine_cfg)
+                with open("/mnt/higan-target/boot/efi/limine.conf", "w") as lf:
+                    lf.write(limine_cfg)
+                log("> Limine EFI bootloader deployed.")
+            except Exception as e:
+                log(f"> Note: Limine EFI deployment warning: {e}")
+
+            # Also install GRUB as multi-OS / Windows chainloader fallback
             subprocess.run([
                 "arch-chroot", "/mnt/higan-target", "grub-install",
                 "--target=x86_64-efi", "--efi-directory=/boot/efi",
@@ -217,6 +252,7 @@ class InstallWorker(QThread):
                     "arch-chroot", "/mnt/higan-target", "grub-install",
                     "--target=i386-pc", "--recheck", disk
                 ], stderr=subprocess.DEVNULL)
+                subprocess.run(["limine", "bios-install", disk], stderr=subprocess.DEVNULL)
 
             grub_default = "/mnt/higan-target/etc/default/grub"
             if os.path.exists(grub_default):

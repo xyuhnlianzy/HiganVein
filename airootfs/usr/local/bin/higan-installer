@@ -337,119 +337,9 @@ class InstallWorker(QThread):
                 if os.path.exists(sddm_conf):
                     os.remove(sddm_conf)
 
-            self.current_pct = 88
-            bootloader = self.config.get('bootloader', 'limine')
-            self.current_msg = f"Installing bootloader ({bootloader.upper()})..."
-            log(f"> Installing chosen bootloader: {bootloader.upper()}...")
-
-            root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
-
-            if not is_efi:
-                # Legacy BIOS (MBR) Bootloader: GRUB BIOS
-                log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
-                subprocess.run([
-                    "arch-chroot", target,
-                    "grub-install", "--target=i386-pc",
-                    "--recheck", disk
-                ], check=True)
-                grub_default = f"{target}/etc/default/grub"
-                if os.path.exists(grub_default):
-                    with open(grub_default, "r") as f:
-                        content = f.read()
-                    content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
-                    if "GRUB_DISABLE_OS_PROBER" not in content:
-                        content += "\nGRUB_DISABLE_OS_PROBER=false\n"
-                    if "GRUB_THEME=" not in content:
-                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
-                    else:
-                        import re
-                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
-                    with open(grub_default, "w") as f:
-                        f.write(content)
-                subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
-                log("  GRUB MBR bootloader configured successfully.")
-
-            elif bootloader == "limine":
-                limine_efi_src = f"{target}/usr/share/limine/BOOTX64.EFI"
-                if os.path.exists(limine_efi_src):
-                    efi_boot = f"{target}/boot/efi/EFI/BOOT"
-                    os.makedirs(efi_boot, exist_ok=True)
-                    shutil.copy2(limine_efi_src, f"{efi_boot}/BOOTX64.EFI")
-
-                    limine_wp_src = f"{target}/usr/share/limine/limine-wallpaper.jpg"
-                    if os.path.exists(limine_wp_src):
-                        shutil.copy2(limine_wp_src, f"{target}/boot/efi/limine-wallpaper.jpg")
-
-                    limine_cfg = f"{target}/boot/efi/limine.conf"
-                    with open(limine_cfg, "w") as f:
-                        f.write(f"""timeout: 5
-interface_branding: H.V HiganveinOS
-interface_branding_colour: ef4444
-interface_help_colour: a1a1aa
-interface_help_colour_bright: ef4444
-default_entry: 1
-wallpaper: boot():/limine-wallpaper.jpg
-wallpaper_style: stretched
-term_background: 9009090b
-term_foreground: fafafa
-term_margin: 64
-term_margin_gradient: 4
-
-/HiganveinOS
-    protocol: linux
-    kernel_path: boot():/vmlinuz-linux-cachyos
-    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet splash
-    module_path: boot():/initramfs-linux-cachyos.img
-""")
-                    log(f"  Limine EFI installed with Frieren theme (root UUID: {root_uuid})")
-
-            elif bootloader == "systemd-boot":
-                log("> Setting up systemd-boot...")
-                subprocess.run(["arch-chroot", target, "bootctl", "--path=/boot/efi", "install"], check=True)
-                loader_conf = f"{target}/boot/efi/loader/loader.conf"
-                os.makedirs(os.path.dirname(loader_conf), exist_ok=True)
-                with open(loader_conf, "w") as f:
-                    f.write("default higanveinos.conf\ntimeout 5\nconsole-mode max\n")
-                
-                entry_conf = f"{target}/boot/efi/loader/entries/higanveinos.conf"
-                os.makedirs(os.path.dirname(entry_conf), exist_ok=True)
-                with open(entry_conf, "w") as f:
-                    f.write(f"""title HiganveinOS
-linux /vmlinuz-linux-cachyos
-initrd /initramfs-linux-cachyos.img
-options root=UUID={root_uuid} rw loglevel=3 quiet
-""")
-                log("  systemd-boot entries created.")
-
-            else: # GRUB
-                log("> Setting up GRUB EFI with Higan Void Frieren Theme...")
-                subprocess.run([
-                    "arch-chroot", target,
-                    "grub-install", "--target=x86_64-efi",
-                    "--efi-directory=/boot/efi", "--bootloader-id=HiganveinOS",
-                    "--removable"
-                ], check=True)
-
-                grub_default = f"{target}/etc/default/grub"
-                if os.path.exists(grub_default):
-                    with open(grub_default, "r") as f:
-                        content = f.read()
-                    content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
-                    if "GRUB_DISABLE_OS_PROBER" not in content:
-                        content += "\nGRUB_DISABLE_OS_PROBER=false\n"
-                    if "GRUB_THEME=" not in content:
-                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
-                    else:
-                        import re
-                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
-                    with open(grub_default, "w") as f:
-                        f.write(content)
-
-                subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
-                log("  GRUB configured with Higan Void Frieren theme & os-prober.")
-
-            self.current_pct = 95
-            self.current_msg = "Generating initramfs..."
+            # ── 1. GENERATE KERNEL & INITRAMFS FIRST ──
+            self.current_pct = 85
+            self.current_msg = "Configuring kernel and generating initramfs..."
             log("> Configuring kernel and standard mkinitcpio for installed system...")
 
             # 0. Ensure target /boot has the vmlinuz kernel binary
@@ -499,7 +389,7 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
                         log(f"> Copied microcode {ucode}")
                         break
 
-            # 1. Restore default mkinitcpio preset (remove archiso preset, enable default & fallback)
+            # 1. Restore default mkinitcpio preset
             preset_file = f"{target}/etc/mkinitcpio.d/{pkgbase_name}.preset"
             with open(preset_file, "w") as f:
                 f.write(f"""# mkinitcpio preset file for the '{pkgbase_name}' package
@@ -536,6 +426,135 @@ fallback_options="-S autodetect"
 
             subprocess.run(["arch-chroot", target, "mkinitcpio", "-P"], check=True)
             log("  Standard initramfs generated successfully.")
+
+            # ── 2. INSTALL BOOTLOADER ──
+            self.current_pct = 92
+            bootloader = self.config.get('bootloader', 'limine')
+            self.current_msg = f"Installing bootloader ({bootloader.upper()})..."
+            log(f"> Installing chosen bootloader: {bootloader.upper()}...")
+
+            root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
+
+            if not is_efi:
+                # Legacy BIOS (MBR) Bootloader: GRUB BIOS
+                log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
+                subprocess.run([
+                    "arch-chroot", target,
+                    "grub-install", "--target=i386-pc",
+                    "--recheck", disk
+                ], check=True)
+                grub_default = f"{target}/etc/default/grub"
+                if os.path.exists(grub_default):
+                    with open(grub_default, "r") as f:
+                        content = f.read()
+                    content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
+                    if "GRUB_DISABLE_OS_PROBER" not in content:
+                        content += "\nGRUB_DISABLE_OS_PROBER=false\n"
+                    if "GRUB_THEME=" not in content:
+                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
+                    else:
+                        import re
+                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
+                    with open(grub_default, "w") as f:
+                        f.write(content)
+                subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
+                log("  GRUB MBR bootloader configured successfully.")
+
+            elif bootloader == "limine":
+                limine_efi_src = f"{target}/usr/share/limine/BOOTX64.EFI"
+                if os.path.exists(limine_efi_src):
+                    efi_boot = f"{target}/boot/efi/EFI/BOOT"
+                    os.makedirs(efi_boot, exist_ok=True)
+                    shutil.copy2(limine_efi_src, f"{efi_boot}/BOOTX64.EFI")
+
+                    limine_wp_src = f"{target}/usr/share/limine/limine-wallpaper.jpg"
+                    if os.path.exists(limine_wp_src):
+                        shutil.copy2(limine_wp_src, f"{target}/boot/efi/limine-wallpaper.jpg")
+
+                    # Copy kernel and initramfs to ESP so Limine boot(): can open them directly
+                    log("> Copying kernel & initramfs to ESP for Limine...")
+                    for kf in [f"vmlinuz-{pkgbase_name}", f"initramfs-{pkgbase_name}.img", f"initramfs-{pkgbase_name}-fallback.img"]:
+                        src_k = f"{target}/boot/{kf}"
+                        dst_k = f"{target}/boot/efi/{kf}"
+                        if os.path.exists(src_k):
+                            try:
+                                shutil.copy2(src_k, dst_k)
+                            except Exception:
+                                pass
+
+                    limine_cfg = f"{target}/boot/efi/limine.conf"
+                    with open(limine_cfg, "w") as f:
+                        f.write(f"""timeout: 5
+interface_branding: H.V HiganveinOS
+interface_branding_colour: ef4444
+interface_help_colour: a1a1aa
+interface_help_colour_bright: ef4444
+default_entry: 1
+wallpaper: boot():/limine-wallpaper.jpg
+wallpaper_style: stretched
+term_background: 9009090b
+term_foreground: fafafa
+term_margin: 64
+term_margin_gradient: 4
+
+/HiganveinOS
+    protocol: linux
+    kernel_path: boot():/vmlinuz-{pkgbase_name}
+    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet splash
+    module_path: boot():/initramfs-{pkgbase_name}.img
+
+/HiganveinOS (Fallback Initramfs)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-{pkgbase_name}
+    kernel_cmdline: root=UUID={root_uuid} rw
+    module_path: boot():/initramfs-{pkgbase_name}-fallback.img
+""")
+                    log(f"  Limine EFI installed with Frieren theme (root UUID: {root_uuid})")
+
+            elif bootloader == "systemd-boot":
+                log("> Setting up systemd-boot...")
+                subprocess.run(["arch-chroot", target, "bootctl", "--path=/boot/efi", "install"], check=True)
+                loader_conf = f"{target}/boot/efi/loader/loader.conf"
+                os.makedirs(os.path.dirname(loader_conf), exist_ok=True)
+                with open(loader_conf, "w") as f:
+                    f.write("default higanveinos.conf\ntimeout 5\nconsole-mode max\n")
+                
+                entry_conf = f"{target}/boot/efi/loader/entries/higanveinos.conf"
+                os.makedirs(os.path.dirname(entry_conf), exist_ok=True)
+                with open(entry_conf, "w") as f:
+                    f.write(f"""title HiganveinOS
+linux /vmlinuz-linux-cachyos
+initrd /initramfs-linux-cachyos.img
+options root=UUID={root_uuid} rw loglevel=3 quiet
+""")
+                log("  systemd-boot entries created.")
+
+            else: # GRUB
+                log("> Setting up GRUB EFI with Higan Void Frieren Theme...")
+                subprocess.run([
+                    "arch-chroot", target,
+                    "grub-install", "--target=x86_64-efi",
+                    "--efi-directory=/boot/efi", "--bootloader-id=HiganveinOS",
+                    "--removable"
+                ], check=True)
+
+                grub_default = f"{target}/etc/default/grub"
+                if os.path.exists(grub_default):
+                    with open(grub_default, "r") as f:
+                        content = f.read()
+                    content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
+                    if "GRUB_DISABLE_OS_PROBER" not in content:
+                        content += "\nGRUB_DISABLE_OS_PROBER=false\n"
+                    if "GRUB_THEME=" not in content:
+                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
+                    else:
+                        import re
+                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
+                    with open(grub_default, "w") as f:
+                        f.write(content)
+
+                subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
+                log("  GRUB configured with Higan Void Frieren theme & os-prober.")
 
             self.current_pct = 98
             self.current_msg = "Cleaning up..."

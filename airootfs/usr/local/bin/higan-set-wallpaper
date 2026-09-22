@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Wait for plasmashell to start
+for i in {1..30}; do
+    if pgrep -x plasmashell &>/dev/null; then
+        break
+    fi
+    sleep 0.5
+done
+
+sleep 1
+
+# Apply wallpaper via KDE CLI utility
+if command -v plasma-apply-wallpaperimage &>/dev/null; then
+    plasma-apply-wallpaperimage /usr/share/wallpapers/Higanvein/higanvein-default.jpg 2>/dev/null || true
+fi

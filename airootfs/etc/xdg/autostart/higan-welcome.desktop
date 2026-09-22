@@ -2,7 +2,8 @@
 Type=Application
 Name=HiganveinOS Installer
 Comment=Install HiganveinOS
-Exec=sudo /usr/local/bin/higan-installer
+Exec=/usr/local/bin/higan-installer-launcher
 Icon=drive-harddisk
 Terminal=false
 Categories=System;
+StartupNotify=true

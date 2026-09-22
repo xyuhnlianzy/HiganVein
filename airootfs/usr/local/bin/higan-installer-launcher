@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Grant root permission to current user Wayland / X11 session
+xhost +si:localuser:root 2>/dev/null || xhost + 2>/dev/null || true
+
+export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export QT_QPA_PLATFORM="wayland;xcb"
+
+# Sleep briefly so desktop environment finishes loading
+sleep 2
+
+# Launch installer with preserved environment
+exec sudo -E /usr/local/bin/higan-installer "$@"

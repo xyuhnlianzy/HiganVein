@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Higanvein Wallpaper Setter
+Exec=/usr/local/bin/higan-set-wallpaper
+Hidden=false
+NoDisplay=true
+X-KDE-autostart-phase=2

@@ -72,6 +72,15 @@ install_ricer() {
     echo -e "${GRAY}    Repository: https://github.com/ilyamiro/serpantinum${NC}"
     pacman -S --needed --noconfirm hyprland waybar rofi-wayland cava starship kitty zsh-syntax-highlighting zsh-autosuggestions hyprpaper waypaper mako grim slurp wl-clipboard hyprlock
     
+    # Hide raw rofi launcher entries from KDE Kickoff to prevent 'Lost & Found' clutter
+    for r_entry in /usr/share/applications/rofi.desktop /usr/share/applications/rofi-theme-selector.desktop; do
+        if [ -f "$r_entry" ]; then
+            if ! grep -q "NoDisplay=true" "$r_entry"; then
+                echo "NoDisplay=true" >> "$r_entry"
+            fi
+        fi
+    done
+    
     echo -e "${GRAY}[+] Integrating Starship prompt to default shell...${NC}"
     if ! grep -q "starship init" /home/"$USER_NAME"/.bashrc 2>/dev/null; then
         echo 'eval "$(starship init bash)"' >> /home/"$USER_NAME"/.bashrc

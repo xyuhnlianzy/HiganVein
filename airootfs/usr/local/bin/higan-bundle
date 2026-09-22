@@ -56,14 +56,29 @@ install_dev() {
 }
 
 install_ricer() {
-    echo -e "${RED}==>${NC} ${WHITE}Installing Ricing Enthusiast Stack (Hyprland Suite)...${NC}"
+    echo -e "${RED}==>${NC} ${WHITE}Installing Ricing Enthusiast Stack (Hyprland + Serpantinum Shell)...${NC}"
+    echo -e "${GRAY}[i] Featured: Serpantinum Shell by Illia Miroshnichenko (ilyamiro)${NC}"
+    echo -e "${GRAY}    Repository: https://github.com/ilyamiro/serpantinum${NC}"
     pacman -S --needed --noconfirm hyprland waybar rofi-wayland cava starship kitty zsh-syntax-highlighting zsh-autosuggestions hyprpaper waypaper mako grim slurp wl-clipboard hyprlock
     
     echo -e "${GRAY}[+] Integrating Starship prompt to default shell...${NC}"
     if ! grep -q "starship init" /home/"$USER_NAME"/.bashrc 2>/dev/null; then
         echo 'eval "$(starship init bash)"' >> /home/"$USER_NAME"/.bashrc
     fi
-    echo -e "${WHITE}[✓] Ricing Stack (WM + Bar + Wallpaper + Notification + Screenshot Toolchain) installed.${NC}\n"
+
+    if [ -t 0 ]; then
+        echo -e "\n${WHITE}Do you want to run the Serpantinum Shell automated installer now? [Y/n]${NC}"
+        read -rp "Choice (default Y): " serp_choice
+        if [[ ! "$serp_choice" =~ ^[Nn] ]]; then
+            echo -e "${RED}==>${NC} ${WHITE}Launching Serpantinum Shell installer by ilyamiro...${NC}"
+            su - "$USER_NAME" -c 'bash -c "$(curl -fsSL https://raw.githubusercontent.com/ilyamiro/serpantinum/master/install/install.sh)"' || true
+        fi
+    else
+        echo -e "${GRAY}[i] To complete Serpantinum setup, run:${NC}"
+        echo -e "${WHITE}    bash -c \"\$(curl -fsSL https://raw.githubusercontent.com/ilyamiro/serpantinum/master/install/install.sh)\"${NC}"
+    fi
+
+    echo -e "${WHITE}[✓] Ricing Stack (Hyprland Suite + Serpantinum Shell) installed.${NC}\n"
 }
 
 install_cyber() {

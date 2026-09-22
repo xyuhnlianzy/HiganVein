@@ -1183,10 +1183,10 @@ class HiganInstallerApp(QWidget):
         cl.addWidget(specs)
 
         for icon, text in [
-            ("CPU", "Intel Core i3 / AMD Ryzen or newer"),
-            ("RAM", "4 GB minimum, 8 GB recommended"),
-            ("Disk", "64 GB minimum, 128 GB+ recommended"),
-            ("GPU", "Vulkan-compatible graphics"),
+            ("CPU", "2 Cores minimum (64-bit x86-64)"),
+            ("RAM", "1 GB minimum (single task, no bundle), 4 GB+ recommended"),
+            ("Disk", "20 GB minimum, 64 GB+ recommended"),
+            ("GPU", "Standard VGA / Vulkan-compatible"),
         ]:
             row = QHBoxLayout()
             tag = QLabel(icon)

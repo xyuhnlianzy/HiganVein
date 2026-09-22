@@ -53,8 +53,8 @@
 
 | Environment / Spec | Target RAM | CPU Cores | CLI Viability | KDE Plasma GUI Viability | Initial Boot RAM |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Constrained CLI** | **1 GB RAM** | **1 Core** | **Pass (Stable)** | Fail / Heavy Swap | ~280 MB - 340 MB |
-| **Constrained GUI** | **2 GB RAM** | **2 Cores** | **Pass (Optimal)** | Marginal (Usable w/ ZRAM) | ~750 MB - 920 MB |
+| **Ultra-Constrained** | **1 GB RAM** | **2 Cores** | **Pass (Verified)** | Single lightweight task only (No bundles) | ~280 MB |
+| **Constrained GUI** | **2 GB RAM** | **2 Cores** | **Pass (Optimal)** | Usable w/ ZRAM (2x swap) | ~750 MB - 920 MB |
 | **Recommended GUI**| **4 GB RAM** | **4 Cores** | **Pass** | **Pass (Fluid 60fps)** | ~980 MB |
 
 ### B. Observed Behavior & Realistic Minimums:

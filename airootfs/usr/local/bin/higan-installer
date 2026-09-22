@@ -1185,7 +1185,7 @@ class HiganInstallerApp(QWidget):
         for icon, text in [
             ("CPU", "2 Cores minimum (64-bit x86-64)"),
             ("RAM", "1 GB minimum (single task, no bundle), 4 GB+ recommended"),
-            ("Disk", "20 GB minimum, 64 GB+ recommended"),
+            ("Disk", "30 GB minimum (no apps installed), 64 GB+ recommended"),
             ("GPU", "Standard VGA / Vulkan-compatible"),
         ]:
             row = QHBoxLayout()

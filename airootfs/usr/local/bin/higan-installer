@@ -485,17 +485,16 @@ fallback_options="-S autodetect"
                     limine_cfg = f"{target}/boot/efi/limine.conf"
                     with open(limine_cfg, "w") as f:
                         f.write(f"""timeout: 5
-interface_branding: H.V HiganveinOS
-interface_branding_colour: ef4444
-interface_help_colour: a1a1aa
-interface_help_colour_bright: ef4444
+interface_resolution: 1920x1080
+interface_branding: 
+interface_help_hidden: yes
 default_entry: 1
 wallpaper: boot():/limine-wallpaper.jpg
 wallpaper_style: stretched
-term_background: 9009090b
+term_background: 00000000
 term_foreground: fafafa
-term_margin: 64
-term_margin_gradient: 4
+term_margin: 0
+term_margin_gradient: 0
 
 /HiganveinOS
     protocol: linux
@@ -509,7 +508,7 @@ term_margin_gradient: 4
     kernel_cmdline: root=UUID={root_uuid} rw
     module_path: uuid({root_uuid}):/boot/initramfs-{pkgbase_name}-fallback.img
 """)
-                    log(f"  Limine EFI installed with Frieren theme (root UUID: {root_uuid})")
+                    log(f"  Limine EFI installed with synchronized theme (root UUID: {root_uuid})")
 
             elif bootloader == "systemd-boot":
                 log("> Setting up systemd-boot...")

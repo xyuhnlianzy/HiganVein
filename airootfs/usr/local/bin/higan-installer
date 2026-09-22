@@ -300,8 +300,16 @@ class InstallWorker(QThread):
 
             self.current_pct = 85
             self.current_msg = "Creating user account..."
-            log(f"> Creating user: {username}")
-            subprocess.run(["arch-chroot", target, "useradd", "-m", "-G", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/bin/bash", username], check=True)
+            log(f"> Setting up user: {username}")
+            # If user already exists (e.g. copied from live system via rsync or naming conflict)
+            user_check = subprocess.run(["arch-chroot", target, "id", "-u", username], capture_output=True)
+            if user_check.returncode == 0:
+                log(f"> User {username} exists, updating groups and shell...")
+                subprocess.run(["arch-chroot", target, "usermod", "-aG", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/bin/bash", username], check=True)
+            else:
+                log(f"> Creating new user {username}...")
+                subprocess.run(["arch-chroot", target, "useradd", "-m", "-G", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/bin/bash", username], check=True)
+
             subprocess.run(["arch-chroot", target, "bash", "-c", f"echo '{username}:{password}' | chpasswd"], check=True)
             subprocess.run(["arch-chroot", target, "bash", "-c", f"echo 'root:{password}' | chpasswd"], check=True)
 

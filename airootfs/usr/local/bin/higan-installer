@@ -513,7 +513,25 @@ fallback_options="-S autodetect"
                             except Exception:
                                 pass
 
-                    limine_cfg = f"{target}/boot/efi/limine.conf"
+                    # Register Limine into UEFI NVRAM BootOrder via efibootmgr
+                    try:
+                        disk_base = disk
+                        part_num = "1"
+                        if "nvme" in esp_part:
+                            part_num = esp_part.split("p")[-1]
+                        else:
+                            import re
+                            m = re.search(r'\d+$', esp_part)
+                            if m:
+                                part_num = m.group(0)
+                        subprocess.run([
+                            "arch-chroot", target,
+                            "efibootmgr", "--create", "--disk", disk_base,
+                            "--part", part_num, "--label", "HiganveinOS (Limine)",
+                            "--loader", "\\EFI\\BOOT\\BOOTX64.EFI"
+                        ], stderr=subprocess.DEVNULL)
+                    except Exception:
+                        pass
                     with open(limine_cfg, "w") as f:
                         f.write(f"""timeout: 5
 interface_resolution: 1920x1080

@@ -34,7 +34,8 @@ power-profiles-daemon
 earlyoom
 zram-generator
 firefox
-kitty
+ptyxis
+fish
 
 # --- Audio & Multimedia ---
 alsa-utils

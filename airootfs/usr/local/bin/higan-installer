@@ -332,10 +332,10 @@ class InstallWorker(QThread):
             user_check = subprocess.run(["arch-chroot", target, "id", "-u", username], capture_output=True)
             if user_check.returncode == 0:
                 log(f"> User {username} exists, updating groups and shell...")
-                subprocess.run(["arch-chroot", target, "usermod", "-aG", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/bin/bash", username], check=True)
+                subprocess.run(["arch-chroot", target, "usermod", "-aG", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/usr/bin/fish", username], check=True)
             else:
                 log(f"> Creating new user {username}...")
-                subprocess.run(["arch-chroot", target, "useradd", "-m", "-G", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/bin/bash", username], check=True)
+                subprocess.run(["arch-chroot", target, "useradd", "-m", "-G", "wheel,video,audio,storage,optical,network,power", "-c", fullname, "-s", "/usr/bin/fish", username], check=True)
 
             subprocess.run(["arch-chroot", target, "bash", "-c", f"echo '{username}:{password}' | chpasswd"], check=True)
             subprocess.run(["arch-chroot", target, "bash", "-c", f"echo 'root:{password}' | chpasswd"], check=True)

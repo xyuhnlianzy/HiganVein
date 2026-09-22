@@ -308,12 +308,16 @@ class InstallWorker(QThread):
             sudoers = f"{target}/etc/sudoers.d/10-{username}"
             with open(sudoers, "w") as f:
                 f.write(f"{username} ALL=(ALL) ALL\n")
+            os.chmod(sudoers, 0o440)
 
+            sddm_conf = f"{target}/etc/sddm.conf.d/autologin.conf"
             if autologin:
-                sddm_conf = f"{target}/etc/sddm.conf.d/autologin.conf"
                 os.makedirs(os.path.dirname(sddm_conf), exist_ok=True)
                 with open(sddm_conf, "w") as f:
                     f.write(f"[Autologin]\nUser={username}\nSession=plasma\n")
+            else:
+                if os.path.exists(sddm_conf):
+                    os.remove(sddm_conf)
 
             self.current_pct = 88
             bootloader = self.config.get('bootloader', 'limine')
@@ -407,6 +411,23 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
 
             self.current_pct = 98
             self.current_msg = "Cleaning up..."
+            log("> Removing live installer autostart and live user artifacts from target...")
+            for stale in [
+                f"{target}/etc/xdg/autostart/higan-welcome.desktop",
+                f"{target}/home/{username}/Desktop/higan-installer.desktop",
+                f"{target}/etc/skel/Desktop/higan-installer.desktop",
+                f"{target}/etc/systemd/system/multi-user.target.wants/higan-live-init.service",
+                f"{target}/etc/systemd/system/higan-live-init.service"
+            ]:
+                if os.path.exists(stale):
+                    try:
+                        os.remove(stale)
+                    except Exception:
+                        pass
+
+            if username != "higan":
+                subprocess.run(["arch-chroot", target, "userdel", "-r", "higan"], stderr=subprocess.DEVNULL)
+
             subprocess.run(["umount", "-R", target], stderr=subprocess.DEVNULL)
 
             self.current_pct = 100

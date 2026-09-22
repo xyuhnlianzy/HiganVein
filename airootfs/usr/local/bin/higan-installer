@@ -329,19 +329,28 @@ class InstallWorker(QThread):
                     os.makedirs(efi_boot, exist_ok=True)
                     shutil.copy2(limine_efi_src, f"{efi_boot}/BOOTX64.EFI")
 
+                    limine_wp_src = f"{target}/usr/share/limine/limine-wallpaper.jpg"
+                    if os.path.exists(limine_wp_src):
+                        shutil.copy2(limine_wp_src, f"{target}/boot/efi/limine-wallpaper.jpg")
+
                     limine_cfg = f"{target}/boot/efi/limine.conf"
                     with open(limine_cfg, "w") as f:
                         f.write(f"""timeout: 5
-interface_branding: HiganveinOS
+interface_branding: H.V HiganveinOS
 default_entry: 1
+wallpaper: boot():/limine-wallpaper.jpg
+wallpaper_style: stretched
+term_background: 8009090b
+term_foreground: fafafa
+term_margin: 64
 
 /HiganveinOS
     protocol: linux
     kernel_path: boot():/vmlinuz-linux-cachyos
-    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet
+    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet splash
     module_path: boot():/initramfs-linux-cachyos.img
 """)
-                    log(f"  Limine EFI installed (root UUID: {root_uuid})")
+                    log(f"  Limine EFI installed with Frieren theme (root UUID: {root_uuid})")
 
             elif bootloader == "systemd-boot":
                 log("> Setting up systemd-boot...")
@@ -362,7 +371,7 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
                 log("  systemd-boot entries created.")
 
             else: # GRUB
-                log("> Setting up GRUB EFI...")
+                log("> Setting up GRUB EFI with Higan Void Frieren Theme...")
                 subprocess.run([
                     "arch-chroot", target,
                     "grub-install", "--target=x86_64-efi",
@@ -377,11 +386,16 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
                     content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
                     if "GRUB_DISABLE_OS_PROBER" not in content:
                         content += "\nGRUB_DISABLE_OS_PROBER=false\n"
+                    if "GRUB_THEME=" not in content:
+                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
+                    else:
+                        import re
+                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
                     with open(grub_default, "w") as f:
                         f.write(content)
 
                 subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
-                log("  GRUB configured with os-prober.")
+                log("  GRUB configured with Higan Void Frieren theme & os-prober.")
 
             self.current_pct = 95
             self.current_msg = "Generating initramfs..."

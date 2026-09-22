@@ -980,6 +980,7 @@ class HiganInstallerApp(QWidget):
             self.btn_next.setEnabled(False)
         elif idx == 7:
             self.btn_next.setText("Reboot")
+            self.btn_next.setEnabled(True)
         else:
             self.btn_next.setText("Next")
             self.btn_next.setEnabled(True)
@@ -1014,7 +1015,8 @@ class HiganInstallerApp(QWidget):
                 self.start_installation()
         elif curr == 7:
             if self.chk_restart.isChecked():
-                subprocess.run(["reboot"])
+                subprocess.Popen(["systemctl", "reboot"])
+                subprocess.Popen(["reboot", "-f"])
             self.close()
         elif curr < 5:
             self.set_step(curr + 1)

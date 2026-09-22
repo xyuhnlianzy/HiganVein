@@ -478,13 +478,17 @@ fallback_options="-S autodetect"
                 if os.path.exists(grub_default):
                     with open(grub_default, "r") as f:
                         content = f.read()
+                    import re
+                    # Set distribution name to HiganveinOS
+                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', 'GRUB_DISTRIBUTOR="HiganveinOS"', content, flags=re.M)
+                    if "GRUB_DISTRIBUTOR=" not in content:
+                        content += '\nGRUB_DISTRIBUTOR="HiganveinOS"\n'
                     content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
                     if "GRUB_DISABLE_OS_PROBER" not in content:
                         content += "\nGRUB_DISABLE_OS_PROBER=false\n"
                     if "GRUB_THEME=" not in content:
                         content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
                     else:
-                        import re
                         content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
                     with open(grub_default, "w") as f:
                         f.write(content)
@@ -590,13 +594,17 @@ options root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet
                 if os.path.exists(grub_default):
                     with open(grub_default, "r") as f:
                         content = f.read()
+                    import re
+                    # Set distribution name to HiganveinOS
+                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', 'GRUB_DISTRIBUTOR="HiganveinOS"', content, flags=re.M)
+                    if "GRUB_DISTRIBUTOR=" not in content:
+                        content += '\nGRUB_DISTRIBUTOR="HiganveinOS"\n'
                     content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
                     if "GRUB_DISABLE_OS_PROBER" not in content:
                         content += "\nGRUB_DISABLE_OS_PROBER=false\n"
                     if "GRUB_THEME=" not in content:
                         content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
                     else:
-                        import re
                         content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
                     with open(grub_default, "w") as f:
                         f.write(content)

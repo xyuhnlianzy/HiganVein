@@ -499,15 +499,15 @@ term_margin_gradient: 4
 
 /HiganveinOS
     protocol: linux
-    kernel_path: boot():/vmlinuz-{pkgbase_name}
+    kernel_path: uuid({root_uuid}):/boot/vmlinuz-{pkgbase_name}
     kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet splash
-    module_path: boot():/initramfs-{pkgbase_name}.img
+    module_path: uuid({root_uuid}):/boot/initramfs-{pkgbase_name}.img
 
 /HiganveinOS (Fallback Initramfs)
     protocol: linux
-    kernel_path: boot():/vmlinuz-{pkgbase_name}
+    kernel_path: uuid({root_uuid}):/boot/vmlinuz-{pkgbase_name}
     kernel_cmdline: root=UUID={root_uuid} rw
-    module_path: boot():/initramfs-{pkgbase_name}-fallback.img
+    module_path: uuid({root_uuid}):/boot/initramfs-{pkgbase_name}-fallback.img
 """)
                     log(f"  Limine EFI installed with Frieren theme (root UUID: {root_uuid})")
 

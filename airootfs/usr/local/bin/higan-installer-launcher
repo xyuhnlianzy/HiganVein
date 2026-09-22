@@ -9,5 +9,8 @@ export QT_QPA_PLATFORM="wayland;xcb"
 # Sleep briefly so desktop environment finishes loading
 sleep 2
 
-# Launch installer with preserved environment
-exec sudo -E /usr/local/bin/higan-installer "$@"
+if [ "$EUID" -eq 0 ]; then
+    exec /usr/local/bin/higan-installer "$@"
+else
+    exec sudo XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" WAYLAND_DISPLAY="$WAYLAND_DISPLAY" DISPLAY="$DISPLAY" QT_QPA_PLATFORM="$QT_QPA_PLATFORM" /usr/local/bin/higan-installer "$@"
+fi

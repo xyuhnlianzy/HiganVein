@@ -110,6 +110,67 @@
                 </p>
             </div>
         </div>
+
+        <!-- 12-Layer Verification Engine -->
+        <div class="p-6 md:p-8 rounded-2xl bg-zinc-900/50 border border-red-950/60 space-y-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></div>
+                <h2 class="text-white font-bold text-lg tracking-tight">12-Layer Continuous Deep Audit</h2>
+            </div>
+            <p class="text-zinc-400 text-xs leading-relaxed">
+                Setiap rilis image ISO HiganveinOS melewati audit diagnostik mendalam 12 lapis secara otomatis sebelum didistribusikan. Proses ini menjamin tidak ada bug kritis, package conflict, atau broken permissions dari level firmware hingga user space.
+            </p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 text-xs font-mono">
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">01. Firmware &amp; Table</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">MBR/GPT hybrid alignment</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">02. Bootloader Stages</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">GRUB, Limine &amp; Syslinux syntax</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">03. Kernel &amp; Microcode</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">BORE, AMD/Intel ucode</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">04. Initramfs Early-Boot</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">mkinitcpio hook sequencing</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">05. Base &amp; Packaging</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">Repo resolver &amp; zero conflicts</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">06. Hardware Enablers</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">Mesa, Vulkan ICD, Broadcom</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">07. Security Boundaries</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">0440 sudoers, device groups</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">08. Init &amp; Daemons</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">Systemd units &amp; target chains</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">09. Display &amp; Wayland</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">XDG runtime socket passthrough</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">10. Desktop Skeleton</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">/etc/skel, KDE Plasma 6 configs</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">11. Installer Logic</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">Btrfs subvolumes, post-cleanup</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
+                    <span class="text-red-500 font-bold block mb-1">12. Ecosystem &amp; Runtime</span>
+                    <span class="text-[11px] text-zinc-500 font-sans">Wine .exe associations &amp; CLI</span>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->

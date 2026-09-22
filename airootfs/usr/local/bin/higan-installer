@@ -573,6 +573,7 @@ options root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet
             self.current_msg = "Cleaning up..."
             log("> Removing live installer autostart and live user artifacts from target...")
             for stale in [
+                f"{target}/usr/local/bin/pacman",
                 f"{target}/etc/xdg/autostart/higan-welcome.desktop",
                 f"{target}/home/{username}/Desktop/higan-installer.desktop",
                 f"{target}/etc/skel/Desktop/higan-installer.desktop",

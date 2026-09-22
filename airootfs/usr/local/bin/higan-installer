@@ -337,12 +337,16 @@ class InstallWorker(QThread):
                     with open(limine_cfg, "w") as f:
                         f.write(f"""timeout: 5
 interface_branding: H.V HiganveinOS
+interface_branding_colour: ef4444
+interface_help_colour: a1a1aa
+interface_help_colour_bright: ef4444
 default_entry: 1
 wallpaper: boot():/limine-wallpaper.jpg
 wallpaper_style: stretched
-term_background: 8009090b
+term_background: 9009090b
 term_foreground: fafafa
 term_margin: 64
+term_margin_gradient: 4
 
 /HiganveinOS
     protocol: linux

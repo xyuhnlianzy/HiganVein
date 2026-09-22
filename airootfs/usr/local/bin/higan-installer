@@ -565,7 +565,14 @@ term_margin_gradient: 0
 
             elif bootloader == "systemd-boot":
                 log("> Setting up systemd-boot...")
-                subprocess.run(["arch-chroot", target, "bootctl", "--path=/boot/efi", "install"], check=True)
+                subprocess.run(["arch-chroot", target, "bootctl", "--esp-path=/boot/efi", "--boot-path=/boot/efi", "install"], check=True)
+
+                # Ensure fallback EFI binary exists at /boot/efi/EFI/BOOT/BOOTX64.EFI
+                sd_boot_src = f"{target}/usr/lib/systemd/boot/efi/systemd-bootx64.efi"
+                efi_fallback = f"{target}/boot/efi/EFI/BOOT/BOOTX64.EFI"
+                if os.path.exists(sd_boot_src):
+                    os.makedirs(os.path.dirname(efi_fallback), exist_ok=True)
+                    shutil.copy2(sd_boot_src, efi_fallback)
 
                 # Copy kernel, initramfs & microcodes to ESP so systemd-boot can load them
                 log("> Copying kernel & initramfs to ESP for systemd-boot...")

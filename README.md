@@ -2,14 +2,20 @@
 
 An elite, performance-focused Arch Linux derivative combining the raw speed of the **CachyOS Kernel**, the fluid window management of **Hyprland**, and a distinct Dark Fantasy aesthetic.
 
-## Legal & Compliance Notice
+## Upstream Acknowledgments & Credits
 
 HiganveinOS is an independent derivative work built upon open-source software:
-- **Arch Linux**: Licensed under GPL / various open-source licenses.
-- **CachyOS**: Kernel and optimizations provided under their respective open-source terms.
-- **Hyprland & Caelestia**: BSD / open-source licenses.
+- **Arch Linux**: Core rolling release repositories and packaging.
+- **CachyOS**: Kernel performance patches, BORE CPU scheduler, and compiler optimizations.
+- **Hyprland & Caelestia**: Fluid Wayland compositing and shell design.
+- **Illia Miroshnichenko ([ilyamiro](https://github.com/ilyamiro))**: Creator of [Serpantinum Shell](https://github.com/ilyamiro/serpantinum).
 
-We respect all upstream licenses, authors, and maintainers. No proprietary or copyrighted closed-source code from other commercial distributions is redistributed here. All artwork and styling are custom-crafted or sourced from freely licensed assets.
+### Special Thanks
+- **Al-Fajri** — Feature ideas: Out-of-the-box native Windows app (.exe) compatibility and custom bootloader artwork.  
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/mhfajrisilmi)
+  [![Threads](https://img.shields.io/badge/Threads-000000?style=flat&logo=threads&logoColor=white)](https://threads.net/@mhfajri.silmi)
+  [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white)](https://instagram.com/mhfajri.silmi)
+  [![TikTok](https://img.shields.io/badge/TikTok-000000?style=flat&logo=tiktok&logoColor=white)](https://tiktok.com/@mhfajri.silmi)
 
 ## License
 Distributed under the MIT License. See `LICENSE` for details.

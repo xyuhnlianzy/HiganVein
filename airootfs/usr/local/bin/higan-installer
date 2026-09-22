@@ -169,27 +169,35 @@ class InstallWorker(QThread):
                         subprocess.run(["umount", "-l", p_path], stderr=subprocess.DEVNULL)
 
                 self.current_pct = 15
-                self.current_msg = "Creating partition table (GPT)..."
+                self.current_msg = "Creating partition table..."
                 log(f"> Wiping {disk}...")
                 subprocess.run(["wipefs", "-a", "--force", disk], stderr=subprocess.DEVNULL)
                 subprocess.run(["sgdisk", "--zap-all", disk], stderr=subprocess.DEVNULL)
                 subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                 time.sleep(1)
 
-                log("> Creating ESP (512 MB) + root partition...")
-                subprocess.run(["parted", "-s", disk, "mklabel", "gpt"], check=True)
-                subprocess.run(["parted", "-s", disk, "mkpart", "ESP", "fat32", "1MiB", "513MiB"], check=True)
-                subprocess.run(["parted", "-s", disk, "set", "1", "esp", "on"], check=True)
-                subprocess.run(["parted", "-s", disk, "mkpart", "root", "513MiB", "100%"], check=True)
+                is_efi = os.path.exists("/sys/firmware/efi")
+                if is_efi:
+                    log("> Creating ESP (512 MB) + root partition (GPT)...")
+                    subprocess.run(["parted", "-s", disk, "mklabel", "gpt"], check=True)
+                    subprocess.run(["parted", "-s", disk, "mkpart", "ESP", "fat32", "1MiB", "513MiB"], check=True)
+                    subprocess.run(["parted", "-s", disk, "set", "1", "esp", "on"], check=True)
+                    subprocess.run(["parted", "-s", disk, "mkpart", "root", "513MiB", "100%"], check=True)
+                else:
+                    log("> Creating MBR partition for Legacy BIOS...")
+                    subprocess.run(["parted", "-s", disk, "mklabel", "msdos"], check=True)
+                    subprocess.run(["parted", "-s", disk, "mkpart", "primary", "1MiB", "100%"], check=True)
+                    subprocess.run(["parted", "-s", disk, "set", "1", "boot", "on"], check=True)
+
                 subprocess.run(["partprobe", disk], check=True)
                 time.sleep(1)
 
                 if "nvme" in disk:
-                    esp_part = f"{disk}p1"
-                    root_part = f"{disk}p2"
+                    esp_part = f"{disk}p1" if is_efi else None
+                    root_part = f"{disk}p2" if is_efi else f"{disk}p1"
                 else:
-                    esp_part = f"{disk}1"
-                    root_part = f"{disk}2"
+                    esp_part = f"{disk}1" if is_efi else None
+                    root_part = f"{disk}2" if is_efi else f"{disk}1"
 
             elif install_mode == "alongside":
                 allocated_gb = self.config.get('allocated_gb', 64)
@@ -216,9 +224,10 @@ class InstallWorker(QThread):
                 devs = sorted([f"/dev/{d}" for d in os.listdir("/dev") if d.startswith(os.path.basename(disk)) and d != os.path.basename(disk)])
                 root_part = devs[-1] if devs else f"{disk}2"
 
-            self.current_pct = 25
+            self.current_pct = 20
             self.current_msg = f"Formatting {fs.upper()}..."
-            if esp_part and install_mode == "erase":
+            is_efi = os.path.exists("/sys/firmware/efi")
+            if is_efi and esp_part and install_mode == "erase":
                 log(f"> Formatting ESP: {esp_part}")
                 subprocess.run(["mkfs.fat", "-F", "32", esp_part], check=True)
 
@@ -247,7 +256,7 @@ class InstallWorker(QThread):
             else:
                 subprocess.run(["mount", root_part, target], check=True)
 
-            if esp_part:
+            if is_efi and esp_part:
                 os.makedirs(f"{target}/boot/efi", exist_ok=True)
                 subprocess.run(["mount", esp_part, f"{target}/boot/efi"], check=True)
 
@@ -334,7 +343,32 @@ class InstallWorker(QThread):
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
 
-            if bootloader == "limine":
+            if not is_efi:
+                # Legacy BIOS (MBR) Bootloader: GRUB BIOS
+                log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
+                subprocess.run([
+                    "arch-chroot", target,
+                    "grub-install", "--target=i386-pc",
+                    "--recheck", disk
+                ], check=True)
+                grub_default = f"{target}/etc/default/grub"
+                if os.path.exists(grub_default):
+                    with open(grub_default, "r") as f:
+                        content = f.read()
+                    content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
+                    if "GRUB_DISABLE_OS_PROBER" not in content:
+                        content += "\nGRUB_DISABLE_OS_PROBER=false\n"
+                    if "GRUB_THEME=" not in content:
+                        content += '\nGRUB_THEME="/boot/grub/themes/higan/theme.txt"\n'
+                    else:
+                        import re
+                        content = re.sub(r'^#?GRUB_THEME=.*', 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"', content, flags=re.M)
+                    with open(grub_default, "w") as f:
+                        f.write(content)
+                subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
+                log("  GRUB MBR bootloader configured successfully.")
+
+            elif bootloader == "limine":
                 limine_efi_src = f"{target}/usr/share/limine/BOOTX64.EFI"
                 if os.path.exists(limine_efi_src):
                     efi_boot = f"{target}/boot/efi/EFI/BOOT"

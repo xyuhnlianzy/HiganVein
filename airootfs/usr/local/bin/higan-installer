@@ -435,9 +435,23 @@ fallback_options="-S autodetect"
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
 
+            # Determine rootflags for Btrfs root subvolume (@)
+            root_flags = "rootflags=subvol=@ " if fs == "btrfs" else ""
+
             if not is_efi:
                 # Legacy BIOS (MBR) Bootloader: GRUB BIOS
                 log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
+                # Configure GRUB cmdline with rootflags if btrfs
+                if fs == "btrfs":
+                    grub_default = f"{target}/etc/default/grub"
+                    if os.path.exists(grub_default):
+                        with open(grub_default, "r") as f:
+                            content = f.read()
+                        if "rootflags=subvol=@" not in content:
+                            content = content.replace('GRUB_CMDLINE_LINUX="', 'GRUB_CMDLINE_LINUX="rootflags=subvol=@ ')
+                            with open(grub_default, "w") as f:
+                                f.write(content)
+
                 subprocess.run([
                     "arch-chroot", target,
                     "grub-install", "--target=i386-pc",
@@ -499,13 +513,13 @@ term_margin_gradient: 0
 /HiganveinOS
     protocol: linux
     kernel_path: uuid({root_uuid}):/boot/vmlinuz-{pkgbase_name}
-    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet splash
+    kernel_cmdline: root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet splash
     module_path: uuid({root_uuid}):/boot/initramfs-{pkgbase_name}.img
 
 /HiganveinOS (Fallback Initramfs)
     protocol: linux
     kernel_path: uuid({root_uuid}):/boot/vmlinuz-{pkgbase_name}
-    kernel_cmdline: root=UUID={root_uuid} rw
+    kernel_cmdline: root=UUID={root_uuid} {root_flags}rw
     module_path: uuid({root_uuid}):/boot/initramfs-{pkgbase_name}-fallback.img
 """)
                     log(f"  Limine EFI installed with synchronized theme (root UUID: {root_uuid})")
@@ -524,7 +538,7 @@ term_margin_gradient: 0
                     f.write(f"""title HiganveinOS
 linux /vmlinuz-linux-cachyos
 initrd /initramfs-linux-cachyos.img
-options root=UUID={root_uuid} rw loglevel=3 quiet
+options root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet
 """)
                 log("  systemd-boot entries created.")
 

@@ -566,18 +566,45 @@ term_margin_gradient: 0
             elif bootloader == "systemd-boot":
                 log("> Setting up systemd-boot...")
                 subprocess.run(["arch-chroot", target, "bootctl", "--path=/boot/efi", "install"], check=True)
+
+                # Copy kernel, initramfs & microcodes to ESP so systemd-boot can load them
+                log("> Copying kernel & initramfs to ESP for systemd-boot...")
+                for kf in [f"vmlinuz-{pkgbase_name}", f"initramfs-{pkgbase_name}.img", f"initramfs-{pkgbase_name}-fallback.img", "intel-ucode.img", "amd-ucode.img"]:
+                    src_k = f"{target}/boot/{kf}"
+                    dst_k = f"{target}/boot/efi/{kf}"
+                    if os.path.exists(src_k):
+                        try:
+                            shutil.copy2(src_k, dst_k)
+                        except Exception:
+                            pass
+
                 loader_conf = f"{target}/boot/efi/loader/loader.conf"
                 os.makedirs(os.path.dirname(loader_conf), exist_ok=True)
                 with open(loader_conf, "w") as f:
                     f.write("default higanveinos.conf\ntimeout 5\nconsole-mode max\n")
                 
+                # Check for ucode to include in loader entry
+                ucode_entry = ""
+                if os.path.exists(f"{target}/boot/efi/intel-ucode.img"):
+                    ucode_entry = "initrd /intel-ucode.img\n"
+                elif os.path.exists(f"{target}/boot/efi/amd-ucode.img"):
+                    ucode_entry = "initrd /amd-ucode.img\n"
+
                 entry_conf = f"{target}/boot/efi/loader/entries/higanveinos.conf"
                 os.makedirs(os.path.dirname(entry_conf), exist_ok=True)
                 with open(entry_conf, "w") as f:
                     f.write(f"""title HiganveinOS
-linux /vmlinuz-linux-cachyos
-initrd /initramfs-linux-cachyos.img
-options root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet
+linux /vmlinuz-{pkgbase_name}
+{ucode_entry}initrd /initramfs-{pkgbase_name}.img
+options root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet splash
+""")
+
+                fallback_entry_conf = f"{target}/boot/efi/loader/entries/higanveinos-fallback.conf"
+                with open(fallback_entry_conf, "w") as f:
+                    f.write(f"""title HiganveinOS (Fallback Initramfs)
+linux /vmlinuz-{pkgbase_name}
+{ucode_entry}initrd /initramfs-{pkgbase_name}-fallback.img
+options root=UUID={root_uuid} {root_flags}rw
 """)
                 log("  systemd-boot entries created.")
 

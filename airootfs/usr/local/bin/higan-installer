@@ -308,6 +308,15 @@ class InstallWorker(QThread):
             with open(f"{target}/etc/locale.conf", "w") as f:
                 f.write("LANG=en_US.UTF-8\n")
 
+            # Enable NetworkManager & networking services on installed system
+            log("> Enabling NetworkManager and networking daemons...")
+            subprocess.run(["arch-chroot", target, "systemctl", "enable", "NetworkManager.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-resolved.service"], stderr=subprocess.DEVNULL)
+            # Ensure DNS resolv.conf fallback exists
+            if not os.path.exists(f"{target}/etc/resolv.conf") or os.path.getsize(f"{target}/etc/resolv.conf") == 0:
+                with open(f"{target}/etc/resolv.conf", "w") as f:
+                    f.write("nameserver 1.1.1.1\nnameserver 8.8.8.8\n")
+
             self.current_pct = 85
             self.current_msg = "Creating user account..."
             log(f"> Setting up user: {username}")

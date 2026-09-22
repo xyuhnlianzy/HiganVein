@@ -317,6 +317,14 @@ class InstallWorker(QThread):
                 with open(f"{target}/etc/resolv.conf", "w") as f:
                     f.write("nameserver 1.1.1.1\nnameserver 8.8.8.8\n")
 
+            # Initialize and populate Pacman GPG Keyrings on target system
+            log("> Initializing pacman GPG keyrings (archlinux, cachyos)...")
+            try:
+                subprocess.run(["arch-chroot", target, "pacman-key", "--init"], check=True)
+                subprocess.run(["arch-chroot", target, "pacman-key", "--populate", "archlinux", "cachyos"], check=True)
+            except Exception:
+                pass
+
             self.current_pct = 85
             self.current_msg = "Creating user account..."
             log(f"> Setting up user: {username}")

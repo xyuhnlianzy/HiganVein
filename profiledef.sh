@@ -15,7 +15,6 @@ file_permissions=(
   ["/usr/local/bin/higan-live-init"]="0:0:755"
   ["/usr/local/bin/higan-bundle"]="0:0:755"
   ["/home/higan/Desktop/higan-installer.desktop"]="1000:1000:755"
-  ["/usr/local/bin/higan-launch-calamares.sh"]="0:0:755"
   ["/etc/shadow"]="0:0:400"
   ["/etc/sudoers.d"]="0:0:750"
   ["/etc/sudoers.d/00-wheel-nopasswd"]="0:0:440"

@@ -105,15 +105,9 @@ class WelcomeDialog(QWidget):
         self.setLayout(layout)
 
     def launch_installer(self):
-        # Live user has passwordless sudo; pkexec needs a polkit agent
-        # which may not be running. Use sudo directly.
-        import shutil
-        calamares = shutil.which("calamares")
-        if not calamares:
-            self.setWindowTitle("Error: calamares not found in PATH")
-            return
+        # Launch native Higanvein installer via launcher
         try:
-            subprocess.Popen(["sudo", calamares])
+            subprocess.Popen(["/usr/local/bin/higan-installer-launcher"])
         except OSError as error:
             self.setWindowTitle(f"Installer failed to start: {error}")
             return

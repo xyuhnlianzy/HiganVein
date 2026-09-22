@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Wine Windows Program Loader
+Name[id]=Pemuat Program Windows Wine
+Comment=Run Windows applications directly on HiganveinOS
+Exec=wine start /unix %f
+MimeType=application/x-ms-dos-executable;application/x-msdownload;application/x-dosexec;application/x-msi;
+Icon=wine
+NoDisplay=false
+StartupNotify=true
+Categories=Utility;

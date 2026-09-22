@@ -606,6 +606,15 @@ linux /vmlinuz-{pkgbase_name}
 {ucode_entry}initrd /initramfs-{pkgbase_name}-fallback.img
 options root=UUID={root_uuid} {root_flags}rw
 """)
+                # Also mirror into /boot/loader for standard systemd-boot discovery
+                try:
+                    os.makedirs(f"{target}/boot/loader/entries", exist_ok=True)
+                    shutil.copy2(loader_conf, f"{target}/boot/loader/loader.conf")
+                    shutil.copy2(entry_conf, f"{target}/boot/loader/entries/higanveinos.conf")
+                    shutil.copy2(fallback_entry_conf, f"{target}/boot/loader/entries/higanveinos-fallback.conf")
+                except Exception:
+                    pass
+
                 log("  systemd-boot entries created.")
 
             else: # GRUB

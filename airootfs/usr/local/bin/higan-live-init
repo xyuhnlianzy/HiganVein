@@ -21,3 +21,23 @@ if [ -f "$WP" ]; then
         done
     fi
 fi
+
+# 3. Restore kernel and ucodes to live /boot so they exist in live filesystem
+mkdir -p /boot
+for mod_dir in /usr/lib/modules/*; do
+    if [ -f "$mod_dir/vmlinuz" ]; then
+        pkgbase="$(cat "$mod_dir/pkgbase" 2>/dev/null || echo "linux-cachyos")"
+        if [ ! -f "/boot/vmlinuz-$pkgbase" ]; then
+            cp -f "$mod_dir/vmlinuz" "/boot/vmlinuz-$pkgbase" 2>/dev/null || true
+        fi
+    fi
+done
+
+# Copy ucode and kernel from ISO boot mount if mounted
+for bootmnt in /run/archiso/bootmnt /run/archiso/bootmnt/arch/boot; do
+    if [ -d "$bootmnt" ]; then
+        cp -f "$bootmnt"/intel-ucode.img /boot/ 2>/dev/null || true
+        cp -f "$bootmnt"/amd-ucode.img /boot/ 2>/dev/null || true
+        cp -f "$bootmnt"/x86_64/vmlinuz* /boot/ 2>/dev/null || true
+    fi
+done

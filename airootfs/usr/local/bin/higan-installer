@@ -449,18 +449,66 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
 
             self.current_pct = 95
             self.current_msg = "Generating initramfs..."
-            log("> Configuring standard mkinitcpio for installed system...")
+            log("> Configuring kernel and standard mkinitcpio for installed system...")
+
+            # 0. Ensure target /boot has the vmlinuz kernel binary
+            os.makedirs(f"{target}/boot", exist_ok=True)
+            kver_found = None
+            pkgbase_name = "linux-cachyos"
+
+            # Search in target's /usr/lib/modules/
+            target_modules = f"{target}/usr/lib/modules"
+            if os.path.exists(target_modules):
+                for m in os.listdir(target_modules):
+                    m_path = os.path.join(target_modules, m)
+                    vmlinuz_path = os.path.join(m_path, "vmlinuz")
+                    if os.path.isfile(vmlinuz_path):
+                        kver_found = m
+                        pkgbase_file = os.path.join(m_path, "pkgbase")
+                        if os.path.isfile(pkgbase_file):
+                            try:
+                                with open(pkgbase_file) as pf:
+                                    pkgbase_name = pf.read().strip()
+                            except Exception:
+                                pass
+                        log(f"> Found kernel in modules: {kver_found} ({pkgbase_name})")
+                        shutil.copy2(vmlinuz_path, f"{target}/boot/vmlinuz-{pkgbase_name}")
+                        break
+
+            # Fallback check from live /boot or /run/archiso/bootmnt
+            if not os.path.exists(f"{target}/boot/vmlinuz-{pkgbase_name}"):
+                for cand in [
+                    f"/boot/vmlinuz-{pkgbase_name}",
+                    "/run/archiso/bootmnt/arch/boot/x86_64/vmlinuz-linux-cachyos",
+                ]:
+                    if os.path.exists(cand):
+                        shutil.copy2(cand, f"{target}/boot/vmlinuz-{pkgbase_name}")
+                        log(f"> Copied kernel from {cand}")
+                        break
+
+            # Copy CPU microcodes to target /boot if available
+            for ucode in ["intel-ucode.img", "amd-ucode.img"]:
+                for u_cand in [
+                    f"/boot/{ucode}",
+                    f"/run/archiso/bootmnt/arch/boot/{ucode}",
+                    f"/run/archiso/bootmnt/{ucode}"
+                ]:
+                    if os.path.exists(u_cand):
+                        shutil.copy2(u_cand, f"{target}/boot/{ucode}")
+                        log(f"> Copied microcode {ucode}")
+                        break
+
             # 1. Restore default mkinitcpio preset (remove archiso preset, enable default & fallback)
-            preset_file = f"{target}/etc/mkinitcpio.d/linux-cachyos.preset"
+            preset_file = f"{target}/etc/mkinitcpio.d/{pkgbase_name}.preset"
             with open(preset_file, "w") as f:
-                f.write("""# mkinitcpio preset file for the 'linux-cachyos' package
+                f.write(f"""# mkinitcpio preset file for the '{pkgbase_name}' package
 ALL_config="/etc/mkinitcpio.conf"
-ALL_kver="/boot/vmlinuz-linux-cachyos"
+ALL_kver="/boot/vmlinuz-{pkgbase_name}"
 
 PRESETS=('default' 'fallback')
 
-default_image="/boot/initramfs-linux-cachyos.img"
-fallback_image="/boot/initramfs-linux-cachyos-fallback.img"
+default_image="/boot/initramfs-{pkgbase_name}.img"
+fallback_image="/boot/initramfs-{pkgbase_name}-fallback.img"
 fallback_options="-S autodetect"
 """)
 

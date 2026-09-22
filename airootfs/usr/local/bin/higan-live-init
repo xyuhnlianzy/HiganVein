@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# HiganveinOS Live Boot Initializer
+# Runs before SDDM/Display Manager
+
+# 1. Ensure user higan owns their home folder
+chown -R 1000:1000 /home/higan 2>/dev/null || true
+
+# 2. Overwrite Breeze default wallpapers with Higan Void wallpaper
+WP="/usr/share/wallpapers/Higanvein/higanvein-default.jpg"
+if [ -f "$WP" ]; then
+    for dir in /usr/share/wallpapers/Next/contents/images /usr/share/wallpapers/Next/contents/images_dark; do
+        if [ -d "$dir" ]; then
+            for img in "$dir"/*; do
+                cp -f "$WP" "$img" 2>/dev/null || true
+            done
+        fi
+    done
+    if [ -d /usr/share/wallpapers/cachyos-wallpapers ]; then
+        for img in /usr/share/wallpapers/cachyos-wallpapers/*; do
+            cp -f "$WP" "$img" 2>/dev/null || true
+        done
+    fi
+fi

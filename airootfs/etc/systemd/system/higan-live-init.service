@@ -1,11 +1,11 @@
 [Unit]
-Description=HiganveinOS Live Session Permission Initializer
+Description=HiganveinOS Live Session Initializer
 Before=sddm.service display-manager.service
 DefaultDependencies=no
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/chown -R 1000:1000 /home/higan
+ExecStart=/usr/local/bin/higan-live-init
 RemainAfterExit=yes
 
 [Install]

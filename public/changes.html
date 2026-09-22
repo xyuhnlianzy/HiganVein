@@ -54,6 +54,26 @@
         </div>
 
         <div class="space-y-6">
+            <!-- 2026.09.22 -->
+            <div class="flex gap-4">
+                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-red-500 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
+                <div class="pb-8">
+                    <span class="text-xs text-zinc-500 font-mono">2026.09.22</span>
+                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.22 (Stable v1.0)</span>
+                    <ul class="mt-3 space-y-1 text-sm text-zinc-400 list-disc list-inside">
+                        <li>11-layer deep audit: fixed <code class="text-red-400">/etc/group</code> missing audio/video/storage/input groups</li>
+                        <li>Fixed sudoers <code class="text-red-400">0644→0440</code> — sudo was silently ignoring wheel rule</li>
+                        <li>Added KWin compositor config, KScreenLocker (off), KSplash (disabled) to skel</li>
+                        <li>Added <code class="text-red-400">mesa</code> base package (was only lib32-mesa)</li>
+                        <li>Fixed installer Wayland sudo display socket passthrough</li>
+                        <li>Fixed installer: clean live user/autostart artifacts from installed system</li>
+                        <li>Fixed sudoers file permissions on installed user account</li>
+                        <li>Added <code class="text-red-400">--help</code> flag to higan-bundle</li>
+                        <li>ISO uploaded to Hugging Face — 2.99 GB</li>
+                    </ul>
+                </div>
+            </div>
+
             <!-- 2026.09.21 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
                 <div class="flex items-center justify-between">

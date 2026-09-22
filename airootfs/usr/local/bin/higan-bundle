@@ -23,6 +23,17 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo -e "${WHITE}Usage:${NC} sudo higan-bundle [--gamer] [--dev] [--ricer] [--all]"
+    echo ""
+    echo -e "  ${RED}--gamer${NC}   Gaming stack (Steam, Lutris, Heroic, GameMode, Wine)"
+    echo -e "  ${RED}--dev${NC}     Developer toolchain (VSCodium, GCC, Rust, Go, Docker)"
+    echo -e "  ${RED}--ricer${NC}   Aesthetics & Hyprland suite (Waybar, Rofi, Serpentinum)"
+    echo -e "  ${RED}--all${NC}     Install all available bundles"
+    echo ""
+    exit 0
+fi
+
 USER_NAME="${SUDO_USER:-$USER}"
 
 install_gamer() {

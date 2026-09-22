@@ -1,0 +1,24 @@
+$1                  `-/+oooo+:-`
+$1              `:+ssssssssssssss+:`
+$1            -+ssssssssssssssssssss+-
+$1          .osssssssssssssssssssssssso.
+$1         /ssssssssssssssssssssssssssss/
+$1        +ssssssssssssssssssssssssssssss+
+$1       /ssssssssssssssssssssssssssssssss/
+$1      .ssssssssssssssssssssssssssssssssss.
+$1      +sssssso/:-.``````````.-:/ossssssss+
+$1     .ssssss/   :osssssssssso:   /sssssss.
+$1     /ssssss:   +ssssssssssss+   :sssssss/
+$1     +ssssss:   +ssssssssssss+   :sssssss+
+$1     +ssssss:   +ssssssssssss+   :sssssss+
+$1     /ssssss:   +ssssssssssss+   :sssssss/
+$1     .ssssss/   :osssssssssso:   /sssssss.
+$1      +sssssso/:-.``````````.-:/ossssssss+
+$1      .ssssssssssssssssssssssssssssssssss.
+$1       /ssssssssssssssssssssssssssssssss/
+$1        +ssssssssssssssssssssssssssssss+
+$1         /ssssssssssssssssssssssssssss/
+$1          .osssssssssssssssssssssssso.
+$1            -+ssssssssssssssssssss+-
+$1              `:+ssssssssssssss+:`
+$1                  `-/+oooo+:-`

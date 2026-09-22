@@ -57,16 +57,24 @@
             <!-- 2026.09.21 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0)</span>
+                    <span class="text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0 — Release Candidate 1)</span>
                     <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
                 </div>
                 <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Higan-Installer v5.0:</b> Full UI overhaul inspired by Calamares, Anaconda, and Pop!_OS research. Features color-coded partition bars, clean zinc-red dark mode, and zero marketing fluff.</li>
-                    <li><b class="text-zinc-200">Multi-Bootloader Choice:</b> Added interactive bootloader selection supporting Limine (modern/fast default), GRUB (universal dual-boot with os-prober), and systemd-boot (minimal native UEFI).</li>
-                    <li><b class="text-zinc-200">Default Live & Installed Wallpaper:</b> Apocalyptic red spider lily landscape ("彼岸 HIGAN / THE VOID REMAINS") forced as native default across KDE Plasma and SDDM.</li>
-                    <li><b class="text-zinc-200">Partition Manager Tooling:</b> Added KDE Partition Manager (<code class="text-zinc-300">kpmcore</code> + <code class="text-zinc-300">partitionmanager</code>) with direct launcher for advanced manual disk partitioning.</li>
-                    <li><b class="text-zinc-200">Btrfs Subvolumes by Default:</b> Automated subvolume topology (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD compression.</li>
-                    <li><b class="text-zinc-200">New ASCII Sigil:</b> Geometric orb-pillar fastfetch branding logo replacing legacy generic artwork.</li>
+                    <li><b class="text-zinc-200">Custom Anime Bootloader Art:</b> Unified split-screen bootloader theme across GRUB, Limine, and Syslinux featuring Frieren in a red spider lily field with dedicated left-hand menu framing.</li>
+                    <li><b class="text-zinc-200">Higan-Installer v5.0:</b> Full UI overhaul inspired by Calamares, Anaconda, and Pop!_OS research. Features color-coded partition visualization bars, clean zinc-red dark mode, and zero marketing fluff.</li>
+                    <li><b class="text-zinc-200">Interactive Bootloader Selection:</b> Choose between Limine (modern/fast default), GRUB (universal dual-boot with automated os-prober), and systemd-boot (minimal native UEFI) during installation.</li>
+                    <li><b class="text-zinc-200">Modular Profile Architecture (<code class="text-zinc-300">higan-bundle</code>):</b> Post-install profile management tool to install tailored software suites:
+                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
+                            <li><b>Gaming Suite:</b> Steam, Heroic Games Launcher, ProtonUp-Qt (GE-Proton), GameMode, MangoHud, xpadneo Xbox Bluetooth driver, and memory tweak (<code class="text-zinc-300">vm.max_map_count=1048576</code>).</li>
+                            <li><b>Developer Toolchain:</b> VSCodium, Neovim, full compiler stack (GCC, Clang, Rustup, Go, Python, Node.js), Docker engine with automated non-root group assignment, and modern Rust CLI tools.</li>
+                            <li><b>Ricing Enthusiast:</b> Hyprland Wayland compositor, Waybar, Rofi-wayland, Waypaper GUI wallpaper picker, Mako notifications, Grim/Slurp screenshot suite, Hyprlock, Cava, and Starship prompt.</li>
+                        </ul>
+                    </li>
+                    <li><b class="text-zinc-200">Interactive Web Configurator:</b> Live bundle generator at <a href="bundles.html" class="text-red-400 hover:underline">/bundles</a> with quick reference terminal cheatsheets.</li>
+                    <li><b class="text-zinc-200">Desktop Aesthetic Overhaul:</b> KDE Plasma Breeze Dark with Spider Lily Crimson Red accent (<code class="text-zinc-300">#ef4444</code>), custom H.V Monogram vector launcher icon, <code class="text-zinc-300">HiganVoid</code> Konsole theme, and automatic fastfetch sigil display on terminal launch.</li>
+                    <li><b class="text-zinc-200">UEFI Root Label Fix:</b> Resolved uninitialized variable in <code class="text-zinc-300">efiboot</code> GRUB configuration to prevent initramfs boot timeouts on certain modern UEFI motherboards.</li>
+                    <li><b class="text-zinc-200">Btrfs Subvolumes by Default:</b> Automated subvolume layout (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD filesystem compression.</li>
                 </ul>
             </div>
 

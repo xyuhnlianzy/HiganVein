@@ -57,14 +57,42 @@
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
                 <h3 class="text-white font-bold text-base">CachyOS Linux Kernel</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">
-                    Custom x86-64-v3 optimized kernel with BORE (Burst-Oriented Response Enhancer) scheduler. Prioritizes desktop interactivity, input latency, and consistent frame rates under heavy background compilations or gaming.
+                    Custom x86-64-v3 optimized kernel with BORE (Burst-Oriented Response Enhancer) scheduler. Prioritizes desktop interactivity, input latency, and consistent frame rates under heavy background compilations or gaming workloads.
                 </p>
             </div>
 
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Native Python Installer (`higan-installer`)</h3>
+                <h3 class="text-white font-bold text-base">Higan-Installer v5.0 (PyQt6)</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">
-                    In-house PyQt6 installer replacing Calamares. Includes interactive Dual-Boot storage allocation slider, drive model discovery, automatic GPT/ESP partition creation, rsync root installation, and multi-OS GRUB configuration.
+                    Custom 8-step wizard inspired by Calamares and Anaconda. Features interactive Dual-Boot storage allocation slider, real-time color-coded partition visualization bars, and direct KDE Partition Manager integration.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Multi-Bootloader Architecture</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    First-class support for Limine (modern, minimal, ultra-fast), GRUB (universal dual-boot with automated os-prober for Windows/other distros), and systemd-boot (native UEFI).
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Btrfs Subvolumes with ZSTD</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Automated layout partitioning into <code class="text-zinc-300">@</code> (root), <code class="text-zinc-300">@home</code> (user data), and <code class="text-zinc-300">@snapshots</code> with transparent ZSTD filesystem compression.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Modular Profile Manager (<code class="text-zinc-300">higan-bundle</code>)</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Keep your core ISO small (~2.8 GB). Easily install specialized software stacks on demand: Gaming Suite (Steam, Heroic, ProtonUp-Qt), Developer Suite (VSCodium, compilers, Docker), or Ricing (Hyprland Wayland suite).
+                </p>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
+                <h3 class="text-white font-bold text-base">Custom Split-Screen Bootloader Theme</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">
+                    Anime-inspired artwork boot interface across GRUB, Limine, and Syslinux featuring Frieren in a red spider lily landscape with high-contrast left-framed navigation menus.
                 </p>
             </div>
 
@@ -79,20 +107,6 @@
                 <h3 class="text-white font-bold text-base">Windows Compatibility Layer</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">
                     Pre-installed Wine runtime with full 32-bit and 64-bit Vulkan graphics libraries (Mesa, Intel, AMD). MIME associations allow direct double-click execution of .exe and .msi binaries from Dolphin.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Desktop & User Interface</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    KDE Plasma 6 on Wayland/X11 configured with a unified dark color scheme. Includes power-profiles-daemon for laptop battery switching, Kitty terminal, and pre-configured development toolchains.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Hardware & Network Support</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Broadcom wireless DKMS drivers, SOF modern audio firmware, active Bluetooth stack, and systemd-timesyncd with automatic IP geolocation timezone detection on initial setup.
                 </p>
             </div>
         </div>

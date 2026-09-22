@@ -157,6 +157,9 @@ class InstallWorker(QThread):
             self.current_msg = "Preparing storage..."
             log(f"> Target: {disk} | FS: {fs.upper()} | Mode: {install_mode}")
 
+            is_efi = os.path.exists("/sys/firmware/efi")
+            log(f"> Firmware environment: {'UEFI' if is_efi else 'Legacy BIOS (MBR)'}")
+
             esp_part = None
             root_part = None
 
@@ -176,7 +179,6 @@ class InstallWorker(QThread):
                 subprocess.run(["partprobe", disk], stderr=subprocess.DEVNULL)
                 time.sleep(1)
 
-                is_efi = os.path.exists("/sys/firmware/efi")
                 if is_efi:
                     log("> Creating ESP (512 MB) + root partition (GPT)...")
                     subprocess.run(["parted", "-s", disk, "mklabel", "gpt"], check=True)
@@ -226,7 +228,6 @@ class InstallWorker(QThread):
 
             self.current_pct = 20
             self.current_msg = f"Formatting {fs.upper()}..."
-            is_efi = os.path.exists("/sys/firmware/efi")
             if is_efi and esp_part and install_mode == "erase":
                 log(f"> Formatting ESP: {esp_part}")
                 subprocess.run(["mkfs.fat", "-F", "32", esp_part], check=True)

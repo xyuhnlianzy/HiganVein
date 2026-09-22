@@ -12,7 +12,7 @@ HiganveinOS is an independent derivative work built upon open-source software:
 
 ### Special Thanks
 - **Al-Fajri** — Feature ideas: Out-of-the-box native Windows app (.exe) compatibility, custom bootloader artwork, and installer multi-OS partition preservation (Windows, macOS, BSD family, other Linux distros).  
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/mhfajrisilmi)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/muhammad-al-fajri-silmi-9a7a643a2/)
   [![Threads](https://img.shields.io/badge/Threads-000000?style=flat&logo=threads&logoColor=white)](https://threads.net/@mhfajri.silmi)
   [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=flat&logo=instagram&logoColor=white)](https://instagram.com/mhfajri.silmi)
   [![TikTok](https://img.shields.io/badge/TikTok-000000?style=flat&logo=tiktok&logoColor=white)](https://tiktok.com/@mhfajri.silmi)

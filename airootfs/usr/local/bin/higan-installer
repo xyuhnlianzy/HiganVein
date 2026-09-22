@@ -415,7 +415,44 @@ options root=UUID={root_uuid} rw loglevel=3 quiet
 
             self.current_pct = 95
             self.current_msg = "Generating initramfs..."
+            log("> Configuring standard mkinitcpio for installed system...")
+            # 1. Restore default mkinitcpio preset (remove archiso preset, enable default & fallback)
+            preset_file = f"{target}/etc/mkinitcpio.d/linux-cachyos.preset"
+            with open(preset_file, "w") as f:
+                f.write("""# mkinitcpio preset file for the 'linux-cachyos' package
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-cachyos"
+
+PRESETS=('default' 'fallback')
+
+default_image="/boot/initramfs-linux-cachyos.img"
+fallback_image="/boot/initramfs-linux-cachyos-fallback.img"
+fallback_options="-S autodetect"
+""")
+
+            # 2. Remove archiso-specific mkinitcpio overrides
+            archiso_hook_conf = f"{target}/etc/mkinitcpio.conf.d/archiso.conf"
+            if os.path.exists(archiso_hook_conf):
+                try:
+                    os.remove(archiso_hook_conf)
+                except Exception:
+                    pass
+
+            # 3. Ensure base /etc/mkinitcpio.conf has proper standard hooks
+            mkinit_conf = f"{target}/etc/mkinitcpio.conf"
+            if not os.path.exists(mkinit_conf) or os.path.getsize(mkinit_conf) == 0:
+                with open(mkinit_conf, "w") as f:
+                    f.write('MODULES=()\nBINARIES=()\nFILES=()\nHOOKS=(base udev autodetect modconf kms keyboard keymap consolefont block filesystems fsck)\n')
+            else:
+                with open(mkinit_conf, "r") as f:
+                    mk_text = f.read()
+                if "archiso" in mk_text:
+                    mk_text = mk_text.replace("archiso", "")
+                    with open(mkinit_conf, "w") as f:
+                        f.write(mk_text)
+
             subprocess.run(["arch-chroot", target, "mkinitcpio", "-P"], check=True)
+            log("  Standard initramfs generated successfully.")
 
             self.current_pct = 98
             self.current_msg = "Cleaning up..."

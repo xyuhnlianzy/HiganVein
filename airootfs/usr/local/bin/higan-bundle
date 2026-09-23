@@ -24,12 +24,14 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo -e "${WHITE}Usage:${NC} sudo higan-bundle [--gamer] [--dev] [--ricer] [--all]"
+    echo -e "${WHITE}Usage:${NC} sudo higan-bundle [--gamer] [--dev] [--ricer] [--cyber] [--nvidia] [--all]"
     echo ""
-    echo -e "  ${RED}--gamer${NC}   Gaming stack (Steam, Lutris, Heroic, GameMode, Wine)"
-    echo -e "  ${RED}--dev${NC}     Developer toolchain (VSCodium, GCC, Rust, Go, Docker)"
-    echo -e "  ${RED}--ricer${NC}   Aesthetics & Hyprland suite (Waybar, Rofi, Serpentinum)"
-    echo -e "  ${RED}--all${NC}     Install all available bundles"
+    echo -e "  ${RED}--gamer${NC}    Gaming stack (Steam, Lutris, Heroic, GameMode, Wine)"
+    echo -e "  ${RED}--dev${NC}      Developer toolchain (VSCodium, GCC, Rust, Go, Docker)"
+    echo -e "  ${RED}--ricer${NC}    Aesthetics & Hyprland suite (Waybar, Rofi, Serpentinum)"
+    echo -e "  ${RED}--cyber${NC}    Offensive security tools (Wireshark, Nmap, Aircrack, Hydra)"
+    echo -e "  ${RED}--nvidia${NC}   Official NVIDIA driver, 32-bit Vulkan libs & Settings GUI"
+    echo -e "  ${RED}--all${NC}      Install all available standard bundles"
     echo ""
     exit 0
 fi
@@ -108,21 +110,39 @@ install_cyber() {
     echo -e "${WHITE}[✓] Cybersecurity Stack installed successfully.${NC}\n"
 }
 
+install_nvidia() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Official NVIDIA Proprietary / Open-Kernel Suite...${NC}"
+    echo -e "${GRAY}[i] Installing kernel modules, 32-bit Wine gaming libraries, and NVIDIA Settings Control Panel...${NC}"
+    pacman -S --needed --noconfirm linux-cachyos-nvidia-open nvidia-utils lib32-nvidia-utils nvidia-settings egl-wayland
+    
+    echo -e "${GRAY}[+] Configuring kernel DRM modesetting for Wayland (KDE / Hyprland)...${NC}"
+    mkdir -p /etc/modprobe.d
+    echo "options nvidia-drm modeset=1 fbdev=1" > /etc/modprobe.d/99-nvidia.conf
+    
+    echo -e "${GRAY}[+] Enabling NVIDIA systemd suspend/resume power services...${NC}"
+    systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service 2>/dev/null || true
+    
+    echo -e "${WHITE}[✓] NVIDIA Gaming & Graphics Suite installed.${NC}"
+    echo -e "${WHITE}    You can open 'NVIDIA X Server Settings' from your application menu or via command: nvidia-settings${NC}\n"
+}
+
 show_menu() {
     echo -e "${WHITE}Pilih bundle yang ingin di-install:${NC}"
     echo -e "  ${RED}1)${NC} Gamer Stack       ${GRAY}(Steam, Lutris, MangoHud, GameMode, Wine)${NC}"
     echo -e "  ${RED}2)${NC} Developer Stack   ${GRAY}(Neovim, Docker, eza, bat, ripgrep, fzf)${NC}"
     echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Cava, Starship, Rofi)${NC}"
     echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Aircrack-ng, Hydra)${NC}"
-    echo -e "  ${RED}5)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
+    echo -e "  ${RED}5)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
+    echo -e "  ${RED}6)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
     echo -e "  ${RED}q)${NC} Keluar\n"
-    read -rp "Pilihan Anda [1-5/q]: " choice
+    read -rp "Pilihan Anda [1-6/q]: " choice
     case "$choice" in
         1) install_gamer ;;
         2) install_dev ;;
         3) install_ricer ;;
         4) install_cyber ;;
-        5) install_gamer; install_dev; install_ricer; install_cyber ;;
+        5) install_nvidia ;;
+        6) install_gamer; install_dev; install_ricer; install_cyber ;;
         q|Q) exit 0 ;;
         *) echo "Pilihan tidak valid."; exit 1 ;;
     esac
@@ -138,6 +158,7 @@ else
             --dev) install_dev ;;
             --ricer) install_ricer ;;
             --cyber) install_cyber ;;
+            --nvidia) install_nvidia ;;
             --all) install_gamer; install_dev; install_ricer; install_cyber ;;
             *) echo "Unknown flag: $arg"; exit 1 ;;
         esac

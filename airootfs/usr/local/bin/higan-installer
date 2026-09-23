@@ -655,6 +655,23 @@ options root=UUID={root_uuid} {root_flags}rw
                 subprocess.run(["arch-chroot", target, "grub-mkconfig", "-o", "/boot/grub/grub.cfg"], check=True)
                 log("  GRUB configured with Higan Void Frieren theme & os-prober.")
 
+            # ── 3. GPU HARDWARE DETECTION & DRM ENABLERS (BIG 3: INTEL / AMD / NVIDIA) ──
+            try:
+                lspci_out = subprocess.run(["lspci"], capture_output=True, text=True).stdout.lower()
+                if "nvidia" in lspci_out:
+                    log("> NVIDIA GPU detected. Configuring DRM modesetting for Wayland...")
+                    modprobe_d = f"{target}/etc/modprobe.d"
+                    os.makedirs(modprobe_d, exist_ok=True)
+                    with open(f"{modprobe_d}/99-nvidia.conf", "w") as f:
+                        f.write("options nvidia-drm modeset=1 fbdev=1\n")
+                    log("  NVIDIA DRM modeset active. Run 'sudo higan-bundle --nvidia' post-boot to install proprietary drivers & Settings GUI.")
+                elif "advanced micro devices" in lspci_out or "amd" in lspci_out or "radeon" in lspci_out:
+                    log("> AMD Radeon GPU detected. Hardware acceleration enabled via Mesa & RADV.")
+                elif "intel" in lspci_out:
+                    log("> Intel Graphics detected. Hardware acceleration enabled via Mesa & ANV/Iris.")
+            except Exception:
+                pass
+
             self.current_pct = 98
             self.current_msg = "Cleaning up..."
             log("> Removing live installer autostart and live user artifacts from target...")

@@ -54,12 +54,39 @@
         </div>
 
         <div class="space-y-6">
+            <!-- 2026.09.23 -->
+            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-white font-bold text-base">Release 2026.09.23 (Stable v1.0 — Post-Audit &amp; Battle-Tested)</span>
+                    <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
+                </div>
+                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
+                    <li><b class="text-zinc-200">Terminal &amp; Shell Upgrade:</b> Replaced Kitty with <code class="text-zinc-300">ptyxis</code> (GTK4/Adwaita terminal with flawless native clipboard support) and set default interactive shell to <code class="text-zinc-300">fish</code> with integrated fastfetch sigil greeting and autosuggestions.</li>
+                    <li><b class="text-zinc-200">Full Bootloader Tri-Engine Synchronization:</b>
+                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
+                            <li><b>Limine UEFI:</b> Automated kernel and initramfs injection into ESP FAT32 partition (<code class="text-zinc-300">boot():</code>), NVRAM registration via <code class="text-zinc-300">efibootmgr</code>, transparent terminal background, and removed duplicate branding overlay over Frieren artwork.</li>
+                            <li><b>systemd-boot:</b> Dual-path configuration mirroring (<code class="text-zinc-300">/boot/loader</code> and <code class="text-zinc-300">/boot/efi/loader</code>) with automated CPU microcode entries and default fallback binaries.</li>
+                            <li><b>GRUB (BIOS &amp; UEFI):</b> Set <code class="text-zinc-300">GRUB_DISTRIBUTOR="HiganveinOS"</code> to eliminate upstream Arch Linux text from menu headers, with verified Btrfs subvolume (<code class="text-zinc-300">rootflags=subvol=@</code>) commandline passthrough.</li>
+                        </ul>
+                    </li>
+                    <li><b class="text-zinc-200">Post-Install Network &amp; Security Automation:</b>
+                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
+                            <li>Automated enabling of <code class="text-zinc-300">NetworkManager.service</code> and <code class="text-zinc-300">systemd-resolved</code> on installed target disks with fallback DNS (<code class="text-zinc-300">1.1.1.1</code>).</li>
+                            <li>Automated <code class="text-zinc-300">pacman-key --init</code> and <code class="text-zinc-300">--populate archlinux cachyos</code> execution to ensure zero GPG trust errors on first boot.</li>
+                            <li>Cleaned up live environment guard scripts (<code class="text-zinc-300">/usr/local/bin/pacman</code>) upon installation completion.</li>
+                        </ul>
+                    </li>
+                    <li><b class="text-zinc-200">Desktop &amp; Branding Polish:</b> Replaced upstream fallback icons in KDE System Info with official SVG <code class="text-zinc-300">H.V Monogram</code>, corrected external documentation links to prevent 404s, and hid standalone Rofi launchers from KDE Kickoff to prevent 'Lost &amp; Found' menu clutter.</li>
+                    <li><b class="text-zinc-200">Verified Minimum Specs:</b> Officially certified for 2 Cores CPU, 1 GB RAM (single lightweight task, no bundles), and 30 GB storage. Tested under full CPU stress-ng workloads.</li>
+                </ul>
+            </div>
+
             <!-- 2026.09.22 -->
             <div class="flex gap-4">
-                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-red-500 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
+                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
                 <div class="pb-8">
                     <span class="text-xs text-zinc-500 font-mono">2026.09.22</span>
-                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.22 (Stable v1.0)</span>
+                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.22 (Pre-Audit Candidate)</span>
                     <ul class="mt-3 space-y-1 text-sm text-zinc-400 list-disc list-inside">
                         <li>11-layer deep audit: fixed <code class="text-red-400">/etc/group</code> missing audio/video/storage/input groups</li>
                         <li>Fixed sudoers <code class="text-red-400">0644→0440</code> — sudo was silently ignoring wheel rule</li>
@@ -69,33 +96,23 @@
                         <li>Fixed installer: clean live user/autostart artifacts from installed system</li>
                         <li>Fixed sudoers file permissions on installed user account</li>
                         <li>Added <code class="text-red-400">--help</code> flag to higan-bundle</li>
-                        <li>ISO uploaded to Hugging Face — 2.99 GB</li>
                     </ul>
                 </div>
             </div>
 
             <!-- 2026.09.21 -->
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0 — Release Candidate 1)</span>
-                    <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
+            <div class="flex gap-4">
+                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-700 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
+                <div class="pb-8">
+                    <span class="text-xs text-zinc-500 font-mono">2026.09.21</span>
+                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0 — Release Candidate 1)</span>
+                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
+                        <li>Custom Anime Bootloader Art across GRUB, Limine, Syslinux featuring Frieren.</li>
+                        <li>Higan-Installer v5.0 with real-time partition visualizer bars and dual-boot allocation.</li>
+                        <li>Modular profile installer (<code class="text-zinc-300">higan-bundle</code>) for Gamer, Developer, and Ricing stacks.</li>
+                        <li>Btrfs subvolume layout (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD compression.</li>
+                    </ul>
                 </div>
-                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Custom Anime Bootloader Art:</b> Unified split-screen bootloader theme across GRUB, Limine, and Syslinux featuring Frieren in a red spider lily field with dedicated left-hand menu framing.</li>
-                    <li><b class="text-zinc-200">Higan-Installer v5.0:</b> Full UI overhaul inspired by Calamares, Anaconda, and Pop!_OS research. Features color-coded partition visualization bars, clean zinc-red dark mode, and zero marketing fluff.</li>
-                    <li><b class="text-zinc-200">Interactive Bootloader Selection:</b> Choose between Limine (modern/fast default), GRUB (universal dual-boot with automated os-prober), and systemd-boot (minimal native UEFI) during installation.</li>
-                    <li><b class="text-zinc-200">Modular Profile Architecture (<code class="text-zinc-300">higan-bundle</code>):</b> Post-install profile management tool to install tailored software suites:
-                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
-                            <li><b>Gaming Suite:</b> Steam, Heroic Games Launcher, ProtonUp-Qt (GE-Proton), GameMode, MangoHud, xpadneo Xbox Bluetooth driver, and memory tweak (<code class="text-zinc-300">vm.max_map_count=1048576</code>).</li>
-                            <li><b>Developer Toolchain:</b> VSCodium, Neovim, full compiler stack (GCC, Clang, Rustup, Go, Python, Node.js), Docker engine with automated non-root group assignment, and modern Rust CLI tools.</li>
-                            <li><b>Ricing Enthusiast:</b> Hyprland Wayland compositor, Waybar, Rofi-wayland, Waypaper GUI wallpaper picker, Mako notifications, Grim/Slurp screenshot suite, Hyprlock, Cava, and Starship prompt.</li>
-                        </ul>
-                    </li>
-                    <li><b class="text-zinc-200">Interactive Web Configurator:</b> Live bundle generator at <a href="bundles.html" class="text-red-400 hover:underline">/bundles</a> with quick reference terminal cheatsheets.</li>
-                    <li><b class="text-zinc-200">Desktop Aesthetic Overhaul:</b> KDE Plasma Breeze Dark with Spider Lily Crimson Red accent (<code class="text-zinc-300">#ef4444</code>), custom H.V Monogram vector launcher icon, <code class="text-zinc-300">HiganVoid</code> Konsole theme, and automatic fastfetch sigil display on terminal launch.</li>
-                    <li><b class="text-zinc-200">UEFI Root Label Fix:</b> Resolved uninitialized variable in <code class="text-zinc-300">efiboot</code> GRUB configuration to prevent initramfs boot timeouts on certain modern UEFI motherboards.</li>
-                    <li><b class="text-zinc-200">Btrfs Subvolumes by Default:</b> Automated subvolume layout (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD filesystem compression.</li>
-                </ul>
             </div>
 
             <!-- 2026.09.20 -->

@@ -63,43 +63,64 @@
             </p>
             <div class="space-y-3 pt-2">
                 <div class="text-xs font-semibold text-zinc-400 tracking-wider uppercase">Select Edition to Download:</div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <!-- 1. Systemd Edition (Most Stable) -->
-                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="p-4 rounded-xl bg-gradient-to-b from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white transition border border-red-500/40 shadow-lg shadow-red-950/30 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="font-bold text-sm">Systemd Edition</span>
-                            <span class="bg-black/30 text-white text-[10px] font-mono px-2 py-0.5 rounded border border-white/20">Most Stable</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <!-- 1. Systemd GUI Edition -->
+                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="p-4 rounded-xl bg-gradient-to-br from-red-900/60 to-red-950/80 hover:from-red-800/70 hover:to-red-900/90 text-white transition border border-red-700/60 flex flex-col justify-between shadow-lg shadow-red-950/30">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">Systemd GUI</span>
+                                <span class="bg-black/30 text-white text-[10px] font-mono px-2 py-0.5 rounded border border-white/20">Flagship</span>
+                            </div>
+                            <p class="text-red-100 text-xs leading-relaxed mb-3">Full KDE Plasma 6 desktop, ZRAM 2.5×, Gaming & Laptop suites, standard systemd stack.</p>
                         </div>
-                        <p class="text-red-100 text-xs leading-relaxed mb-3">Full desktop integration, KDE Plasma 6, ZRAM 2.5×, standard systemd stack.</p>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-white/90">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct Download (~2.8 GB)
+                            Direct ISO (~2.8 GB)
                         </div>
                     </a>
 
-                    <!-- 2. OpenRC Edition -->
+                    <!-- 2. Core CLI Edition -->
+                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-core-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">Core Server / CLI</span>
+                                <span class="bg-emerald-950 text-emerald-400 text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-800/60">New · Phase 2</span>
+                            </div>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Ultra-lean headless base. CachyOS BORE, Fish shell, ~300MB idle RAM, higan-core-installer.</p>
+                        </div>
+                        <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Direct ISO (~2.1 GB)
+                        </div>
+                    </a>
+
+                    <!-- 3. OpenRC Edition -->
                     <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-openrc-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="font-bold text-sm">OpenRC Edition</span>
-                            <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Phase 2</span>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">OpenRC Edition</span>
+                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Preview</span>
+                            </div>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Lean dependency-based init with elogind support. Fast boot &amp; low daemon overhead.</p>
                         </div>
-                        <p class="text-zinc-400 text-xs leading-relaxed mb-3">Lean dependency-based init with elogind support. Fast boot &amp; low overhead.</p>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct Download ISO
+                            Direct ISO (WIP)
                         </div>
                     </a>
 
-                    <!-- 3. Runit Edition -->
+                    <!-- 4. Runit Edition -->
                     <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-runit-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="font-bold text-sm">Runit Edition</span>
-                            <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Phase 2</span>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">Runit Edition</span>
+                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Preview</span>
+                            </div>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Ultra-minimal Unix-philosophy supervisor. Minimalist RAM footprint (~120MB idle).</p>
                         </div>
-                        <p class="text-zinc-400 text-xs leading-relaxed mb-3">Ultra-minimal Unix-philosophy supervisor. Minimalist RAM footprint (~120MB idle).</p>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct Download ISO
+                            Direct ISO (WIP)
                         </div>
                     </a>
                 </div>

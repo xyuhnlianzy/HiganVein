@@ -38,6 +38,8 @@ zram-generator
 firefox
 ptyxis
 fish
+paru
+flatpak
 
 # --- Audio & Multimedia ---
 alsa-utils
@@ -60,6 +62,8 @@ edk2-shell
 # --- Filesystem & Tools ---
 partitionmanager
 kpmcore
+btrfs-assistant
+snapper
 mtools
 dosfstools
 btrfs-progs

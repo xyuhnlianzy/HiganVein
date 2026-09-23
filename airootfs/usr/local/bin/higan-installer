@@ -328,6 +328,26 @@ class InstallWorker(QThread):
             except Exception:
                 pass
 
+            # Setup Flathub repository if flatpak is installed
+            log("> Configuring Flathub repository...")
+            try:
+                subprocess.run([
+                    "arch-chroot", target,
+                    "flatpak", "remote-add", "--if-not-exists", "flathub",
+                    "https://dl.flathub.org/repo/flathub.flatpakrepo"
+                ], stderr=subprocess.DEVNULL)
+            except Exception:
+                pass
+
+            # Setup Snapper Btrfs root configuration if Btrfs filesystem
+            if fs == "btrfs":
+                log("> Configuring Snapper snapshot management for Btrfs...")
+                try:
+                    subprocess.run(["arch-chroot", target, "systemctl", "enable", "snapper-timeline.timer"], stderr=subprocess.DEVNULL)
+                    subprocess.run(["arch-chroot", target, "systemctl", "enable", "snapper-cleanup.timer"], stderr=subprocess.DEVNULL)
+                except Exception:
+                    pass
+
             self.current_pct = 85
             self.current_msg = "Creating user account..."
             log(f"> Setting up user: {username}")

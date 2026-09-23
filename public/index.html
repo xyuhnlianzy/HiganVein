@@ -77,9 +77,9 @@
         </div>
 
         <!-- System Architecture Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
-                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Kernel & I/O</div>
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Kernel &amp; I/O</div>
                 <h3 class="text-white font-bold text-base">CachyOS BORE Kernel</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">Burst-Oriented Response Enhancer scheduler prioritizing interactive desktop tasks with reduced frame jitter.</p>
             </div>
@@ -89,14 +89,24 @@
                 <p class="text-zinc-400 text-xs leading-relaxed">Compressed RAM swap using zstd (2.5× detected physical RAM) paired with earlyoom daemon to prevent system locks during high memory workloads.</p>
             </div>
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
-                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Storage Layout</div>
-                <h3 class="text-white font-bold text-base">Btrfs Subvolumes</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">Automated subvolume topology (@, @home, @snapshots) with native transparent ZSTD filesystem compression.</p>
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Storage &amp; Rollback</div>
+                <h3 class="text-white font-bold text-base">Btrfs &amp; Snapper GUI</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Subvolumes (@, @home, @snapshots) with native ZSTD compression and 1-click Btrfs Assistant snapshot restore points.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Phase 2 Architecture</div>
+                <h3 class="text-white font-bold text-base">Modular Init System</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Freedom of choice: install with standard <b>Systemd</b>, ultra-lean <b>OpenRC</b>, or minimal <b>Runit</b> with automated kernel handoffs.</p>
+            </div>
+            <div class="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Hardware Tri-Stack</div>
+                <h3 class="text-white font-bold text-base">Intel · AMD · NVIDIA</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Out-of-the-box Vulkan &amp; media acceleration for Intel/AMD, plus automated Wayland DRM setup and official NVIDIA suite.</p>
             </div>
             <div class="p-5 rounded-2xl bg-zinc-900/60 border border-red-900/50 bg-red-950/10 space-y-2">
-                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Modular Profiles</div>
-                <h3 class="text-white font-bold text-base">Higan-Bundle CLI</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">Zero-bloat ISO. Choose and install Gamer, Developer, or Ricing software stacks with one terminal command.</p>
+                <div class="text-red-400 font-bold text-xs uppercase tracking-wider">App Ecosystem</div>
+                <h3 class="text-white font-bold text-base">Paru AUR &amp; Flatpak</h3>
+                <p class="text-zinc-400 text-xs leading-relaxed">Built-in Rust AUR helper, Flathub software center, Ptyxis terminal, and modular <code class="text-zinc-300">higan-bundle</code> CLI stacks.</p>
             </div>
         </div>
 

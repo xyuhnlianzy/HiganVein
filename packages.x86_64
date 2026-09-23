@@ -60,7 +60,6 @@ partitionmanager
 kpmcore
 mtools
 dosfstools
-ntfs-3g
 btrfs-progs
 xfsprogs
 gptfdisk

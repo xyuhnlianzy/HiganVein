@@ -309,9 +309,12 @@ class InstallWorker(QThread):
                 f.write("LANG=en_US.UTF-8\n")
 
             # Enable NetworkManager & networking services on installed system
-            log("> Enabling NetworkManager and networking daemons...")
+            log("> Enabling NetworkManager, power & networking daemons...")
             subprocess.run(["arch-chroot", target, "systemctl", "enable", "NetworkManager.service"], stderr=subprocess.DEVNULL)
             subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-resolved.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["arch-chroot", target, "systemctl", "enable", "power-profiles-daemon.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["arch-chroot", target, "systemctl", "enable", "acpid.service"], stderr=subprocess.DEVNULL)
+            subprocess.run(["arch-chroot", target, "systemctl", "enable", "bluetooth.service"], stderr=subprocess.DEVNULL)
             # Ensure DNS resolv.conf fallback exists
             if not os.path.exists(f"{target}/etc/resolv.conf") or os.path.getsize(f"{target}/etc/resolv.conf") == 0:
                 with open(f"{target}/etc/resolv.conf", "w") as f:

@@ -31,6 +31,8 @@ sddm
 arch-install-scripts
 xdg-user-dirs
 power-profiles-daemon
+brightnessctl
+acpid
 earlyoom
 zram-generator
 firefox

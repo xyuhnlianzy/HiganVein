@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+# HiganveinOS Core CLI Installer
+# Lightweight TUI / CLI Installer for Server & Minimal Setups
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+echo -e "${RED}"
+echo "  _   _ _                               _        ____ ____  _____ "
+echo " | | | (_) __ _  __ _ _ ____   _____  (_)_ __  / ___|  _ \|_   _|"
+echo " | |_| | |/ _\` |/ _\` | '_ \ \ / / _ \ | | '_ \| |   | |_) | | |  "
+echo " |  _  | | (_| | (_| | | | \ V /  __/ | | | | | |___|  _ <  | |  "
+echo " |_| |_|_|\__, |\__,_|_| |_|\_/ \___| |_|_| |_|\____|_| \_\ |_|  "
+echo "          |___/                                                  "
+echo -e "${NC}"
+echo -e "${CYAN}=== HiganveinOS Core CLI Installer (Phase 2) ===${NC}\n"
+
+if [ "$EUID" -ne 0 ]; then
+  echo -e "${RED}Error: Jalankan installer ini sebagai root (sudo higan-core-installer)${NC}"
+  exit 1
+fi
+
+# 1. Target Disk Selection
+echo -e "${CYAN}[1/5] Target Storage Disk:${NC}"
+lsblk -d -n -o NAME,SIZE,MODEL | grep -v "loop" | grep -v "airootfs"
+echo ""
+read -p "Ketik nama disk target (contoh: sda / nvme0n1 / vda): " TARGET_DEV
+
+DISK="/dev/$TARGET_DEV"
+if [ ! -b "$DISK" ]; then
+  echo -e "${RED}Error: Disk $DISK tidak valid!${NC}"
+  exit 1
+fi
+
+echo -e "${RED}PERINGATAN: Semua data di $DISK akan DIHAPUS TOTAL!${NC}"
+read -p "Ketik 'YA' untuk konfirmasi format: " CONFIRM
+if [ "$CONFIRM" != "YA" ]; then
+  echo "Instalasi dibatalkan."
+  exit 0
+fi
+
+# 2. Hostname & User
+echo -e "\n${CYAN}[2/5] Akun & Hostname:${NC}"
+read -p "Masukkan Hostname (default: higan-server): " HOSTNAME
+HOSTNAME=${HOSTNAME:-higan-server}
+
+read -p "Masukkan Username baru: " USERNAME
+while [ -z "$USERNAME" ]; do
+  read -p "Username tidak boleh kosong: " USERNAME
+done
+
+read -s -p "Masukkan Password user $USERNAME: " USER_PASS
+echo ""
+read -s -p "Konfirmasi Password: " USER_PASS2
+echo ""
+if [ "$USER_PASS" != "$USER_PASS2" ]; then
+  echo -e "${RED}Error: Password tidak cocok!${NC}"
+  exit 1
+fi
+
+# 3. Partitioning (Btrfs subvol @ / @home)
+echo -e "\n${CYAN}[3/5] Menyiapkan Partisi & Btrfs Subvolumes...${NC}"
+umount -R /mnt/higan-target 2>/dev/null || true
+wipefs -af "$DISK"
+sgdisk -Z "$DISK"
+
+# Check EFI mode
+IS_UEFI=0
+if [ -d "/sys/firmware/efi" ]; then
+  IS_UEFI=1
+  sgdisk -n 1:0:+512M -t 1:ef00 -c 1:"EFI-SP" "$DISK"
+  sgdisk -n 2:0:0 -t 2:8300 -c 2:"HIGAN-ROOT" "$DISK"
+  PART_EFI="${DISK}1"
+  PART_ROOT="${DISK}2"
+  [[ "$DISK" =~ "nvme" || "$DISK" =~ "mmcblk" ]] && PART_EFI="${DISK}p1" && PART_ROOT="${DISK}p2"
+  mkfs.fat -F32 "$PART_EFI"
+else
+  # BIOS MBR
+  parted -s "$DISK" mklabel msdos
+  parted -s "$DISK" mkpart primary btrfs 1MiB 100%
+  parted -s "$DISK" set 1 boot on
+  PART_ROOT="${DISK}1"
+  [[ "$DISK" =~ "nvme" || "$DISK" =~ "mmcblk" ]] && PART_ROOT="${DISK}p1"
+fi
+
+mkfs.btrfs -f -L "HIGAN_ROOT" "$PART_ROOT"
+
+# Mount subvolumes
+mkdir -p /mnt/higan-target
+mount "$PART_ROOT" /mnt/higan-target
+btrfs subvolume create /mnt/higan-target/@
+btrfs subvolume create /mnt/higan-target/@home
+btrfs subvolume create /mnt/higan-target/@snapshots
+umount /mnt/higan-target
+
+mount -o noatime,compress=zstd:3,subvol=@ "$PART_ROOT" /mnt/higan-target
+mkdir -p /mnt/higan-target/{home,.snapshots,boot}
+mount -o noatime,compress=zstd:3,subvol=@home "$PART_ROOT" /mnt/higan-target/home
+mount -o noatime,compress=zstd:3,subvol=@snapshots "$PART_ROOT" /mnt/higan-target/.snapshots
+
+if [ "$IS_UEFI" -eq 1 ]; then
+  mkdir -p /mnt/higan-target/boot/efi
+  mount "$PART_EFI" /mnt/higan-target/boot/efi
+fi
+
+# 4. Copying Core RootFS
+echo -e "\n${CYAN}[4/5] Menyalin Core System ke Storage (rsync)...${NC}"
+rsync -aAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/work-core*","/out-core*"} / /mnt/higan-target/
+
+# Post install cleanup
+rm -f /mnt/higan-target/etc/systemd/system/getty@tty1.service.d/autologin.conf 2>/dev/null || true
+rm -f /mnt/higan-target/usr/local/bin/pacman 2>/dev/null || true
+
+# Config system
+echo "$HOSTNAME" > /mnt/higan-target/etc/hostname
+genfstab -U /mnt/higan-target >> /mnt/higan-target/etc/fstab
+
+# Copy kernel
+mkdir -p /mnt/higan-target/boot
+KERNEL_SRC=$(ls -d /mnt/higan-target/usr/lib/modules/*/vmlinuz 2>/dev/null | sort -V | tail -n 1)
+[ -f "$KERNEL_SRC" ] && cp -v "$KERNEL_SRC" /mnt/higan-target/boot/vmlinuz-linux-cachyos
+
+# User creation
+arch-chroot /mnt/higan-target useradd -m -G wheel,network,storage,power -s /usr/bin/fish "$USERNAME" || true
+echo "$USERNAME:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
+echo "root:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
+
+# Initramfs
+rm -f /mnt/higan-target/etc/mkinitcpio.conf.d/archiso.conf 2>/dev/null || true
+cat << 'EOF' > /mnt/higan-target/etc/mkinitcpio.d/linux-cachyos.preset
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-cachyos"
+PRESETS=('default')
+default_image="/boot/initramfs-linux-cachyos.img"
+default_options=""
+EOF
+arch-chroot /mnt/higan-target mkinitcpio -P
+
+# 5. Bootloader Setup (GRUB)
+echo -e "\n${CYAN}[5/5] Memasang GRUB Bootloader...${NC}"
+if [ "$IS_UEFI" -eq 1 ]; then
+  arch-chroot /mnt/higan-target grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=HIGANVEIN-CORE --recheck
+else
+  arch-chroot /mnt/higan-target grub-install --target=i386-pc "$DISK"
+fi
+
+# Ensure rootflags=subvol=@ in GRUB
+sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 rootflags=subvol=@"/' /mnt/higan-target/etc/default/grub
+arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
+
+# Enable essential daemons
+arch-chroot /mnt/higan-target systemctl enable NetworkManager.service
+arch-chroot /mnt/higan-target systemctl enable earlyoom.service
+
+echo -e "\n${GREEN}=== INSTALASI HIGANVEIN-CORE SELESAI! ===${NC}"
+echo -e "Silakan ketik: ${CYAN}reboot${NC} lalu cabut media instalasi."

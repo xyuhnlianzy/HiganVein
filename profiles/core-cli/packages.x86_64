@@ -1,0 +1,107 @@
+base
+base-devel
+archiso
+mkinitcpio-archiso
+linux-cachyos
+linux-cachyos-headers
+linux-firmware
+sof-firmware
+broadcom-wl-dkms
+bluez
+bluez-utils
+gamemode
+mangohud
+cachyos-keyring
+cachyos-mirrorlist
+vim
+nano
+htop
+btop
+fastfetch
+cmatrix
+cava
+git
+networkmanager
+
+# --- Desktop Environment (KDE Plasma Only) ---
+
+# --- Graphical Installer & System Tools ---
+arch-install-scripts
+xdg-user-dirs
+power-profiles-daemon
+brightnessctl
+acpid
+earlyoom
+zram-generator
+fish
+paru
+flatpak
+
+# --- Audio & Multimedia ---
+alsa-utils
+wireplumber
+
+# --- Bootloader & Archiso Req ---
+syslinux
+limine
+grub
+efibootmgr
+os-prober
+ntfs-3g
+memtest86+
+edk2-shell
+
+# --- Filesystem & Tools ---
+partitionmanager
+kpmcore
+btrfs-assistant
+snapper
+mtools
+dosfstools
+btrfs-progs
+xfsprogs
+gptfdisk
+intel-ucode
+amd-ucode
+curl
+wget
+rsync
+tar
+zip
+unzip
+
+# --- Aesthetics & Fonts ---
+papirus-icon-theme
+ttf-jetbrains-mono-nerd
+ttf-fira-code
+noto-fonts-emoji
+kvantum
+qt5ct
+qt6ct
+
+# --- Graphics Drivers & Hardware Acceleration (Intel / AMD / NVIDIA Wayland) ---
+mesa
+lib32-mesa
+vulkan-radeon
+lib32-vulkan-radeon
+vulkan-intel
+lib32-vulkan-intel
+intel-media-driver
+libva-intel-driver
+
+# --- Windows Compatibility Layer ---
+wine
+vulkan-icd-loader
+lib32-vulkan-icd-loader
+
+# --- GUI Apps & Pop-up Helper Deps ---
+python-pyqt6
+python-gobject
+gtk3
+gtk4
+libadwaita
+jq
+uv
+gdisk
+parted
+e2fsprogs

@@ -470,13 +470,23 @@ fallback_options="-S autodetect"
             # ── 2. INSTALL BOOTLOADER ──
             self.current_pct = 92
             bootloader = self.config.get('bootloader', 'limine')
+            init_choice = self.config.get('init_system', 'systemd')
             self.current_msg = f"Installing bootloader ({bootloader.upper()})..."
-            log(f"> Installing chosen bootloader: {bootloader.upper()}...")
+            log(f"> Installing chosen bootloader: {bootloader.upper()} | Init: {init_choice.upper()}...")
+
+            # Phase 2 Init System Hook
+            init_cmdline = ""
+            if init_choice == "openrc":
+                init_cmdline = "init=/sbin/openrc-init "
+                log("> Phase 2: OpenRC init hook registered in kernel cmdline.")
+            elif init_choice == "runit":
+                init_cmdline = "init=/sbin/runit-init "
+                log("> Phase 2: Runit init hook registered in kernel cmdline.")
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
 
             # Determine rootflags for Btrfs root subvolume (@)
-            root_flags = "rootflags=subvol=@ " if fs == "btrfs" else ""
+            root_flags = f"{init_cmdline}rootflags=subvol=@ " if fs == "btrfs" else init_cmdline
 
             if not is_efi:
                 # Legacy BIOS (MBR) Bootloader: GRUB BIOS
@@ -1451,6 +1461,15 @@ class HiganInstallerApp(QWidget):
         self.combo_bootloader.addItems(["Limine (Modern / Fast)", "GRUB (Legacy / Dual-Boot)", "systemd-boot (Minimal)"])
         col_b.addWidget(self.combo_bootloader)
         drv_row.addLayout(col_b, stretch=2)
+
+        col_i = QVBoxLayout()
+        lbl_i = QLabel("INIT SYSTEM")
+        lbl_i.setStyleSheet("color: #52525b; font-size: 8pt; font-weight: 600; letter-spacing: 1px;")
+        col_i.addWidget(lbl_i)
+        self.combo_init = QComboBox()
+        self.combo_init.addItems(["Systemd (Standard / Full)", "OpenRC (Phase 2 Preview)", "Runit (Phase 2 Preview)"])
+        col_i.addWidget(self.combo_init)
+        drv_row.addLayout(col_i, stretch=2)
         l.addLayout(drv_row)
 
         # Disk bar
@@ -1702,13 +1721,14 @@ class HiganInstallerApp(QWidget):
         disk_txt = self.combo_disk.currentText().split(" ")[0]
         fs_txt = "Btrfs" if "Btrfs" in self.combo_fs.currentText() else "Ext4"
         boot_txt = self.combo_bootloader.currentText().split(" ")[0]
+        init_txt = self.combo_init.currentText().split(" ")[0]
         if self.rad_erase.isChecked():
-            mode = "Erase entire disk"
+            mode = "Erase disk"
         elif self.rad_alongside.isChecked():
             mode = f"Dual-boot ({self.slider_size.value()} GB)"
         else:
             mode = "Manual partitioning"
-        self.summary_items["Disk"].setText(f"{disk_txt}  ·  {mode}  ·  {fs_txt}  ·  {boot_txt}")
+        self.summary_items["Disk"].setText(f"{disk_txt}  ·  {mode}  ·  {fs_txt}  ·  {boot_txt}  ·  {init_txt}")
 
         user = self.in_username.text()
         host = self.in_hostname.text()
@@ -1755,6 +1775,7 @@ class HiganInstallerApp(QWidget):
         fs = "btrfs" if "Btrfs" in self.combo_fs.currentText() else "ext4"
         tz = f"{self.combo_region.currentText()}/{self.combo_zone.currentText()}"
         boot_choice = self.combo_bootloader.currentText().split(" ")[0].lower()
+        init_choice = self.combo_init.currentText().split(" ")[0].lower()
 
         if self.rad_erase.isChecked():
             imode = "erase"
@@ -1767,6 +1788,7 @@ class HiganInstallerApp(QWidget):
             'disk': raw_disk,
             'fs': fs,
             'bootloader': boot_choice,
+            'init_system': init_choice,
             'fullname': self.in_fullname.text(),
             'username': self.in_username.text(),
             'password': self.in_password.text(),

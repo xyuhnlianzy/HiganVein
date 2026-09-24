@@ -188,8 +188,21 @@ else
   arch-chroot /mnt/higan-target grub-install --target=i386-pc "$DISK"
 fi
 
-# Ensure rootflags=subvol=@ in GRUB
+# Ensure rootflags=subvol=@ and branding in GRUB
 sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 rootflags=subvol=@"/' /mnt/higan-target/etc/default/grub
+sed -i 's/^#\?GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="HiganveinOS Core"/' /mnt/higan-target/etc/default/grub
+if ! grep -q "GRUB_DISTRIBUTOR=" /mnt/higan-target/etc/default/grub; then
+  echo 'GRUB_DISTRIBUTOR="HiganveinOS Core"' >> /mnt/higan-target/etc/default/grub
+fi
+
+# Apply GRUB theme if present
+if [ -f /mnt/higan-target/boot/grub/themes/higan/theme.txt ]; then
+  sed -i 's|^#\?GRUB_THEME=.*|GRUB_THEME="/boot/grub/themes/higan/theme.txt"|' /mnt/higan-target/etc/default/grub
+  if ! grep -q "GRUB_THEME=" /mnt/higan-target/etc/default/grub; then
+    echo 'GRUB_THEME="/boot/grub/themes/higan/theme.txt"' >> /mnt/higan-target/etc/default/grub
+  fi
+fi
+
 arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
 
 # Enable essential daemons

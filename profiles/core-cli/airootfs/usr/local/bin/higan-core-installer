@@ -208,6 +208,10 @@ arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
 # Enable essential daemons
 arch-chroot /mnt/higan-target systemctl enable NetworkManager.service
 arch-chroot /mnt/higan-target systemctl enable earlyoom.service
+arch-chroot /mnt/higan-target systemctl enable systemd-timesyncd.service
+
+# Sync hardware clock to prevent GPG time-warp error
+arch-chroot /mnt/higan-target hwclock --systohc 2>/dev/null || true
 
 # Initialize & Populate pacman keys on target disk
 mkdir -p /mnt/higan-target/etc/pacman.d/gnupg

@@ -8,6 +8,7 @@ linux-firmware
 sof-firmware
 broadcom-wl-dkms
 cachyos-keyring
+archlinux-keyring
 cachyos-mirrorlist
 vim
 nano

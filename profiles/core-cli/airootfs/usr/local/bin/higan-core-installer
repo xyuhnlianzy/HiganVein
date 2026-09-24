@@ -209,5 +209,11 @@ arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
 arch-chroot /mnt/higan-target systemctl enable NetworkManager.service
 arch-chroot /mnt/higan-target systemctl enable earlyoom.service
 
+# Initialize & Populate pacman keys on target disk
+mkdir -p /mnt/higan-target/etc/pacman.d/gnupg
+chmod 700 /mnt/higan-target/etc/pacman.d/gnupg
+arch-chroot /mnt/higan-target pacman-key --init || true
+arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos || true
+
 echo -e "\n${GREEN}=== INSTALASI HIGANVEIN-CORE SELESAI! ===${NC}"
 echo -e "Silakan ketik: ${CYAN}reboot${NC} lalu cabut media instalasi."

@@ -18,20 +18,24 @@
                 <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
                 <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
             </div>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
+            <nav class="hidden md:flex items-center space-x-6 text-sm text-zinc-400">
                 <a href="index.html" class="text-white font-semibold">Home</a>
                 <a href="features.html" class="hover:text-white transition">Features</a>
                 <a href="bundles.html" class="hover:text-white transition">Bundles</a>
                 <a href="changes.html" class="hover:text-white transition">Changelog</a>
                 <a href="docs.html" class="hover:text-white transition">Docs</a>
                 <a href="about.html" class="hover:text-white transition">About</a>
+                <a href="https://sourceforge.net/projects/higanvein/files/" target="_blank" class="hover:text-orange-400 text-zinc-400 transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                    SourceForge
+                </a>
                 <a href="https://discord.gg/HQANxjyfKx" target="_blank" class="hover:text-indigo-400 text-zinc-400 transition flex items-center gap-1">
                     <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
                     Discord
                 </a>
             </nav>
             <div class="hidden md:block">
-                <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
+                <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-2026.09.20-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
                     Download ISO
                 </a>
             </div>
@@ -69,7 +73,7 @@
                 <div class="text-xs font-semibold text-zinc-400 tracking-wider uppercase">Select Edition to Download:</div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     <!-- 1. Systemd GUI Edition -->
-                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="p-4 rounded-xl bg-gradient-to-br from-red-900/60 to-red-950/80 hover:from-red-800/70 hover:to-red-900/90 text-white transition border border-red-700/60 flex flex-col justify-between shadow-lg shadow-red-950/30">
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-gradient-to-br from-red-900/60 to-red-950/80 hover:from-red-800/70 hover:to-red-900/90 text-white transition border border-red-700/60 flex flex-col justify-between shadow-lg shadow-red-950/30">
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-bold text-sm">Systemd GUI</span>
@@ -84,7 +88,7 @@
                     </a>
 
                     <!-- 2. Core CLI Edition -->
-                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-core-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-core-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-bold text-sm">Core Server / CLI</span>
@@ -94,7 +98,7 @@
                         </div>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct ISO (~2.1 GB)
+                            Direct ISO (~1.5 GB)
                         </div>
                     </a>
 

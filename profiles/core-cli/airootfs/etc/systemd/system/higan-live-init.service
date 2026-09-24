@@ -1,0 +1,13 @@
+[Unit]
+Description=HiganveinOS Core Live Environment Initialization
+DefaultDependencies=no
+After=systemd-udev-settle.service local-fs.target
+Before=getty@tty1.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/higan-live-init
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

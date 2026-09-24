@@ -114,22 +114,58 @@ rsync -aAXv --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/
 # Post install cleanup
 rm -f /mnt/higan-target/etc/systemd/system/getty@tty1.service.d/autologin.conf 2>/dev/null || true
 rm -f /mnt/higan-target/usr/local/bin/pacman 2>/dev/null || true
+rm -f /mnt/higan-target/etc/systemd/system/display-manager.service 2>/dev/null || true
+rm -rf /mnt/higan-target/etc/sddm.conf.d 2>/dev/null || true
+rm -f /mnt/higan-target/etc/xdg/autostart/higan-*.desktop 2>/dev/null || true
+rm -f /mnt/higan-target/home/*/Desktop/higan-*.desktop 2>/dev/null || true
+rm -f /mnt/higan-target/root/Desktop/higan-*.desktop 2>/dev/null || true
+rm -rf /mnt/higan-target/work* /mnt/higan-target/out* 2>/dev/null || true
 
 # Config system
 echo "$HOSTNAME" > /mnt/higan-target/etc/hostname
+echo "127.0.0.1   localhost" > /mnt/higan-target/etc/hosts
+echo "::1         localhost" >> /mnt/higan-target/etc/hosts
+echo "127.0.1.1   $HOSTNAME.localdomain $HOSTNAME" >> /mnt/higan-target/etc/hosts
+
+# DNS fallback
+echo -e "nameserver 1.1.1.1\nnameserver 8.8.8.8" > /mnt/higan-target/etc/resolv.conf
+
 genfstab -U /mnt/higan-target >> /mnt/higan-target/etc/fstab
 
-# Copy kernel
+# Copy kernel & microcodes to target /boot
 mkdir -p /mnt/higan-target/boot
 KERNEL_SRC=$(ls -d /mnt/higan-target/usr/lib/modules/*/vmlinuz 2>/dev/null | sort -V | tail -n 1)
 [ -f "$KERNEL_SRC" ] && cp -v "$KERNEL_SRC" /mnt/higan-target/boot/vmlinuz-linux-cachyos
+for ucode in /boot/*ucode.img /run/archiso/bootmnt/*ucode.img; do
+  [ -f "$ucode" ] && cp -f "$ucode" /mnt/higan-target/boot/ 2>/dev/null || true
+done
+if [ "$IS_UEFI" -eq 1 ]; then
+  mkdir -p /mnt/higan-target/boot/efi
+  for f in /mnt/higan-target/boot/*ucode.img /mnt/higan-target/boot/vmlinuz-linux-cachyos; do
+    [ -f "$f" ] && cp -f "$f" /mnt/higan-target/boot/efi/ 2>/dev/null || true
+  done
+fi
 
-# User creation
-arch-chroot /mnt/higan-target useradd -m -G wheel,network,storage,power -s /usr/bin/fish "$USERNAME" || true
+# User creation / handling
+if arch-chroot /mnt/higan-target id -u "$USERNAME" >/dev/null 2>&1; then
+  arch-chroot /mnt/higan-target usermod -aG wheel,network,storage,power -s /usr/bin/fish "$USERNAME"
+else
+  arch-chroot /mnt/higan-target useradd -m -G wheel,network,storage,power -s /usr/bin/fish "$USERNAME"
+fi
+
+# Clean up live user if different
+if [ "$USERNAME" != "higan" ]; then
+  arch-chroot /mnt/higan-target userdel -r higan 2>/dev/null || true
+fi
+
 echo "$USERNAME:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
 echo "root:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
 
-# Initramfs
+# Sudoers permissions
+echo "%wheel ALL=(ALL:ALL) ALL" > /mnt/higan-target/etc/sudoers.d/10-wheel
+chmod 0440 /mnt/higan-target/etc/sudoers.d/10-wheel
+
+# Initramfs desktop presets
 rm -f /mnt/higan-target/etc/mkinitcpio.conf.d/archiso.conf 2>/dev/null || true
 cat << 'EOF' > /mnt/higan-target/etc/mkinitcpio.d/linux-cachyos.preset
 ALL_config="/etc/mkinitcpio.conf"
@@ -139,6 +175,10 @@ default_image="/boot/initramfs-linux-cachyos.img"
 default_options=""
 EOF
 arch-chroot /mnt/higan-target mkinitcpio -P
+
+if [ "$IS_UEFI" -eq 1 ] && [ -f /mnt/higan-target/boot/initramfs-linux-cachyos.img ]; then
+  cp -f /mnt/higan-target/boot/initramfs-linux-cachyos.img /mnt/higan-target/boot/efi/
+fi
 
 # 5. Bootloader Setup (GRUB)
 echo -e "\n${CYAN}[5/5] Memasang GRUB Bootloader...${NC}"

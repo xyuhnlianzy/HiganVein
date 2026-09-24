@@ -1,5 +1,10 @@
 /work/
 /out/
+/profiles/*/work*
+/profiles/*/out*
+discord_setup.json
+__pycache__/
+*.pyc
 .DS_Store
 upload_hf.py
 node_modules/

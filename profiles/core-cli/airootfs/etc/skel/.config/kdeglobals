@@ -1,0 +1,10 @@
+[General]
+ColorScheme=HiganVoid
+accentColor=#ef4444
+
+[KDE]
+LookAndFeelPackage=org.kde.breezedark.desktop
+widgetStyle=Breeze
+
+[Icons]
+Theme=Papirus-Dark

@@ -1,28 +1,10 @@
 #!/usr/bin/env bash
-# HiganveinOS Live Boot Initializer
-# Runs before SDDM/Display Manager
+# HiganveinOS Core CLI Live Boot Initializer
 
 # 1. Ensure user higan owns their home folder
 chown -R 1000:1000 /home/higan 2>/dev/null || true
 
-# 2. Overwrite Breeze default wallpapers with Higan Void wallpaper
-WP="/usr/share/wallpapers/Higanvein/higanvein-default.jpg"
-if [ -f "$WP" ]; then
-    for dir in /usr/share/wallpapers/Next/contents/images /usr/share/wallpapers/Next/contents/images_dark; do
-        if [ -d "$dir" ]; then
-            for img in "$dir"/*; do
-                cp -f "$WP" "$img" 2>/dev/null || true
-            done
-        fi
-    done
-    if [ -d /usr/share/wallpapers/cachyos-wallpapers ]; then
-        for img in /usr/share/wallpapers/cachyos-wallpapers/*; do
-            cp -f "$WP" "$img" 2>/dev/null || true
-        done
-    fi
-fi
-
-# 3. Restore kernel and ucodes to live /boot so they exist in live filesystem
+# 2. Restore kernel and ucodes to live /boot so they exist in live filesystem
 mkdir -p /boot
 for mod_dir in /usr/lib/modules/*; do
     if [ -f "$mod_dir/vmlinuz" ]; then
@@ -33,7 +15,6 @@ for mod_dir in /usr/lib/modules/*; do
     fi
 done
 
-# Copy ucode and kernel from ISO boot mount if mounted
 for bootmnt in /run/archiso/bootmnt /run/archiso/bootmnt/arch/boot; do
     if [ -d "$bootmnt" ]; then
         cp -f "$bootmnt"/intel-ucode.img /boot/ 2>/dev/null || true
@@ -42,11 +23,10 @@ for bootmnt in /run/archiso/bootmnt /run/archiso/bootmnt/arch/boot; do
     fi
 done
 
-# 4. Auto-initialize Pacman Keyring if not present
+# 3. Auto-initialize Pacman Keyring if not present
 if [ ! -d /etc/pacman.d/gnupg ] || [ ! -f /etc/pacman.d/gnupg/pubring.gpg ]; then
     mkdir -p /etc/pacman.d/gnupg
     chmod 700 /etc/pacman.d/gnupg
     pacman-key --init 2>/dev/null || true
     pacman-key --populate archlinux cachyos 2>/dev/null || true
 fi
-

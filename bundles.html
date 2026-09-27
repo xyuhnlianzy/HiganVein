@@ -184,18 +184,26 @@
                     <p class="text-zinc-200 select-all">sudo higan-bundle --dev</p>
                 </div>
                 <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Ricing (Hyprland) only:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --ricer</p>
+                    <span class="text-zinc-500 text-[10px]"># Cybersecurity Arsenal only:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --cyber</p>
                 </div>
                 <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Gaming + Developer combined:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --gamer --dev</p>
+                    <span class="text-zinc-500 text-[10px]"># BlackArch Repository (2800+ tools):</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --blackarch</p>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Agentic AI Stack (Ollama + 9Router + Hermes):</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --ai-agent</p>
+                </div>
+                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+                    <span class="text-zinc-500 text-[10px]"># Ricing (Hyprland + Serpantinum) only:</span>
+                    <p class="text-zinc-200 select-all">sudo higan-bundle --ricer</p>
                 </div>
             </div>
 
             <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-xs font-mono flex items-center justify-between">
                 <div>
-                    <span class="text-zinc-500 text-[10px]"># Interactive Mode (shows terminal menu with choices 1-5):</span>
+                    <span class="text-zinc-500 text-[10px]"># Interactive TUI Menu (choices 1-8):</span>
                     <p class="text-red-400 select-all font-semibold">sudo higan-bundle</p>
                 </div>
             </div>
@@ -209,19 +217,23 @@
 
     <script>
         function updateCommand() {
-            const gamer = document.getElementById('chk-gamer').checked;
-            const dev = document.getElementById('chk-dev').checked;
-            const ricer = document.getElementById('chk-ricer').checked;
+            const gamer = document.getElementById('chk-gamer')?.checked;
+            const dev = document.getElementById('chk-dev')?.checked;
+            const ricer = document.getElementById('chk-ricer')?.checked;
+            const cyber = document.getElementById('chk-cyber')?.checked;
+            const ai = document.getElementById('chk-ai')?.checked;
 
             let flags = [];
             if (gamer) flags.push('--gamer');
             if (dev) flags.push('--dev');
             if (ricer) flags.push('--ricer');
+            if (cyber) flags.push('--cyber');
+            if (ai) flags.push('--ai-agent');
 
             const display = document.getElementById('cmd-display');
             if (flags.length === 0) {
                 display.innerText = 'sudo higan-bundle';
-            } else if (flags.length === 3) {
+            } else if (gamer && dev && ricer && cyber && ai) {
                 display.innerText = 'sudo higan-bundle --all';
             } else {
                 display.innerText = 'sudo higan-bundle ' + flags.join(' ');

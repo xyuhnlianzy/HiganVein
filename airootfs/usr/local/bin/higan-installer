@@ -518,16 +518,17 @@ fallback_options="-S autodetect"
             if not is_efi:
                 # Legacy BIOS (MBR) Bootloader: GRUB BIOS
                 log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
-                # Configure GRUB cmdline with rootflags if btrfs
-                if fs == "btrfs":
-                    grub_default = f"{target}/etc/default/grub"
-                    if os.path.exists(grub_default):
-                        with open(grub_default, "r") as f:
-                            content = f.read()
-                        if "rootflags=subvol=@" not in content:
-                            content = content.replace('GRUB_CMDLINE_LINUX="', 'GRUB_CMDLINE_LINUX="rootflags=subvol=@ ')
-                            with open(grub_default, "w") as f:
-                                f.write(content)
+                # Configure GRUB cmdline with rootflags & init parameters
+                grub_default = f"{target}/etc/default/grub"
+                if os.path.exists(grub_default):
+                    with open(grub_default, "r") as f:
+                        content = f.read()
+                    if init_cmdline and init_cmdline.strip() not in content:
+                        content = content.replace('GRUB_CMDLINE_LINUX_DEFAULT="', f'GRUB_CMDLINE_LINUX_DEFAULT="{init_cmdline}')
+                    if fs == "btrfs" and "rootflags=subvol=@" not in content:
+                        content = content.replace('GRUB_CMDLINE_LINUX="', 'GRUB_CMDLINE_LINUX="rootflags=subvol=@ ')
+                    with open(grub_default, "w") as f:
+                        f.write(content)
 
                 subprocess.run([
                     "arch-chroot", target,
@@ -539,10 +540,10 @@ fallback_options="-S autodetect"
                     with open(grub_default, "r") as f:
                         content = f.read()
                     import re
-                    # Set distribution name to HiganveinOS
-                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', 'GRUB_DISTRIBUTOR="HiganveinOS"', content, flags=re.M)
+                    # Set distribution name to HiganveinOS with Init tag
+                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', f'GRUB_DISTRIBUTOR="HiganveinOS ({init_choice.upper()})"', content, flags=re.M)
                     if "GRUB_DISTRIBUTOR=" not in content:
-                        content += '\nGRUB_DISTRIBUTOR="HiganveinOS"\n'
+                        content += f'\nGRUB_DISTRIBUTOR="HiganveinOS ({init_choice.upper()})"\n'
                     content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
                     if "GRUB_DISABLE_OS_PROBER" not in content:
                         content += "\nGRUB_DISABLE_OS_PROBER=false\n"
@@ -684,7 +685,7 @@ options root=UUID={root_uuid} {root_flags}rw
 
                 log("  systemd-boot entries created.")
 
-            else: # GRUB
+            else: # GRUB EFI
                 log("> Setting up GRUB EFI with Higan Void Frieren Theme...")
                 subprocess.run([
                     "arch-chroot", target,
@@ -698,10 +699,14 @@ options root=UUID={root_uuid} {root_flags}rw
                     with open(grub_default, "r") as f:
                         content = f.read()
                     import re
-                    # Set distribution name to HiganveinOS
-                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', 'GRUB_DISTRIBUTOR="HiganveinOS"', content, flags=re.M)
+                    if init_cmdline and init_cmdline.strip() not in content:
+                        content = content.replace('GRUB_CMDLINE_LINUX_DEFAULT="', f'GRUB_CMDLINE_LINUX_DEFAULT="{init_cmdline}')
+                    if fs == "btrfs" and "rootflags=subvol=@" not in content:
+                        content = content.replace('GRUB_CMDLINE_LINUX="', 'GRUB_CMDLINE_LINUX="rootflags=subvol=@ ')
+                    # Set distribution name to HiganveinOS with Init tag
+                    content = re.sub(r'^#?GRUB_DISTRIBUTOR=.*', f'GRUB_DISTRIBUTOR="HiganveinOS ({init_choice.upper()})"', content, flags=re.M)
                     if "GRUB_DISTRIBUTOR=" not in content:
-                        content += '\nGRUB_DISTRIBUTOR="HiganveinOS"\n'
+                        content += f'\nGRUB_DISTRIBUTOR="HiganveinOS ({init_choice.upper()})"\n'
                     content = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false")
                     if "GRUB_DISABLE_OS_PROBER" not in content:
                         content += "\nGRUB_DISABLE_OS_PROBER=false\n"

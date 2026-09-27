@@ -31,6 +31,7 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo -e "  ${RED}--ricer${NC}    Aesthetics & Hyprland suite (Waybar, Rofi, Serpentinum)"
     echo -e "  ${RED}--cyber${NC}    Offensive security & penetration testing arsenal"
     echo -e "  ${RED}--blackarch${NC} Add BlackArch Linux official repository (2800+ tools)"
+    echo -e "  ${RED}--ai-agent${NC}  Agentic AI stack (Ollama, Hermes Agent, 9Router proxy/gateway)"
     echo -e "  ${RED}--nvidia${NC}   Official NVIDIA driver, 32-bit Vulkan libs & Settings GUI"
     echo -e "  ${RED}--all${NC}      Install all available standard bundles"
     echo ""
@@ -162,6 +163,55 @@ setup_blackarch() {
     fi
 }
 
+install_ai_agent() {
+    echo -e "${RED}==>${NC} ${WHITE}Installing Agentic AI Infrastructure (Ollama, Hermes Agent, 9Router)...${NC}"
+    
+    # 1. Base runtimes & dependencies
+    echo -e "${GRAY}[+] Installing Core Runtimes (Ollama, Python uv, Node.js, SQLite3)...${NC}"
+    pacman -S --needed --noconfirm ollama uv nodejs npm sqlite git
+
+    # 2. Systemd service for Ollama (local offline LLM engine)
+    echo -e "${GRAY}[+] Enabling and starting Ollama background daemon...${NC}"
+    systemctl enable --now ollama.service 2>/dev/null || true
+
+    # 3. 9Router - LLM Multi-Provider Gateway & Rate-Limit Router
+    echo -e "${GRAY}[+] Installing 9Router via NPM global...${NC}"
+    npm install -g 9router better-sqlite3
+
+    # 4. Hermes Agent - Autonomous Agent Framework via uv isolated environment
+    local user_home
+    user_home=$(getent passwd "$USER_NAME" | cut -d: -f6)
+    if [ -z "$user_home" ]; then
+        user_home="/home/$USER_NAME"
+    fi
+
+    echo -e "${GRAY}[+] Setting up Hermes Agent environment for $USER_NAME...${NC}"
+    su - "$USER_NAME" -c 'curl -fsSL https://raw.githubusercontent.com/NousResearch/Hermes-Agent/main/setup.sh | bash' || {
+        echo -e "${GRAY}[i] Fallback: Provisioning Hermes Agent via uv tool/venv...${NC}"
+        su - "$USER_NAME" -c 'uv tool install hermes-agent || uv venv ~/.hermes/hermes-agent/venv && ~/.hermes/hermes-agent/venv/bin/pip install hermes-agent' || true
+    }
+
+    # 5. Shell Helper Wrapper
+    mkdir -p /usr/local/bin
+    cat << 'EOF' > /usr/local/bin/higan-ai-status
+#!/usr/bin/env bash
+echo "=== HiganveinOS Agentic AI Status ==="
+echo -n "Ollama Service: "
+systemctl is-active ollama.service 2>/dev/null || echo "inactive"
+echo -n "9Router Gateway: "
+which 9router 2>/dev/null || echo "not found in PATH"
+echo -n "Hermes Agent: "
+which hermes 2>/dev/null || echo "check ~/.hermes or ~/.local/bin"
+echo "====================================="
+EOF
+    chmod +x /usr/local/bin/higan-ai-status
+
+    echo -e "${WHITE}[✓] Agentic AI Stack installed successfully.${NC}"
+    echo -e "${GRAY}[i] Ollama active at: http://localhost:11434${NC}"
+    echo -e "${GRAY}[i] Launch 9Router with: 9router${NC}"
+    echo -e "${GRAY}[i] Launch Hermes Agent with: hermes${NC}\n"
+}
+
 install_nvidia() {
     echo -e "${RED}==>${NC} ${WHITE}Installing Official NVIDIA Proprietary / Open-Kernel Suite...${NC}"
     echo -e "${GRAY}[i] Installing kernel modules, 32-bit Wine gaming libraries, and NVIDIA Settings Control Panel...${NC}"
@@ -185,18 +235,20 @@ show_menu() {
     echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Cava, Starship, Rofi)${NC}"
     echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Metasploit, Ghidra, Hydra)${NC}"
     echo -e "  ${RED}5)${NC} BlackArch Repo    ${GRAY}(Tambahkan repo resmi BlackArch 2800+ tools)${NC}"
-    echo -e "  ${RED}6)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
-    echo -e "  ${RED}7)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
+    echo -e "  ${RED}6)${NC} Agentic AI Stack  ${GRAY}(Ollama, Hermes Agent, 9Router Multi-Gateway)${NC}"
+    echo -e "  ${RED}7)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
+    echo -e "  ${RED}8)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
     echo -e "  ${RED}q)${NC} Keluar\n"
-    read -rp "Pilihan Anda [1-7/q]: " choice
+    read -rp "Pilihan Anda [1-8/q]: " choice
     case "$choice" in
         1) install_gamer ;;
         2) install_dev ;;
         3) install_ricer ;;
         4) install_cyber ;;
         5) setup_blackarch ;;
-        6) install_nvidia ;;
-        7) install_gamer; install_dev; install_ricer; install_cyber ;;
+        6) install_ai_agent ;;
+        7) install_nvidia ;;
+        8) install_gamer; install_dev; install_ricer; install_cyber; install_ai_agent ;;
         q|Q) exit 0 ;;
         *) echo "Pilihan tidak valid."; exit 1 ;;
     esac
@@ -213,6 +265,7 @@ else
             --ricer) install_ricer ;;
             --cyber) install_cyber ;;
             --blackarch) setup_blackarch ;;
+            --ai-agent) install_ai_agent ;;
             --nvidia) install_nvidia ;;
             --all) install_gamer; install_dev; install_ricer; install_cyber ;;
             *) echo "Unknown flag: $arg"; exit 1 ;;

@@ -54,36 +54,34 @@
         </div>
 
         <div class="space-y-6">
-            <!-- 2026.09.23 -->
+            <!-- 2026.09.24 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.09.23 (Stable v1.0 — Post-Audit &amp; Battle-Tested)</span>
+                    <span class="text-white font-bold text-base">Release 2026.09.24 (Global Mirrors &amp; AI Stack)</span>
                     <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
                 </div>
                 <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Phase 2 Modular Init Architecture (Preview):</b> Integrated interactive Init System selection in installer v5.0 supporting <b>Systemd</b> (Standard/Full), <b>OpenRC</b>, and <b>Runit</b> with automated kernel commandline handoffs (<code class="text-zinc-300">init=/sbin/openrc-init</code>, <code class="text-zinc-300">init=/sbin/runit-init</code>).</li>
-                    <li><b class="text-zinc-200">Ecosystem &amp; Snapshot Rollback:</b> Pre-installed <code class="text-zinc-300">paru</code> (Rust AUR helper) and <code class="text-zinc-300">Flatpak</code> with auto-configured Flathub remote. Integrated <code class="text-zinc-300">btrfs-assistant</code> GUI and <code class="text-zinc-300">snapper</code> timeline services for 1-click system restore points on Btrfs subvolumes.</li>
-                    <li><b class="text-zinc-200">Laptop Hardware Optimization:</b> Out-of-the-box Touchpad tap-to-click, natural scrolling, native Fn-key backlight brightness control via <code class="text-zinc-300">brightnessctl</code>, <code class="text-zinc-300">power-profiles-daemon</code> battery conservation profiles, and ACPI lid-close event handling.</li>
-                    <li><b class="text-zinc-200">Memory Multiplier Tuning:</b> Increased ZRAM swap allocation from 2.0× to <b>2.5× detected physical RAM</b> with earlyoom low-memory freeze protection.</li>
-                    <li><b class="text-zinc-200">Big 3 GPU Hardware Support (Intel, AMD, NVIDIA):</b> Added out-of-the-box hardware video acceleration and 32-bit Vulkan gaming drivers for Intel and AMD. Integrated <code class="text-zinc-300">egl-wayland</code> and automated installer DRM modesetting (<code class="text-zinc-300">nvidia-drm.modeset=1 fbdev=1</code>). Added dedicated <code class="text-zinc-300">higan-bundle --nvidia</code> profile installing official CachyOS open-kernel modules and NVIDIA Settings Control Panel GUI.</li>
-                    <li><b class="text-zinc-200">Terminal &amp; Shell Upgrade:</b> Replaced Kitty with <code class="text-zinc-300">ptyxis</code> (GTK4/Adwaita terminal with flawless native clipboard support) and set default interactive shell to <code class="text-zinc-300">fish</code> with integrated fastfetch sigil greeting and autosuggestions.</li>
-                    <li><b class="text-zinc-200">Full Bootloader Tri-Engine Synchronization:</b>
-                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
-                            <li><b>Limine UEFI:</b> Automated kernel and initramfs injection into ESP FAT32 partition (<code class="text-zinc-300">boot():</code>), NVRAM registration via <code class="text-zinc-300">efibootmgr</code>, transparent terminal background, and removed duplicate branding overlay over Frieren artwork.</li>
-                            <li><b>systemd-boot:</b> Dual-path configuration mirroring (<code class="text-zinc-300">/boot/loader</code> and <code class="text-zinc-300">/boot/efi/loader</code>) with automated CPU microcode entries and default fallback binaries.</li>
-                            <li><b>GRUB (BIOS &amp; UEFI):</b> Set <code class="text-zinc-300">GRUB_DISTRIBUTOR="HiganveinOS"</code> to eliminate upstream Arch Linux text from menu headers, with verified Btrfs subvolume (<code class="text-zinc-300">rootflags=subvol=@</code>) commandline passthrough.</li>
-                        </ul>
-                    </li>
-                    <li><b class="text-zinc-200">Post-Install Network &amp; Security Automation:</b>
-                        <ul class="list-circle list-inside pl-4 pt-1 space-y-1 text-zinc-400">
-                            <li>Automated enabling of <code class="text-zinc-300">NetworkManager.service</code> and <code class="text-zinc-300">systemd-resolved</code> on installed target disks with fallback DNS (<code class="text-zinc-300">1.1.1.1</code>).</li>
-                            <li>Automated <code class="text-zinc-300">pacman-key --init</code> and <code class="text-zinc-300">--populate archlinux cachyos</code> execution to ensure zero GPG trust errors on first boot.</li>
-                            <li>Cleaned up live environment guard scripts (<code class="text-zinc-300">/usr/local/bin/pacman</code>) upon installation completion.</li>
-                        </ul>
-                    </li>
-                    <li><b class="text-zinc-200">Desktop &amp; Branding Polish:</b> Replaced upstream fallback icons in KDE System Info with official SVG <code class="text-zinc-300">H.V Monogram</code>, corrected external documentation links to prevent 404s, and hid standalone Rofi launchers from KDE Kickoff to prevent 'Lost &amp; Found' menu clutter.</li>
-                    <li><b class="text-zinc-200">Verified Minimum Specs:</b> Officially certified for 2 Cores CPU, 1 GB RAM (single lightweight task, no bundles), and 30 GB storage. Tested under full CPU stress-ng workloads.</li>
+                    <li><b class="text-zinc-200">Global Mirror Migration (SourceForge):</b> Established official project mirror at SourceForge with high-speed global CDN routing, automatic resume capability, and direct download links across all editions.</li>
+                    <li><b class="text-zinc-200">Cybersecurity Arsenal &amp; BlackArch Integration:</b> Upgraded <code class="text-zinc-300">higan-bundle --cyber</code> with offensive security tools from Kali, ParrotOS, and BlackArch (Nmap, Wireshark, Metasploit, Ghidra, Bettercap, Proxychains). Added automated BlackArch repository integration via <code class="text-zinc-300">higan-bundle --blackarch</code> to access 2,800+ specialized packages.</li>
+                    <li><b class="text-zinc-200">Agentic AI Infrastructure Stack:</b> Introduced <code class="text-zinc-300">higan-bundle --ai-agent</code> enabling out-of-the-box local and cloud AI agent workflows. Packages Ollama daemon, 9Router multi-provider rate-limiting gateway, Hermes autonomous agent environment, and system health utility <code class="text-zinc-300">higan-ai-status</code>.</li>
+                    <li><b class="text-zinc-200">Core CLI v6 Integrity Fixes:</b> Resolved GPG time-warp clock issues via automated <code class="text-zinc-300">systemd-timesyncd</code> &amp; <code class="text-zinc-300">hwclock</code> target synchronization, initialized <code class="text-zinc-300">archlinux-keyring</code>, and cleaned bootloader menu branding to <code class="text-zinc-300">HiganveinOS Core</code> with ~316 MiB idle memory footprint.</li>
                 </ul>
+            </div>
+
+            <!-- 2026.09.23 -->
+            <div class="flex gap-4">
+                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
+                <div class="pb-8">
+                    <span class="text-xs text-zinc-500 font-mono">2026.09.23</span>
+                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.23 (Stable v1.0 — Post-Audit)</span>
+                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
+                        <li>Phase 2 Modular Init Architecture (Systemd / OpenRC / Runit) preview</li>
+                        <li>Ecosystem &amp; Snapshot Rollback with Paru, Flatpak, and Btrfs-Assistant / Snapper</li>
+                        <li>Laptop Hardware Optimization (Touchpad, Fn-keys, brightnessctl, power profiles)</li>
+                        <li>ZRAM swap multiplier tuned to 2.5× physical RAM</li>
+                        <li>Full Bootloader Tri-Engine Synchronization (Limine UEFI, systemd-boot, GRUB)</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- 2026.09.22 -->

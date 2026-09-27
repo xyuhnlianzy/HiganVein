@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=HiganSocial
+GenericName=Social Media Broadcaster
+Comment=Multi-platform social media poster for X, Facebook, Threads, and Instagram
+Exec=/usr/local/bin/higansocial
+Icon=higanvein-logo
+Terminal=false
+Categories=Network;Utility;
+Keywords=social;twitter;x;facebook;threads;instagram;broadcast;

@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+import sys
+import os
+import json
+import threading
+import tkinter as tk
+from tkinter import ttk, messagebox, scrolledtext
+
+# Import backend engine
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import social_poster
+
+CONFIG_PATH = os.path.expanduser("~/social-poster/config/credentials.json")
+EXAMPLE_CONFIG_PATH = os.path.expanduser("~/social-poster/config/credentials.example.json")
+
+class HiganSocialApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("HiganSocial — Multi-Platform Publisher")
+        self.geometry("780x680")
+        self.minsize(700, 600)
+        self.configure(bg="#09090b") # Void Zinc-950
+
+        # Styles
+        self.style = ttk.Style(self)
+        self.style.theme_use("clam")
+        
+        # Configure colors
+        self.style.configure(".", background="#09090b", foreground="#f4f4f5", font=("Sans", 10))
+        self.style.configure("TLabel", background="#09090b", foreground="#f4f4f5")
+        self.style.configure("TCheckbutton", background="#09090b", foreground="#f4f4f5")
+        self.style.map("TCheckbutton", background=[("active", "#09090b")], foreground=[("active", "#ef4444")])
+        self.style.configure("Header.TLabel", font=("Sans", 14, "bold"), foreground="#ef4444")
+        self.style.configure("Sub.TLabel", font=("Sans", 9), foreground="#71717a")
+
+        self.ensure_config()
+        self.create_widgets()
+
+    def ensure_config(self):
+        if not os.path.exists(CONFIG_PATH) and os.path.exists(EXAMPLE_CONFIG_PATH):
+            os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
+            with open(EXAMPLE_CONFIG_PATH, "r") as src, open(CONFIG_PATH, "w") as dst:
+                dst.write(src.read())
+
+    def create_widgets(self):
+        # Header container
+        header_frame = tk.Frame(self, bg="#09090b", padx=20, pady=15)
+        header_frame.pack(fill="x")
+
+        lbl_title = ttk.Label(header_frame, text="HIGANSOCIAL PUBLISHER", style="Header.TLabel")
+        lbl_title.pack(anchor="w")
+
+        lbl_desc = ttk.Label(header_frame, text="Synchronous distribution across X, Facebook, Threads, and Instagram", style="Sub.TLabel")
+        lbl_desc.pack(anchor="w", pady=(2, 0))
+
+        # Main content
+        content_frame = tk.Frame(self, bg="#09090b", padx=20)
+        content_frame.pack(fill="both", expand=True)
+
+        # Target Platform Checkboxes
+        platform_box = tk.LabelFrame(content_frame, text=" Target Networks ", bg="#18181b", fg="#e4e4e7", padx=15, pady=10, font=("Sans", 10, "bold"), relief="flat", highlightbackground="#27272a", highlightthickness=1)
+        platform_box.pack(fill="x", pady=(0, 15))
+
+        self.var_x = tk.BooleanVar(value=True)
+        self.var_fb = tk.BooleanVar(value=True)
+        self.var_threads = tk.BooleanVar(value=True)
+        self.var_ig = tk.BooleanVar(value=False)
+
+        cb_x = ttk.Checkbutton(platform_box, text="X (Twitter)", variable=self.var_x)
+        cb_x.pack(side="left", padx=10)
+
+        cb_fb = ttk.Checkbutton(platform_box, text="Facebook Page", variable=self.var_fb)
+        cb_fb.pack(side="left", padx=10)
+
+        cb_threads = ttk.Checkbutton(platform_box, text="Threads", variable=self.var_threads)
+        cb_threads.pack(side="left", padx=10)
+
+        cb_ig = ttk.Checkbutton(platform_box, text="Instagram", variable=self.var_ig)
+        cb_ig.pack(side="left", padx=10)
+
+        btn_cfg = tk.Button(platform_box, text="Edit API Tokens", bg="#27272a", fg="#f4f4f5", activebackground="#3f3f46", activeforeground="#ffffff", relief="flat", padx=10, pady=3, font=("Sans", 9), command=self.open_config_window)
+        btn_cfg.pack(side="right")
+
+        # Message Text Area
+        lbl_msg = ttk.Label(content_frame, text="Post Content / Caption:", style="TLabel")
+        lbl_msg.pack(anchor="w", pady=(0, 5))
+
+        self.txt_message = scrolledtext.ScrolledText(content_frame, height=7, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10), padx=8, pady=8)
+        self.txt_message.pack(fill="x", pady=(0, 15))
+
+        # Links and Image Inputs
+        inputs_frame = tk.Frame(content_frame, bg="#09090b")
+        inputs_frame.pack(fill="x", pady=(0, 15))
+
+        # Link URL
+        lbl_link = ttk.Label(inputs_frame, text="Attached URL Link (Optional):", style="TLabel")
+        lbl_link.grid(row=0, column=0, sticky="w", pady=2)
+        self.entry_link = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
+        self.entry_link.grid(row=1, column=0, sticky="ew", padx=(0, 10), pady=(0, 5))
+
+        # Image URL
+        lbl_img = ttk.Label(inputs_frame, text="Public Image URL (Required for Instagram):", style="TLabel")
+        lbl_img.grid(row=0, column=1, sticky="w", pady=2)
+        self.entry_img = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
+        self.entry_img.grid(row=1, column=1, sticky="ew", pady=(0, 5))
+
+        inputs_frame.columnconfigure(0, weight=1)
+        inputs_frame.columnconfigure(1, weight=1)
+
+        # Action Buttons
+        btn_frame = tk.Frame(content_frame, bg="#09090b")
+        btn_frame.pack(fill="x", pady=(5, 15))
+
+        self.btn_publish = tk.Button(btn_frame, text="PUBLISH BROADCAST", bg="#ef4444", fg="#ffffff", activebackground="#dc2626", activeforeground="#ffffff", font=("Sans", 11, "bold"), relief="flat", pady=8, cursor="hand2", command=self.start_publish_thread)
+        self.btn_publish.pack(fill="x")
+
+        # Output Log Box
+        lbl_log = ttk.Label(content_frame, text="Real-time Dispatch Logs:", style="TLabel")
+        lbl_log.pack(anchor="w", pady=(0, 5))
+
+        self.txt_log = scrolledtext.ScrolledText(content_frame, height=8, bg="#121215", fg="#a1a1aa", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Monospace", 9), padx=8, pady=8)
+        self.txt_log.pack(fill="both", expand=True, pady=(0, 15))
+
+    def log(self, text):
+        self.txt_log.insert(tk.END, text + "\n")
+        self.txt_log.see(tk.END)
+
+    def open_config_window(self):
+        cfg_win = tk.Toplevel(self)
+        cfg_win.title("API Credentials Editor")
+        cfg_win.geometry("640x520")
+        cfg_win.configure(bg="#09090b")
+
+        lbl = ttk.Label(cfg_win, text="Edit Credentials (JSON format):", style="Header.TLabel")
+        lbl.pack(anchor="w", padx=15, pady=(15, 5))
+
+        txt_cfg = scrolledtext.ScrolledText(cfg_win, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", font=("Monospace", 9), padx=8, pady=8)
+        txt_cfg.pack(fill="both", expand=True, padx=15, pady=5)
+
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                txt_cfg.insert("1.0", f.read())
+
+        def save_cfg():
+            try:
+                raw = txt_cfg.get("1.0", tk.END).strip()
+                parsed = json.loads(raw)
+                with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+                    json.dump(parsed, f, indent=2)
+                messagebox.showinfo("Saved", "Credentials updated successfully!", parent=cfg_win)
+                cfg_win.destroy()
+            except Exception as e:
+                messagebox.showerror("Invalid JSON", f"Error parsing JSON:\n{e}", parent=cfg_win)
+
+        btn_save = tk.Button(cfg_win, text="SAVE CREDENTIALS", bg="#ef4444", fg="#ffffff", font=("Sans", 10, "bold"), relief="flat", pady=6, command=save_cfg)
+        btn_save.pack(fill="x", padx=15, pady=15)
+
+    def start_publish_thread(self):
+        msg = self.txt_message.get("1.0", tk.END).strip()
+        if not msg:
+            messagebox.showwarning("Warning", "Message text cannot be empty!")
+            return
+
+        self.btn_publish.config(state="disabled", text="PUBLISHING...")
+        threading.Thread(target=self.run_publish, daemon=True).start()
+
+    def run_publish(self):
+        msg = self.txt_message.get("1.0", tk.END).strip()
+        link = self.entry_link.get().strip() or None
+        img = self.entry_img.get().strip() or None
+
+        self.log(f"\n[*] Starting broadcast session at {os.popen('date +%H:%M:%S').read().strip()}...")
+        
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+        except Exception as e:
+            self.log(f"[X] Failed to load config: {e}")
+            self.reset_btn()
+            return
+
+        target_text = msg
+        if link:
+            target_text = f"{msg}\n\n{link}"
+
+        # 1. X
+        if self.var_x.get():
+            self.log("[*] Dispatching to X...")
+            res = social_poster.post_to_x(target_text, cfg.get("x", {}))
+            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+
+        # 2. Facebook
+        if self.var_fb.get():
+            self.log("[*] Dispatching to Facebook Page...")
+            res = social_poster.post_to_facebook(msg, cfg.get("facebook", {}), link=link)
+            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+
+        # 3. Threads
+        if self.var_threads.get():
+            self.log("[*] Dispatching to Threads...")
+            res = social_poster.post_to_threads(target_text, cfg.get("threads", {}))
+            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+
+        # 4. Instagram
+        if self.var_ig.get():
+            self.log("[*] Dispatching to Instagram Business...")
+            res = social_poster.post_to_instagram(target_text, img, cfg.get("instagram", {}))
+            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+
+        self.log("[✓] Broadcast sequence finished.")
+        self.reset_btn()
+
+    def reset_btn(self):
+        self.btn_publish.config(state="normal", text="PUBLISH BROADCAST")
+
+if __name__ == "__main__":
+    app = HiganSocialApp()
+    app.mainloop()

@@ -1,0 +1,246 @@
+#!/usr/bin/env python3
+"""
+Social Media Multi-Platform Publisher CLI
+Targets: X (Twitter), Facebook Page, Threads, Instagram Business
+Uses native Graph API & Twitter OAuth 1.0a / v2 API without third-party heavy SDKs.
+"""
+
+import sys
+import os
+import json
+import time
+import hmac
+import hashlib
+import base64
+import urllib.parse
+import urllib.request
+import argparse
+
+CONFIG_PATH = os.path.expanduser("~/social-poster/config/credentials.json")
+
+def load_config():
+    if not os.path.exists(CONFIG_PATH):
+        print(f"[!] Config file missing: {CONFIG_PATH}")
+        print("[i] Copy config/credentials.example.json to config/credentials.json and fill your tokens.")
+        sys.exit(1)
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+# ==========================================
+# 1. X (Twitter) v2 / v1.1 Implementation
+# ==========================================
+def build_oauth1_header(method, url, params, api_key, api_secret, access_token, token_secret):
+    oauth_params = {
+        "oauth_consumer_key": api_key,
+        "oauth_nonce": base64.b64encode(os.urandom(16)).decode("utf-8").replace("=", "").replace("+", "").replace("/", ""),
+        "oauth_signature_method": "HMAC-SHA1",
+        "oauth_timestamp": str(int(time.time())),
+        "oauth_token": access_token,
+        "oauth_version": "1.0"
+    }
+    
+    all_params = dict(params)
+    all_params.update(oauth_params)
+    
+    # Sort and percent-encode
+    sorted_params = sorted(all_params.items())
+    encoded_params = urllib.parse.urlencode(sorted_params, quote_via=urllib.parse.quote)
+    
+    base_string = f"{method.upper()}&{urllib.parse.quote(url, safe='')}&{urllib.parse.quote(encoded_params, safe='')}"
+    signing_key = f"{urllib.parse.quote(api_secret, safe='')}&{urllib.parse.quote(token_secret, safe='')}"
+    
+    signature = base64.b64encode(
+        hmac.new(signing_key.encode("utf-8"), base_string.encode("utf-8"), hashlib.sha1).digest()
+    ).decode("utf-8")
+    
+    oauth_params["oauth_signature"] = signature
+    
+    auth_header_parts = [f'{urllib.parse.quote(k)}="{urllib.parse.quote(v)}"' for k, v in sorted(oauth_params.items())]
+    return "OAuth " + ", ".join(auth_header_parts)
+
+def post_to_x(text, cfg):
+    if not cfg.get("enabled"):
+        return {"platform": "X", "status": "skipped", "message": "Disabled in config"}
+    
+    api_key = cfg.get("api_key")
+    api_secret = cfg.get("api_secret")
+    access_token = cfg.get("access_token")
+    token_secret = cfg.get("access_token_secret")
+
+    url = "https://api.twitter.com/2/tweets"
+    body = json.dumps({"text": text}).encode("utf-8")
+    
+    auth_header = build_oauth1_header("POST", url, {}, api_key, api_secret, access_token, token_secret)
+    
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "Authorization": auth_header,
+            "Content-Type": "application/json",
+            "User-Agent": "HiganveinPoster/1.0"
+        }
+    )
+    try:
+        with urllib.request.urlopen(req) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            return {"platform": "X", "status": "success", "id": data.get("data", {}).get("id")}
+    except Exception as e:
+        return {"platform": "X", "status": "failed", "error": str(e)}
+
+# ==========================================
+# 2. Facebook Page (Graph API)
+# ==========================================
+def post_to_facebook(text, cfg, link=None):
+    if not cfg.get("enabled"):
+        return {"platform": "Facebook", "status": "skipped", "message": "Disabled in config"}
+    
+    page_id = cfg.get("page_id")
+    token = cfg.get("page_access_token")
+    url = f"https://graph.facebook.com/v19.0/{page_id}/feed"
+    
+    payload = {"message": text, "access_token": token}
+    if link:
+        payload["link"] = link
+        
+    data = urllib.parse.urlencode(payload).encode("utf-8")
+    req = urllib.request.Request(url, data=data)
+    
+    try:
+        with urllib.request.urlopen(req) as resp:
+            res = json.loads(resp.read().decode("utf-8"))
+            return {"platform": "Facebook", "status": "success", "id": res.get("id")}
+    except Exception as e:
+        return {"platform": "Facebook", "status": "failed", "error": str(e)}
+
+# ==========================================
+# 3. Threads (Meta Threads API)
+# ==========================================
+def post_to_threads(text, cfg):
+    if not cfg.get("enabled"):
+        return {"platform": "Threads", "status": "skipped", "message": "Disabled in config"}
+    
+    user_id = cfg.get("user_id")
+    token = cfg.get("access_token")
+    
+    # Step 1: Create Media Container
+    create_url = f"https://graph.threads.net/v1.0/{user_id}/threads"
+    create_data = urllib.parse.urlencode({
+        "media_type": "TEXT",
+        "text": text,
+        "access_token": token
+    }).encode("utf-8")
+    
+    try:
+        with urllib.request.urlopen(urllib.request.Request(create_url, data=create_data)) as resp:
+            creation = json.loads(resp.read().decode("utf-8"))
+            container_id = creation.get("id")
+            
+        if not container_id:
+            return {"platform": "Threads", "status": "failed", "error": "No container ID created"}
+        
+        # Step 2: Publish Container
+        time.sleep(2)  # Wait for container processing
+        pub_url = f"https://graph.threads.net/v1.0/{user_id}/threads_publish"
+        pub_data = urllib.parse.urlencode({
+            "creation_id": container_id,
+            "access_token": token
+        }).encode("utf-8")
+        
+        with urllib.request.urlopen(urllib.request.Request(pub_url, data=pub_data)) as resp:
+            published = json.loads(resp.read().decode("utf-8"))
+            return {"platform": "Threads", "status": "success", "id": published.get("id")}
+    except Exception as e:
+        return {"platform": "Threads", "status": "failed", "error": str(e)}
+
+# ==========================================
+# 4. Instagram Business (Image/Video Container)
+# ==========================================
+def post_to_instagram(caption, image_url, cfg):
+    if not cfg.get("enabled"):
+        return {"platform": "Instagram", "status": "skipped", "message": "Disabled in config"}
+    
+    if not image_url:
+        return {"platform": "Instagram", "status": "skipped", "message": "Instagram Graph API requires a public image URL"}
+    
+    ig_id = cfg.get("account_id")
+    token = cfg.get("access_token")
+    
+    # Step 1: Create Container
+    create_url = f"https://graph.facebook.com/v19.0/{ig_id}/media"
+    create_data = urllib.parse.urlencode({
+        "image_url": image_url,
+        "caption": caption,
+        "access_token": token
+    }).encode("utf-8")
+    
+    try:
+        with urllib.request.urlopen(urllib.request.Request(create_url, data=create_data)) as resp:
+            creation = json.loads(resp.read().decode("utf-8"))
+            creation_id = creation.get("id")
+            
+        if not creation_id:
+            return {"platform": "Instagram", "status": "failed", "error": "Failed to create media container"}
+        
+        # Step 2: Publish Media
+        time.sleep(3)
+        pub_url = f"https://graph.facebook.com/v19.0/{ig_id}/media_publish"
+        pub_data = urllib.parse.urlencode({
+            "creation_id": creation_id,
+            "access_token": token
+        }).encode("utf-8")
+        
+        with urllib.request.urlopen(urllib.request.Request(pub_url, data=pub_data)) as resp:
+            published = json.loads(resp.read().decode("utf-8"))
+            return {"platform": "Instagram", "status": "success", "id": published.get("id")}
+    except Exception as e:
+        return {"platform": "Instagram", "status": "failed", "error": str(e)}
+
+# ==========================================
+# Main CLI Orchestrator
+# ==========================================
+def main():
+    parser = argparse.ArgumentParser(description="Multi-Platform Social Media Publisher (X, FB, Threads, IG)")
+    parser.add_argument("message", help="The text message / caption to publish")
+    parser.add_argument("--link", help="Optional URL link attached to the post")
+    parser.add_argument("--image-url", help="Public image URL required for Instagram posting")
+    parser.add_argument("--platform", choices=["all", "x", "facebook", "threads", "instagram"], default="all",
+                        help="Specific platform to publish to (default: all enabled)")
+    
+    args = parser.parse_args()
+    cfg = load_config()
+    
+    target_msg = args.message
+    if args.link:
+        target_msg = f"{args.message}\n\n{args.link}"
+        
+    print(f"[*] Dispatching post across configured platforms...")
+    results = []
+    
+    # Dispatch
+    if args.platform in ["all", "x"]:
+        results.append(post_to_x(target_msg, cfg.get("x", {})))
+        
+    if args.platform in ["all", "facebook"]:
+        results.append(post_to_facebook(args.message, cfg.get("facebook", {}), link=args.link))
+        
+    if args.platform in ["all", "threads"]:
+        results.append(post_to_threads(target_msg, cfg.get("threads", {})))
+        
+    if args.platform in ["all", "instagram"]:
+        results.append(post_to_instagram(target_msg, args.image_url, cfg.get("instagram", {})))
+        
+    # Output summary
+    print("\n=== Post Results Summary ===")
+    for r in results:
+        status = r.get("status").upper()
+        name = r.get("platform")
+        if status == "SUCCESS":
+            print(f"[✓] {name}: SUCCESS (Post ID: {r.get('id')})")
+        elif status == "SKIPPED":
+            print(f"[-] {name}: SKIPPED ({r.get('message')})")
+        else:
+            print(f"[X] {name}: FAILED ({r.get('error')})")
+
+if __name__ == "__main__":
+    main()

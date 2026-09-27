@@ -236,6 +236,8 @@ class InstallWorker(QThread):
                 log(f"> Formatting root: {root_part} as {fs}")
                 if fs == "btrfs":
                     subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
+                elif fs == "xfs":
+                    subprocess.run(["mkfs.xfs", "-f", root_part], check=True)
                 else:
                     subprocess.run(["mkfs.ext4", "-F", root_part], check=True)
 
@@ -477,10 +479,10 @@ fallback_options="-S autodetect"
             # Phase 2 Init System Hook
             init_cmdline = ""
             if init_choice == "openrc":
-                init_cmdline = "init=/sbin/openrc-init "
+                init_cmdline = "init=/usr/bin/openrc-init "
                 log("> Phase 2: OpenRC init hook registered in kernel cmdline.")
             elif init_choice == "runit":
-                init_cmdline = "init=/sbin/runit-init "
+                init_cmdline = "init=/usr/bin/runit-init "
                 log("> Phase 2: Runit init hook registered in kernel cmdline.")
             elif init_choice == "dinit":
                 init_cmdline = "init=/usr/bin/dinit "
@@ -1455,7 +1457,7 @@ class HiganInstallerApp(QWidget):
         lbl_f.setStyleSheet("color: #52525b; font-size: 8pt; font-weight: 600; letter-spacing: 1px;")
         col_f.addWidget(lbl_f)
         self.combo_fs = QComboBox()
-        self.combo_fs.addItems(["Btrfs (recommended)", "Ext4"])
+        self.combo_fs.addItems(["Btrfs (recommended)", "Ext4", "XFS"])
         col_f.addWidget(self.combo_fs)
         drv_row.addLayout(col_f, stretch=2)
 
@@ -1731,7 +1733,13 @@ class HiganInstallerApp(QWidget):
         self.summary_items["Keyboard"].setText(kb.text() if kb else "English (US)")
 
         disk_txt = self.combo_disk.currentText().split(" ")[0]
-        fs_txt = "Btrfs" if "Btrfs" in self.combo_fs.currentText() else "Ext4"
+        fs_raw = self.combo_fs.currentText()
+        if "Btrfs" in fs_raw:
+            fs_txt = "Btrfs"
+        elif "XFS" in fs_raw:
+            fs_txt = "XFS"
+        else:
+            fs_txt = "Ext4"
         boot_txt = self.combo_bootloader.currentText().split(" ")[0]
         init_txt = self.combo_init.currentText().split(" ")[0]
         if self.rad_erase.isChecked():
@@ -1784,7 +1792,13 @@ class HiganInstallerApp(QWidget):
 
     def start_installation(self):
         raw_disk = self.combo_disk.currentText().split(" ")[0]
-        fs = "btrfs" if "Btrfs" in self.combo_fs.currentText() else "ext4"
+        fs_raw = self.combo_fs.currentText()
+        if "Btrfs" in fs_raw:
+            fs = "btrfs"
+        elif "XFS" in fs_raw:
+            fs = "xfs"
+        else:
+            fs = "ext4"
         tz = f"{self.combo_region.currentText()}/{self.combo_zone.currentText()}"
         boot_choice = self.combo_bootloader.currentText().split(" ")[0].lower()
         init_choice = self.combo_init.currentText().split(" ")[0].lower()

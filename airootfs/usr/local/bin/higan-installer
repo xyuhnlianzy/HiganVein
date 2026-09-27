@@ -482,6 +482,12 @@ fallback_options="-S autodetect"
             elif init_choice == "runit":
                 init_cmdline = "init=/sbin/runit-init "
                 log("> Phase 2: Runit init hook registered in kernel cmdline.")
+            elif init_choice == "dinit":
+                init_cmdline = "init=/usr/bin/dinit "
+                log("> Phase 2: Dinit init hook registered in kernel cmdline.")
+            elif init_choice == "s6":
+                init_cmdline = "init=/sbin/s6-svscan "
+                log("> Phase 2: s6 init hook registered in kernel cmdline.")
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
 
@@ -1467,7 +1473,13 @@ class HiganInstallerApp(QWidget):
         lbl_i.setStyleSheet("color: #52525b; font-size: 8pt; font-weight: 600; letter-spacing: 1px;")
         col_i.addWidget(lbl_i)
         self.combo_init = QComboBox()
-        self.combo_init.addItems(["Systemd (Standard / Full)", "OpenRC (Phase 2 Preview)", "Runit (Phase 2 Preview)"])
+        self.combo_init.addItems([
+            "Systemd (Standard / Full Stack)",
+            "OpenRC (Dependency-based Shell Init)",
+            "Runit (Ultra-fast Process Supervisor)",
+            "Dinit (Modern C++ Service Manager)",
+            "s6 (High-Reliability Supervision)"
+        ])
         col_i.addWidget(self.combo_init)
         drv_row.addLayout(col_i, stretch=2)
         l.addLayout(drv_row)

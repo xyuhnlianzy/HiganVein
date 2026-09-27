@@ -9,12 +9,6 @@ sof-firmware
 broadcom-wl-dkms
 cachyos-keyring
 archlinux-keyring
-openrc
-runit
-dinit
-s6
-skalibs
-execline
 cachyos-mirrorlist
 vim
 nano
@@ -23,6 +17,13 @@ btop
 fastfetch
 cmatrix
 cava
+inetutils
+openrc
+runit
+dinit
+s6
+skalibs
+execline
 git
 networkmanager
 arch-install-scripts

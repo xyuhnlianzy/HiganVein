@@ -29,7 +29,8 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
     echo -e "  ${RED}--gamer${NC}    Gaming stack (Steam, Lutris, Heroic, GameMode, Wine)"
     echo -e "  ${RED}--dev${NC}      Developer toolchain (VSCodium, GCC, Rust, Go, Docker)"
     echo -e "  ${RED}--ricer${NC}    Aesthetics & Hyprland suite (Waybar, Rofi, Serpentinum)"
-    echo -e "  ${RED}--cyber${NC}    Offensive security tools (Wireshark, Nmap, Aircrack, Hydra)"
+    echo -e "  ${RED}--cyber${NC}    Offensive security & penetration testing arsenal"
+    echo -e "  ${RED}--blackarch${NC} Add BlackArch Linux official repository (2800+ tools)"
     echo -e "  ${RED}--nvidia${NC}   Official NVIDIA driver, 32-bit Vulkan libs & Settings GUI"
     echo -e "  ${RED}--all${NC}      Install all available standard bundles"
     echo ""
@@ -104,10 +105,61 @@ install_ricer() {
 }
 
 install_cyber() {
-    echo -e "${RED}==>${NC} ${WHITE}Installing Cybersecurity Tools...${NC}"
-    pacman -S --needed --noconfirm nmap wireshark-qt tcpdump aircrack-ng hydra john whois
+    echo -e "${RED}==>${NC} ${WHITE}Installing Cybersecurity & Penetration Testing Arsenal...${NC}"
+    echo -e "${GRAY}[i] Curated from Kali, ParrotOS & BlackArch core essentials${NC}"
+
+    # Network, Sniffing & Spoofing
+    echo -e "${GRAY}[+] Installing Network Recon & Traffic Analysis (Nmap, Wireshark, Bettercap, Masscan)...${NC}"
+    pacman -S --needed --noconfirm nmap masscan wireshark-cli wireshark-qt tshark tcpdump termshark bettercap ettercap-gtk openbsd-netcat socat whois
+
+    # Web Application Pentesting
+    echo -e "${GRAY}[+] Installing Web & API Pentesting Suite (SQLmap, Gobuster, Nikto)...${NC}"
+    pacman -S --needed --noconfirm sqlmap gobuster nikto
+
+    # Password Cracking & Brute Force
+    echo -e "${GRAY}[+] Installing Credential Recovery & Hash Cracking (Hydra, John, Hashcat)...${NC}"
+    pacman -S --needed --noconfirm hydra john hashcat
+
+    # Wireless & Radio
+    echo -e "${GRAY}[+] Installing Wireless Security (Aircrack-ng)...${NC}"
+    pacman -S --needed --noconfirm aircrack-ng
+
+    # Reverse Engineering & Binary Exploitation
+    echo -e "${GRAY}[+] Installing Reverse Engineering & Forensics (Ghidra, Radare2, GDB, Binwalk)...${NC}"
+    pacman -S --needed --noconfirm radare2 gdb binwalk ghidra
+
+    # Exploitation & Frameworks
+    echo -e "${GRAY}[+] Installing Exploitation Frameworks & Databases (Metasploit, ExploitDB)...${NC}"
+    pacman -S --needed --noconfirm metasploit exploitdb
+
+    # Anonymity & OpSec (ParrotOS heritage)
+    echo -e "${GRAY}[+] Installing OpSec & Anonymity Tools (Proxychains, Macchanger)...${NC}"
+    pacman -S --needed --noconfirm proxychains-ng macchanger
+
+    # User group permissions
     usermod -aG wireshark "$USER_NAME" 2>/dev/null || true
-    echo -e "${WHITE}[✓] Cybersecurity Stack installed successfully.${NC}\n"
+
+    echo -e "${WHITE}[✓] Cybersecurity Stack installed successfully.${NC}"
+    echo -e "${GRAY}[i] Need 2800+ more specialized tools? Run: sudo higan-bundle --blackarch${NC}\n"
+}
+
+setup_blackarch() {
+    echo -e "${RED}==>${NC} ${WHITE}Setting up BlackArch Linux Official Repository...${NC}"
+    echo -e "${GRAY}[i] Adding signed repository with 2800+ cybersecurity tools directly to pacman${NC}"
+    
+    local strap_script
+    strap_script=$(mktemp)
+    if curl -fsSL https://blackarch.org/strap.sh -o "$strap_script"; then
+        chmod +x "$strap_script"
+        bash "$strap_script"
+        rm -f "$strap_script"
+        echo -e "${WHITE}[✓] BlackArch repository integrated successfully.${NC}"
+        echo -e "${GRAY}[i] You can now install any tool with: pacman -S <tool-name>${NC}\n"
+    else
+        rm -f "$strap_script"
+        echo -e "${RED}[!] Failed to download BlackArch strap.sh. Check internet connection.${NC}\n"
+        return 1
+    fi
 }
 
 install_nvidia() {
@@ -131,18 +183,20 @@ show_menu() {
     echo -e "  ${RED}1)${NC} Gamer Stack       ${GRAY}(Steam, Lutris, MangoHud, GameMode, Wine)${NC}"
     echo -e "  ${RED}2)${NC} Developer Stack   ${GRAY}(Neovim, Docker, eza, bat, ripgrep, fzf)${NC}"
     echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Cava, Starship, Rofi)${NC}"
-    echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Aircrack-ng, Hydra)${NC}"
-    echo -e "  ${RED}5)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
-    echo -e "  ${RED}6)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
+    echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Metasploit, Ghidra, Hydra)${NC}"
+    echo -e "  ${RED}5)${NC} BlackArch Repo    ${GRAY}(Tambahkan repo resmi BlackArch 2800+ tools)${NC}"
+    echo -e "  ${RED}6)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
+    echo -e "  ${RED}7)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
     echo -e "  ${RED}q)${NC} Keluar\n"
-    read -rp "Pilihan Anda [1-6/q]: " choice
+    read -rp "Pilihan Anda [1-7/q]: " choice
     case "$choice" in
         1) install_gamer ;;
         2) install_dev ;;
         3) install_ricer ;;
         4) install_cyber ;;
-        5) install_nvidia ;;
-        6) install_gamer; install_dev; install_ricer; install_cyber ;;
+        5) setup_blackarch ;;
+        6) install_nvidia ;;
+        7) install_gamer; install_dev; install_ricer; install_cyber ;;
         q|Q) exit 0 ;;
         *) echo "Pilihan tidak valid."; exit 1 ;;
     esac
@@ -158,6 +212,7 @@ else
             --dev) install_dev ;;
             --ricer) install_ricer ;;
             --cyber) install_cyber ;;
+            --blackarch) setup_blackarch ;;
             --nvidia) install_nvidia ;;
             --all) install_gamer; install_dev; install_ricer; install_cyber ;;
             *) echo "Unknown flag: $arg"; exit 1 ;;

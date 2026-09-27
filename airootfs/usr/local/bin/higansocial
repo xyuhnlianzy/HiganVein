@@ -2,30 +2,23 @@
 import sys
 import os
 import json
-import threading
+import webbrowser
+import urllib.parse
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
-
-# Import backend engine
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import social_poster
-
-CONFIG_PATH = os.path.expanduser("~/social-poster/config/credentials.json")
-EXAMPLE_CONFIG_PATH = os.path.expanduser("~/social-poster/config/credentials.example.json")
 
 class HiganSocialApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("HiganSocial — Multi-Platform Publisher")
-        self.geometry("780x680")
-        self.minsize(700, 600)
+        self.title("HiganSocial — Multi-Platform Broadcaster")
+        self.geometry("820x720")
+        self.minsize(720, 640)
         self.configure(bg="#09090b") # Void Zinc-950
 
         # Styles
         self.style = ttk.Style(self)
         self.style.theme_use("clam")
         
-        # Configure colors
         self.style.configure(".", background="#09090b", foreground="#f4f4f5", font=("Sans", 10))
         self.style.configure("TLabel", background="#09090b", foreground="#f4f4f5")
         self.style.configure("TCheckbutton", background="#09090b", foreground="#f4f4f5")
@@ -33,24 +26,17 @@ class HiganSocialApp(tk.Tk):
         self.style.configure("Header.TLabel", font=("Sans", 14, "bold"), foreground="#ef4444")
         self.style.configure("Sub.TLabel", font=("Sans", 9), foreground="#71717a")
 
-        self.ensure_config()
         self.create_widgets()
-
-    def ensure_config(self):
-        if not os.path.exists(CONFIG_PATH) and os.path.exists(EXAMPLE_CONFIG_PATH):
-            os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
-            with open(EXAMPLE_CONFIG_PATH, "r") as src, open(CONFIG_PATH, "w") as dst:
-                dst.write(src.read())
 
     def create_widgets(self):
         # Header container
         header_frame = tk.Frame(self, bg="#09090b", padx=20, pady=15)
         header_frame.pack(fill="x")
 
-        lbl_title = ttk.Label(header_frame, text="HIGANSOCIAL PUBLISHER", style="Header.TLabel")
+        lbl_title = ttk.Label(header_frame, text="HIGANSOCIAL ZERO-API BROADCASTER", style="Header.TLabel")
         lbl_title.pack(anchor="w")
 
-        lbl_desc = ttk.Label(header_frame, text="Synchronous distribution across X, Facebook, Threads, and Instagram", style="Sub.TLabel")
+        lbl_desc = ttk.Label(header_frame, text="Instant multi-network publishing via authenticated browser sessions. Zero fees, zero API keys required.", style="Sub.TLabel")
         lbl_desc.pack(anchor="w", pady=(2, 0))
 
         # Main content
@@ -58,160 +44,195 @@ class HiganSocialApp(tk.Tk):
         content_frame.pack(fill="both", expand=True)
 
         # Target Platform Checkboxes
-        platform_box = tk.LabelFrame(content_frame, text=" Target Networks ", bg="#18181b", fg="#e4e4e7", padx=15, pady=10, font=("Sans", 10, "bold"), relief="flat", highlightbackground="#27272a", highlightthickness=1)
+        platform_box = tk.LabelFrame(content_frame, text=" Active Target Networks ", bg="#18181b", fg="#e4e4e7", padx=15, pady=10, font=("Sans", 10, "bold"), relief="flat", highlightbackground="#27272a", highlightthickness=1)
         platform_box.pack(fill="x", pady=(0, 15))
 
         self.var_x = tk.BooleanVar(value=True)
-        self.var_fb = tk.BooleanVar(value=True)
         self.var_threads = tk.BooleanVar(value=True)
-        self.var_ig = tk.BooleanVar(value=False)
+        self.var_fb = tk.BooleanVar(value=True)
+        self.var_reddit = tk.BooleanVar(value=True)
+        self.var_linkedin = tk.BooleanVar(value=False)
 
         cb_x = ttk.Checkbutton(platform_box, text="X (Twitter)", variable=self.var_x)
         cb_x.pack(side="left", padx=10)
 
-        cb_fb = ttk.Checkbutton(platform_box, text="Facebook Page", variable=self.var_fb)
-        cb_fb.pack(side="left", padx=10)
-
         cb_threads = ttk.Checkbutton(platform_box, text="Threads", variable=self.var_threads)
         cb_threads.pack(side="left", padx=10)
 
-        cb_ig = ttk.Checkbutton(platform_box, text="Instagram", variable=self.var_ig)
-        cb_ig.pack(side="left", padx=10)
+        cb_fb = ttk.Checkbutton(platform_box, text="Facebook", variable=self.var_fb)
+        cb_fb.pack(side="left", padx=10)
 
-        btn_cfg = tk.Button(platform_box, text="Edit API Tokens", bg="#27272a", fg="#f4f4f5", activebackground="#3f3f46", activeforeground="#ffffff", relief="flat", padx=10, pady=3, font=("Sans", 9), command=self.open_config_window)
-        btn_cfg.pack(side="right")
+        cb_reddit = ttk.Checkbutton(platform_box, text="Reddit", variable=self.var_reddit)
+        cb_reddit.pack(side="left", padx=10)
+
+        cb_li = ttk.Checkbutton(platform_box, text="LinkedIn", variable=self.var_linkedin)
+        cb_li.pack(side="left", padx=10)
+
+        # Presets Buttons
+        preset_frame = tk.Frame(content_frame, bg="#09090b")
+        preset_frame.pack(fill="x", pady=(0, 8))
+
+        lbl_templates = ttk.Label(preset_frame, text="Quick Announcement Templates:", style="TLabel")
+        lbl_templates.pack(side="left", padx=(0, 10))
+
+        btn_tmpl1 = tk.Button(preset_frame, text="New Release ISO", bg="#27272a", fg="#f4f4f5", activebackground="#3f3f46", relief="flat", padx=8, pady=2, font=("Sans", 9), command=self.load_release_template)
+        btn_tmpl1.pack(side="left", padx=4)
+
+        btn_tmpl2 = tk.Button(preset_frame, text="Discord Invite", bg="#27272a", fg="#f4f4f5", activebackground="#3f3f46", relief="flat", padx=8, pady=2, font=("Sans", 9), command=self.load_discord_template)
+        btn_tmpl2.pack(side="left", padx=4)
+
+        btn_tmpl3 = tk.Button(preset_frame, text="Core CLI Highlight", bg="#27272a", fg="#f4f4f5", activebackground="#3f3f46", relief="flat", padx=8, pady=2, font=("Sans", 9), command=self.load_cli_template)
+        btn_tmpl3.pack(side="left", padx=4)
 
         # Message Text Area
-        lbl_msg = ttk.Label(content_frame, text="Post Content / Caption:", style="TLabel")
-        lbl_msg.pack(anchor="w", pady=(0, 5))
+        lbl_msg = ttk.Label(content_frame, text="Announcement Post / Caption:", style="TLabel")
+        lbl_msg.pack(anchor="w", pady=(5, 5))
 
-        self.txt_message = scrolledtext.ScrolledText(content_frame, height=7, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10), padx=8, pady=8)
+        self.txt_message = scrolledtext.ScrolledText(content_frame, height=8, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10), padx=8, pady=8)
         self.txt_message.pack(fill="x", pady=(0, 15))
 
-        # Links and Image Inputs
+        # Links and Subreddit Inputs
         inputs_frame = tk.Frame(content_frame, bg="#09090b")
         inputs_frame.pack(fill="x", pady=(0, 15))
 
-        # Link URL
-        lbl_link = ttk.Label(inputs_frame, text="Attached URL Link (Optional):", style="TLabel")
+        # Attached Link
+        lbl_link = ttk.Label(inputs_frame, text="Official Link / Repository URL:", style="TLabel")
         lbl_link.grid(row=0, column=0, sticky="w", pady=2)
         self.entry_link = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
         self.entry_link.grid(row=1, column=0, sticky="ew", padx=(0, 10), pady=(0, 5))
+        self.entry_link.insert(0, "https://higanvein.pages.dev")
 
-        # Image URL
-        lbl_img = ttk.Label(inputs_frame, text="Public Image URL (Required for Instagram):", style="TLabel")
-        lbl_img.grid(row=0, column=1, sticky="w", pady=2)
-        self.entry_img = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
-        self.entry_img.grid(row=1, column=1, sticky="ew", pady=(0, 5))
+        # Reddit Subreddit
+        lbl_sub = ttk.Label(inputs_frame, text="Target Subreddit (for Reddit intent):", style="TLabel")
+        lbl_sub.grid(row=0, column=1, sticky="w", pady=2)
+        self.entry_sub = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
+        self.entry_sub.grid(row=1, column=1, sticky="ew", pady=(0, 5))
+        self.entry_sub.insert(0, "linux")
 
-        inputs_frame.columnconfigure(0, weight=1)
+        inputs_frame.columnconfigure(0, weight=3)
         inputs_frame.columnconfigure(1, weight=1)
 
         # Action Buttons
         btn_frame = tk.Frame(content_frame, bg="#09090b")
         btn_frame.pack(fill="x", pady=(5, 15))
 
-        self.btn_publish = tk.Button(btn_frame, text="PUBLISH BROADCAST", bg="#ef4444", fg="#ffffff", activebackground="#dc2626", activeforeground="#ffffff", font=("Sans", 11, "bold"), relief="flat", pady=8, cursor="hand2", command=self.start_publish_thread)
+        self.btn_publish = tk.Button(btn_frame, text="LAUNCH ONE-CLICK BROADCAST TABS", bg="#ef4444", fg="#ffffff", activebackground="#dc2626", activeforeground="#ffffff", font=("Sans", 11, "bold"), relief="flat", pady=9, cursor="hand2", command=self.broadcast_all)
         self.btn_publish.pack(fill="x")
 
         # Output Log Box
-        lbl_log = ttk.Label(content_frame, text="Real-time Dispatch Logs:", style="TLabel")
+        lbl_log = ttk.Label(content_frame, text="Broadcast Dispatch Tracker:", style="TLabel")
         lbl_log.pack(anchor="w", pady=(0, 5))
 
-        self.txt_log = scrolledtext.ScrolledText(content_frame, height=8, bg="#121215", fg="#a1a1aa", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Monospace", 9), padx=8, pady=8)
+        self.txt_log = scrolledtext.ScrolledText(content_frame, height=6, bg="#121215", fg="#a1a1aa", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Monospace", 9), padx=8, pady=8)
         self.txt_log.pack(fill="both", expand=True, pady=(0, 15))
+
+        # Initial default text
+        self.load_release_template()
 
     def log(self, text):
         self.txt_log.insert(tk.END, text + "\n")
         self.txt_log.see(tk.END)
 
-    def open_config_window(self):
-        cfg_win = tk.Toplevel(self)
-        cfg_win.title("API Credentials Editor")
-        cfg_win.geometry("640x520")
-        cfg_win.configure(bg="#09090b")
+    def load_release_template(self):
+        text = (
+            "HiganveinOS Release 2026.09.24 is live! 🔴\n\n"
+            "An aggressive Arch/CachyOS derivative tuned for performance and freedom:\n"
+            "• Core CLI Edition: ~316 MiB idle memory with BORE kernel\n"
+            "• Modular Inits: Systemd, OpenRC, and Runit\n"
+            "• Tri-Engine Bootloader (Limine UEFI, GRUB MBR, systemd-boot)\n"
+            "• Curated stacks: --cyber (Kali/BlackArch) & --ai-agent (Ollama + 9Router + Hermes)\n"
+            "• Direct high-speed CDN mirrors on SourceForge & Hugging Face\n\n"
+            "#Linux #ArchLinux #OpenSource #CyberSecurity #SysAdmin"
+        )
+        self.txt_message.delete("1.0", tk.END)
+        self.txt_message.insert("1.0", text)
+        self.entry_link.delete(0, tk.END)
+        self.entry_link.insert(0, "https://higanvein.pages.dev")
 
-        lbl = ttk.Label(cfg_win, text="Edit Credentials (JSON format):", style="Header.TLabel")
-        lbl.pack(anchor="w", padx=15, pady=(15, 5))
+    def load_discord_template(self):
+        text = (
+            "Join the official HiganVein Linux community! 🔴\n\n"
+            "We are building an Arch derivative from scratch with modular inits and extreme memory tuning.\n"
+            "Testers, developers, and low-spec fleet builders welcome.\n\n"
+            "Discord Invite: https://discord.gg/HQANxjyfKx\n\n"
+            "#LinuxCommunity #ArchLinux #Discord #HiganveinOS"
+        )
+        self.txt_message.delete("1.0", tk.END)
+        self.txt_message.insert("1.0", text)
+        self.entry_link.delete(0, tk.END)
+        self.entry_link.insert(0, "https://discord.gg/HQANxjyfKx")
 
-        txt_cfg = scrolledtext.ScrolledText(cfg_win, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", font=("Monospace", 9), padx=8, pady=8)
-        txt_cfg.pack(fill="both", expand=True, padx=15, pady=5)
+    def load_cli_template(self):
+        text = (
+            "Headless server tuned to perfection: HiganveinOS Core CLI v1.0 ⚡\n\n"
+            "• 316 MiB cold boot idle memory\n"
+            "• CachyOS BORE kernel scheduler & auto-ZRAM 2.5×\n"
+            "• Native Btrfs subvolumes (@, @home, @snapshots)\n"
+            "• Pre-baked agentic AI & penetration testing stacks\n\n"
+            "Download ISO via SourceForge mirror:\n"
+            "https://sourceforge.net/projects/higanvein/files/\n\n"
+            "#ArchLinux #SysAdmin #Server #Homelab"
+        )
+        self.txt_message.delete("1.0", tk.END)
+        self.txt_message.insert("1.0", text)
+        self.entry_link.delete(0, tk.END)
+        self.entry_link.insert(0, "https://sourceforge.net/projects/higanvein/")
 
-        if os.path.exists(CONFIG_PATH):
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                txt_cfg.insert("1.0", f.read())
-
-        def save_cfg():
-            try:
-                raw = txt_cfg.get("1.0", tk.END).strip()
-                parsed = json.loads(raw)
-                with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-                    json.dump(parsed, f, indent=2)
-                messagebox.showinfo("Saved", "Credentials updated successfully!", parent=cfg_win)
-                cfg_win.destroy()
-            except Exception as e:
-                messagebox.showerror("Invalid JSON", f"Error parsing JSON:\n{e}", parent=cfg_win)
-
-        btn_save = tk.Button(cfg_win, text="SAVE CREDENTIALS", bg="#ef4444", fg="#ffffff", font=("Sans", 10, "bold"), relief="flat", pady=6, command=save_cfg)
-        btn_save.pack(fill="x", padx=15, pady=15)
-
-    def start_publish_thread(self):
+    def broadcast_all(self):
         msg = self.txt_message.get("1.0", tk.END).strip()
+        link = self.entry_link.get().strip()
+        sub = self.entry_sub.get().strip() or "linux"
+
         if not msg:
-            messagebox.showwarning("Warning", "Message text cannot be empty!")
+            messagebox.showwarning("Warning", "Announcement content cannot be empty!")
             return
 
-        self.btn_publish.config(state="disabled", text="PUBLISHING...")
-        threading.Thread(target=self.run_publish, daemon=True).start()
+        full_text = f"{msg}\n\n{link}" if link and link not in msg else msg
 
-    def run_publish(self):
-        msg = self.txt_message.get("1.0", tk.END).strip()
-        link = self.entry_link.get().strip() or None
-        img = self.entry_img.get().strip() or None
+        self.log(f"\n[*] Generating zero-API dispatch URLs at {os.popen('date +%H:%M:%S').read().strip()}...")
+        count = 0
 
-        self.log(f"\n[*] Starting broadcast session at {os.popen('date +%H:%M:%S').read().strip()}...")
-        
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                cfg = json.load(f)
-        except Exception as e:
-            self.log(f"[X] Failed to load config: {e}")
-            self.reset_btn()
-            return
-
-        target_text = msg
-        if link:
-            target_text = f"{msg}\n\n{link}"
-
-        # 1. X
+        # 1. X (Twitter)
         if self.var_x.get():
-            self.log("[*] Dispatching to X...")
-            res = social_poster.post_to_x(target_text, cfg.get("x", {}))
-            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+            x_url = f"https://x.com/intent/tweet?text={urllib.parse.quote(full_text)}"
+            self.log("[✓] Launching X (Twitter) draft...")
+            webbrowser.open(x_url)
+            count += 1
 
-        # 2. Facebook
-        if self.var_fb.get():
-            self.log("[*] Dispatching to Facebook Page...")
-            res = social_poster.post_to_facebook(msg, cfg.get("facebook", {}), link=link)
-            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
-
-        # 3. Threads
+        # 2. Threads
         if self.var_threads.get():
-            self.log("[*] Dispatching to Threads...")
-            res = social_poster.post_to_threads(target_text, cfg.get("threads", {}))
-            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+            threads_url = f"https://www.threads.net/intent/post?text={urllib.parse.quote(full_text)}"
+            self.log("[✓] Launching Threads draft...")
+            webbrowser.open(threads_url)
+            count += 1
 
-        # 4. Instagram
-        if self.var_ig.get():
-            self.log("[*] Dispatching to Instagram Business...")
-            res = social_poster.post_to_instagram(target_text, img, cfg.get("instagram", {}))
-            self.log(f"    -> {res.get('status').upper()}: {res.get('id') or res.get('error') or res.get('message')}")
+        # 3. Facebook
+        if self.var_fb.get():
+            fb_target = link if link else "https://higanvein.pages.dev"
+            fb_url = f"https://www.facebook.com/sharer/sharer.php?u={urllib.parse.quote(fb_target)}&quote={urllib.parse.quote(msg)}"
+            self.log("[✓] Launching Facebook Share modal...")
+            webbrowser.open(fb_url)
+            count += 1
 
-        self.log("[✓] Broadcast sequence finished.")
-        self.reset_btn()
+        # 4. Reddit
+        if self.var_reddit.get():
+            reddit_title = msg.splitlines()[0] if msg.splitlines() else "HiganveinOS Update"
+            reddit_target = link if link else "https://higanvein.pages.dev"
+            reddit_url = f"https://www.reddit.com/r/{sub}/submit?title={urllib.parse.quote(reddit_title)}&url={urllib.parse.quote(reddit_target)}"
+            self.log(f"[✓] Launching Reddit submit for r/{sub}...")
+            webbrowser.open(reddit_url)
+            count += 1
 
-    def reset_btn(self):
-        self.btn_publish.config(state="normal", text="PUBLISH BROADCAST")
+        # 5. LinkedIn
+        if self.var_linkedin.get():
+            li_target = link if link else "https://higanvein.pages.dev"
+            li_url = f"https://www.linkedin.com/sharing/share-offsite/?url={urllib.parse.quote(li_target)}"
+            self.log("[✓] Launching LinkedIn share intent...")
+            webbrowser.open(li_url)
+            count += 1
+
+        self.log(f"[✓] Complete! {count} network tabs launched in default browser.")
+        self.log("[i] Teks sudah terisi otomatis di setiap tab, tinggal klik Post/Publish.")
 
 if __name__ == "__main__":
     app = HiganSocialApp()

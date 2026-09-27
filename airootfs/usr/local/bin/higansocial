@@ -50,7 +50,6 @@ class HiganSocialApp(tk.Tk):
         self.var_x = tk.BooleanVar(value=True)
         self.var_threads = tk.BooleanVar(value=True)
         self.var_fb = tk.BooleanVar(value=True)
-        self.var_reddit = tk.BooleanVar(value=True)
         self.var_linkedin = tk.BooleanVar(value=False)
 
         cb_x = ttk.Checkbutton(platform_box, text="X (Twitter)", variable=self.var_x)
@@ -61,9 +60,6 @@ class HiganSocialApp(tk.Tk):
 
         cb_fb = ttk.Checkbutton(platform_box, text="Facebook", variable=self.var_fb)
         cb_fb.pack(side="left", padx=10)
-
-        cb_reddit = ttk.Checkbutton(platform_box, text="Reddit", variable=self.var_reddit)
-        cb_reddit.pack(side="left", padx=10)
 
         cb_li = ttk.Checkbutton(platform_box, text="LinkedIn", variable=self.var_linkedin)
         cb_li.pack(side="left", padx=10)
@@ -91,26 +87,12 @@ class HiganSocialApp(tk.Tk):
         self.txt_message = scrolledtext.ScrolledText(content_frame, height=8, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10), padx=8, pady=8)
         self.txt_message.pack(fill="x", pady=(0, 15))
 
-        # Links and Subreddit Inputs
-        inputs_frame = tk.Frame(content_frame, bg="#09090b")
-        inputs_frame.pack(fill="x", pady=(0, 15))
-
-        # Attached Link
-        lbl_link = ttk.Label(inputs_frame, text="Official Link / Repository URL:", style="TLabel")
-        lbl_link.grid(row=0, column=0, sticky="w", pady=2)
-        self.entry_link = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
-        self.entry_link.grid(row=1, column=0, sticky="ew", padx=(0, 10), pady=(0, 5))
+        # Link Input
+        lbl_link = ttk.Label(content_frame, text="Official Link / Repository URL:", style="TLabel")
+        lbl_link.pack(anchor="w", pady=(0, 2))
+        self.entry_link = tk.Entry(content_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
+        self.entry_link.pack(fill="x", pady=(0, 15))
         self.entry_link.insert(0, "https://higanvein.pages.dev")
-
-        # Reddit Subreddit
-        lbl_sub = ttk.Label(inputs_frame, text="Target Subreddit (for Reddit intent):", style="TLabel")
-        lbl_sub.grid(row=0, column=1, sticky="w", pady=2)
-        self.entry_sub = tk.Entry(inputs_frame, bg="#18181b", fg="#f4f4f5", insertbackground="#ef4444", relief="flat", highlightbackground="#27272a", highlightthickness=1, font=("Sans", 10))
-        self.entry_sub.grid(row=1, column=1, sticky="ew", pady=(0, 5))
-        self.entry_sub.insert(0, "linux")
-
-        inputs_frame.columnconfigure(0, weight=3)
-        inputs_frame.columnconfigure(1, weight=1)
 
         # Action Buttons
         btn_frame = tk.Frame(content_frame, bg="#09090b")
@@ -214,16 +196,7 @@ class HiganSocialApp(tk.Tk):
             webbrowser.open(fb_url)
             count += 1
 
-        # 4. Reddit
-        if self.var_reddit.get():
-            reddit_title = msg.splitlines()[0] if msg.splitlines() else "HiganveinOS Update"
-            reddit_target = link if link else "https://higanvein.pages.dev"
-            reddit_url = f"https://www.reddit.com/r/{sub}/submit?title={urllib.parse.quote(reddit_title)}&url={urllib.parse.quote(reddit_target)}"
-            self.log(f"[✓] Launching Reddit submit for r/{sub}...")
-            webbrowser.open(reddit_url)
-            count += 1
-
-        # 5. LinkedIn
+        # 4. LinkedIn
         if self.var_linkedin.get():
             li_target = link if link else "https://higanvein.pages.dev"
             li_url = f"https://www.linkedin.com/sharing/share-offsite/?url={urllib.parse.quote(li_target)}"

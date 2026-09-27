@@ -310,13 +310,32 @@ class InstallWorker(QThread):
             with open(f"{target}/etc/locale.conf", "w") as f:
                 f.write("LANG=en_US.UTF-8\n")
 
-            # Enable NetworkManager & networking services on installed system
-            log("> Enabling NetworkManager, power & networking daemons...")
-            subprocess.run(["arch-chroot", target, "systemctl", "enable", "NetworkManager.service"], stderr=subprocess.DEVNULL)
-            subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-resolved.service"], stderr=subprocess.DEVNULL)
-            subprocess.run(["arch-chroot", target, "systemctl", "enable", "power-profiles-daemon.service"], stderr=subprocess.DEVNULL)
-            subprocess.run(["arch-chroot", target, "systemctl", "enable", "acpid.service"], stderr=subprocess.DEVNULL)
-            subprocess.run(["arch-chroot", target, "systemctl", "enable", "bluetooth.service"], stderr=subprocess.DEVNULL)
+            # Enable Services based on selected Init System
+            log(f"> Enabling essential daemons for {init_choice.upper()}...")
+            if init_choice == "systemd":
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "NetworkManager.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-resolved.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "power-profiles-daemon.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "acpid.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "bluetooth.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-timesyncd.service"], stderr=subprocess.DEVNULL)
+            elif init_choice == "openrc":
+                # Register OpenRC runlevels
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "networkmanager", "default"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "dbus", "default"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "elogind", "boot"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "acpid", "default"], stderr=subprocess.DEVNULL)
+            elif init_choice == "runit":
+                # Create runit runsvdir service symlinks
+                for srv in ["networkmanager", "dbus", "elogind", "agetty-tty1"]:
+                    srv_src = f"{target}/etc/sv/{srv}"
+                    srv_dst = f"{target}/etc/runit/runsvdir/default/{srv}"
+                    if os.path.exists(srv_src):
+                        os.makedirs(os.path.dirname(srv_dst), exist_ok=True)
+                        try:
+                            os.symlink(f"/etc/sv/{srv}", srv_dst)
+                        except Exception:
+                            pass
             # Ensure DNS resolv.conf fallback exists
             if not os.path.exists(f"{target}/etc/resolv.conf") or os.path.getsize(f"{target}/etc/resolv.conf") == 0:
                 with open(f"{target}/etc/resolv.conf", "w") as f:

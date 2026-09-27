@@ -315,6 +315,17 @@ if [ "$INIT_SYS" == "systemd" ]; then
   arch-chroot /mnt/higan-target systemctl enable NetworkManager.service 2>/dev/null || true
   arch-chroot /mnt/higan-target systemctl enable earlyoom.service 2>/dev/null || true
   arch-chroot /mnt/higan-target systemctl enable systemd-timesyncd.service 2>/dev/null || true
+elif [ "$INIT_SYS" == "openrc" ]; then
+  arch-chroot /mnt/higan-target rc-update add networkmanager default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add dbus default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add elogind boot 2>/dev/null || true
+elif [ "$INIT_SYS" == "runit" ]; then
+  for srv in networkmanager dbus elogind agetty-tty1; do
+    if [ -d "/mnt/higan-target/etc/sv/$srv" ]; then
+      mkdir -p /mnt/higan-target/etc/runit/runsvdir/default
+      ln -sf "/etc/sv/$srv" "/mnt/higan-target/etc/runit/runsvdir/default/$srv" 2>/dev/null || true
+    fi
+  done
 fi
 
 # Keyring initialization

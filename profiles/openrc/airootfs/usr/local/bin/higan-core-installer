@@ -304,6 +304,9 @@ if [ -n "$INIT_CMDLINE" ]; then
     ln -sf "$INIT_BIN" /mnt/higan-target/sbin/init
     ln -sf "$INIT_BIN" /mnt/higan-target/usr/bin/init
   fi
+  # Install reboot/poweroff wrapper so sudo reboot works under non-systemd
+  cp -f /usr/local/bin/reboot /mnt/higan-target/usr/local/bin/reboot 2>/dev/null || true
+  cp -f /usr/local/bin/poweroff /mnt/higan-target/usr/local/bin/poweroff 2>/dev/null || true
 fi
 
 # Essential System Services (NTP & Keyring anti-timewarp)

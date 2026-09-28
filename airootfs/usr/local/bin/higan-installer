@@ -507,7 +507,7 @@ fallback_options="-S autodetect"
                 init_cmdline = "init=/usr/bin/dinit "
                 log("> Phase 2: Dinit init hook registered in kernel cmdline.")
             elif init_choice == "s6":
-                init_cmdline = "init=/sbin/s6-svscan "
+                init_cmdline = "init=/etc/s6-init.sh "
                 log("> Phase 2: s6 init hook registered in kernel cmdline.")
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()

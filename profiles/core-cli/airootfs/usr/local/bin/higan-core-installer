@@ -79,7 +79,7 @@ case "$INIT_CHOICE" in
   2) INIT_SYS="openrc";  INIT_CMDLINE="init=/usr/bin/openrc-init" ;;
   3) INIT_SYS="runit";   INIT_CMDLINE="init=/usr/bin/runit-init" ;;
   4) INIT_SYS="dinit";   INIT_CMDLINE="init=/usr/bin/dinit" ;;
-  5) INIT_SYS="s6";      INIT_CMDLINE="init=/sbin/s6-svscan" ;;
+  5) INIT_SYS="s6";      INIT_CMDLINE="init=/etc/s6-init.sh" ;;
   *) INIT_SYS="systemd"; INIT_CMDLINE="" ;;
 esac
 echo -e "${GREEN}Init System dipilih: ${INIT_SYS} (${INIT_CMDLINE:-default systemd})${NC}"

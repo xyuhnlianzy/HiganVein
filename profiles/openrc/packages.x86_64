@@ -21,6 +21,9 @@ inetutils
 man-db
 man-pages
 openrc
+dbus-openrc
+elogind-openrc
+networkmanager-openrc
 runit
 dinit
 s6

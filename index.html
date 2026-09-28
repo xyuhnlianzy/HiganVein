@@ -103,32 +103,62 @@
                     </a>
 
                     <!-- 3. OpenRC Edition -->
-                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-openrc-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-openrc-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-bold text-sm">OpenRC Edition</span>
-                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Preview</span>
+                                <span class="bg-red-950 text-red-400 text-[10px] font-mono px-2 py-0.5 rounded border border-red-800/60">New · Phase 2</span>
                             </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Lean dependency-based init with elogind support. Fast boot &amp; low daemon overhead.</p>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Alpine/Gentoo dependency-based init, elogind seat manager, official Artix OpenRC suite (~120MB idle RAM).</p>
                         </div>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct ISO (WIP)
+                            Direct ISO (~1.5 GB)
                         </div>
                     </a>
 
                     <!-- 4. Runit Edition -->
-                    <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-runit-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-runit-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-bold text-sm">Runit Edition</span>
-                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Preview</span>
+                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Phase 2</span>
                             </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Ultra-minimal Unix-philosophy supervisor. Minimalist RAM footprint (~120MB idle).</p>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Ultra-minimal Unix-philosophy supervisor. Stage 1/2/3 boot lifecycle, minimal RAM footprint (~70MB idle).</p>
                         </div>
                         <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Direct ISO (WIP)
+                            Direct ISO (~1.2 GB)
+                        </div>
+                    </a>
+
+                    <!-- 5. Dinit Edition -->
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-dinit-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">Dinit Edition</span>
+                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Phase 2</span>
+                            </div>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">Modern fast C++ dependency graph service manager with zero monolithic bloat (~80MB idle).</p>
+                        </div>
+                        <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Direct ISO (~1.2 GB)
+                        </div>
+                    </a>
+
+                    <!-- 6. s6 Supervision Edition -->
+                    <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-s6-2026.09.20-x86_64.iso" class="p-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 text-white transition border border-zinc-800 hover:border-zinc-700 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-sm">s6 Edition</span>
+                                <span class="bg-zinc-800 text-zinc-400 text-[10px] font-mono px-2 py-0.5 rounded border border-zinc-700">Phase 2</span>
+                            </div>
+                            <p class="text-zinc-400 text-xs leading-relaxed mb-3">High-reliability Skarnet process supervision suite (s6 + execline + skalibs) for zero-downtime nodes.</p>
+                        </div>
+                        <div class="text-xs font-mono font-semibold flex items-center gap-1.5 text-zinc-300">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            Direct ISO (~1.2 GB)
                         </div>
                     </a>
                 </div>

@@ -18,6 +18,8 @@ fastfetch
 cmatrix
 cava
 inetutils
+man-db
+man-pages
 openrc
 runit
 dinit

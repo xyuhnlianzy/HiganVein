@@ -30,7 +30,6 @@ arch-install-scripts
 power-profiles-daemon
 acpid
 earlyoom
-zram-generator
 fish
 paru
 mtools

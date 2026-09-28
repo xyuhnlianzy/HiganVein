@@ -1,0 +1,26 @@
+# /etc/inittab: HiganveinOS OpenRC Init & TTY Manager
+
+# Default runlevel
+id:3:initdefault:
+
+# System initialization
+si::sysinit:/usr/bin/openrc sysinit
+rc::bootwait:/usr/bin/openrc boot
+
+# Runlevel execution
+l0:0:wait:/usr/bin/openrc shutdown
+l1:S1:wait:/usr/bin/openrc single
+l2:2:wait:/usr/bin/openrc nonetwork
+l3:3:wait:/usr/bin/openrc default
+l4:4:wait:/usr/bin/openrc default
+l5:5:wait:/usr/bin/openrc default
+l6:6:wait:/usr/bin/openrc reboot
+
+# Automatic Live Login & Terminals
+c1:12345:respawn:/usr/bin/agetty --autologin higan --noclear 38400 tty1 linux
+c2:2345:respawn:/usr/bin/agetty 38400 tty2 linux
+c3:2345:respawn:/usr/bin/agetty 38400 tty3 linux
+c4:2345:respawn:/usr/bin/agetty 38400 tty4 linux
+
+# Ctrl-Alt-Del Reboot
+ca:12345:ctrlaltdel:/usr/bin/openrc-shutdown -r now

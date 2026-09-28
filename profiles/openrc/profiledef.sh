@@ -1,4 +1,4 @@
-iso_name="higanveinos-core"
+iso_name="higanveinos-openrc"
 iso_label="HIGANVEINOS_$(date +%Y%m)"
 iso_version="2026.09.20"
 install_dir="arch"

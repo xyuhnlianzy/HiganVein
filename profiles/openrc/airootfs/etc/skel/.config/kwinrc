@@ -1,0 +1,7 @@
+[Compositing]
+Enabled=true
+Backend=OpenGL
+GLTextureFilter=2
+
+[Windows]
+FocusPolicy=ClickToFocus

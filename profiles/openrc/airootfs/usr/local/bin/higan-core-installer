@@ -179,7 +179,8 @@ elif [ "$FS_TYPE" == "ext4" ]; then
   mkfs.ext4 -F -L "HIGAN_ROOT" "$PART_ROOT"
   mount "$PART_ROOT" /mnt/higan-target
 elif [ "$FS_TYPE" == "xfs" ]; then
-  mkfs.xfs -f -L "HIGAN_ROOT" "$PART_ROOT"
+  # Use compat options for legacy BIOS GRUB support (bigtime=0, inobtcount=0)
+  mkfs.xfs -f -m bigtime=0,inobtcount=0 -L "HIGAN_ROOT" "$PART_ROOT"
   mount "$PART_ROOT" /mnt/higan-target
 fi
 

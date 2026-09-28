@@ -237,7 +237,8 @@ class InstallWorker(QThread):
                 if fs == "btrfs":
                     subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
                 elif fs == "xfs":
-                    subprocess.run(["mkfs.xfs", "-f", root_part], check=True)
+                    # XFS with GRUB BIOS compatibility
+                    subprocess.run(["mkfs.xfs", "-f", "-m", "bigtime=0,inobtcount=0", root_part], check=True)
                 else:
                     subprocess.run(["mkfs.ext4", "-F", root_part], check=True)
 

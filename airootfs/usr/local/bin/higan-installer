@@ -533,6 +533,7 @@ fallback_options="-S autodetect"
                 subprocess.run([
                     "arch-chroot", target,
                     "grub-install", "--target=i386-pc",
+                    "--modules=btrfs ext2 xfs part_msdos part_gpt",
                     "--recheck", disk
                 ], check=True)
                 grub_default = f"{target}/etc/default/grub"

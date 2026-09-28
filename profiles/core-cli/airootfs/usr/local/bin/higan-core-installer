@@ -264,12 +264,22 @@ if [ "$BOOTLOADER" == "grub" ]; then
   if [ "$IS_UEFI" -eq 1 ]; then
     arch-chroot /mnt/higan-target grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=HIGANVEIN-CORE --recheck
   else
-    arch-chroot /mnt/higan-target grub-install --target=i386-pc "$DISK"
+    arch-chroot /mnt/higan-target grub-install --target=i386-pc --modules="btrfs ext2 xfs part_msdos part_gpt" "$DISK"
   fi
 
   sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"/GRUB_CMDLINE_LINUX_DEFAULT=\"\1 ${CMDLINE_EXTRAS}\"/" /mnt/higan-target/etc/default/grub
   sed -i "s/^#\?GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR=\"HiganveinOS ($INIT_SYS)\"/" /mnt/higan-target/etc/default/grub
   arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
+
+  # Fix Btrfs Subvolume Prefix in Legacy BIOS mode
+  if [ "$FS_TYPE" == "btrfs" ] && [ "$IS_UEFI" -ne 1 ]; then
+    # Mirror grub.cfg to root of Btrfs partition so GRUB core can find it before mounting subvol
+    mkdir -p /mnt/higan-target/boot/grub
+    # Embed fallback prefix
+    if [ -f /mnt/higan-target/boot/grub/grub.cfg ]; then
+      cp -f /mnt/higan-target/boot/grub/grub.cfg /mnt/higan-target/boot/grub.cfg 2>/dev/null || true
+    fi
+  fi
 
 elif [ "$BOOTLOADER" == "limine" ] && [ "$IS_UEFI" -eq 1 ]; then
   ROOT_UUID=$(blkid -s UUID -o value "$PART_ROOT")
@@ -304,6 +314,9 @@ if [ -n "$INIT_CMDLINE" ]; then
     ln -sf "$INIT_BIN" /mnt/higan-target/sbin/init
     ln -sf "$INIT_BIN" /mnt/higan-target/usr/bin/init
   fi
+  # Install reboot/poweroff wrapper so sudo reboot works under non-systemd
+  cp -f /usr/local/bin/reboot /mnt/higan-target/usr/local/bin/reboot 2>/dev/null || true
+  cp -f /usr/local/bin/poweroff /mnt/higan-target/usr/local/bin/poweroff 2>/dev/null || true
 fi
 
 # Essential System Services (NTP & Keyring anti-timewarp)

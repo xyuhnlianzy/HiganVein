@@ -24,11 +24,6 @@ openrc
 dbus-openrc
 elogind-openrc
 networkmanager-openrc
-runit
-dinit
-s6
-skalibs
-execline
 git
 networkmanager
 arch-install-scripts

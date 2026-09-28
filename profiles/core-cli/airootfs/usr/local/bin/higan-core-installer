@@ -205,6 +205,8 @@ rm -rf /mnt/higan-target/work* /mnt/higan-target/out* 2>/dev/null || true
 # Remove live autologin scripts from installed target so it uses standard login prompt
 rm -f /mnt/higan-target/etc/local.d/00-higan-autologin.start 2>/dev/null || true
 rm -f /mnt/higan-target/etc/openrc/conf.d/agetty.tty1 2>/dev/null || true
+rm -f /mnt/higan-target/etc/openrc/conf.d/agetty.tty2 2>/dev/null || true
+rm -f /mnt/higan-target/etc/openrc/conf.d/agetty.tty3 2>/dev/null || true
 
 # Config system
 echo "$HOSTNAME" > /mnt/higan-target/etc/hostname

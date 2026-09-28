@@ -268,7 +268,8 @@ if [ "$BOOTLOADER" == "grub" ]; then
     arch-chroot /mnt/higan-target grub-install --target=i386-pc --modules="btrfs ext2 xfs part_msdos part_gpt" "$DISK"
   fi
 
-  sed -i "s/GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"/GRUB_CMDLINE_LINUX_DEFAULT=\"\1 ${CMDLINE_EXTRAS}\"/" /mnt/higan-target/etc/default/grub
+  # Use | delimiter in sed to prevent crash from slashes in init=/usr/bin/...
+  sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"|GRUB_CMDLINE_LINUX_DEFAULT=\"\1 ${CMDLINE_EXTRAS}\"|" /mnt/higan-target/etc/default/grub
   sed -i "s/^#\?GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR=\"HiganveinOS ($INIT_SYS)\"/" /mnt/higan-target/etc/default/grub
   arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
 

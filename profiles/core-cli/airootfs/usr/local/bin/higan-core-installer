@@ -346,7 +346,11 @@ elif [ "$INIT_SYS" == "openrc" ]; then
   arch-chroot /mnt/higan-target rc-update add dbus default 2>/dev/null || true
   arch-chroot /mnt/higan-target rc-update add elogind boot 2>/dev/null || true
   ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty1 2>/dev/null || true
+  ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty2 2>/dev/null || true
+  ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty3 2>/dev/null || true
   arch-chroot /mnt/higan-target rc-update add agetty.tty1 default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add agetty.tty2 default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add agetty.tty3 default 2>/dev/null || true
 elif [ "$INIT_SYS" == "runit" ]; then
   for srv in networkmanager dbus elogind agetty-tty1; do
     if [ -d "/mnt/higan-target/etc/sv/$srv" ]; then

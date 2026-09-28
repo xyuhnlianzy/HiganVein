@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiganBrowser — Fast, Private, Zero-Telemetry Browser for Linux</title>
+    <meta name="description" content="HiganBrowser is an independent, ultra-lightweight web browser engineered in Rust, C++, and Python. Powered by Google Pure Web with zero tracking.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #ef4444;
+            --brand-deep: #09090b;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #08080a;
+            color: #f4f4f5;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .hero-glow {
+            background: radial-gradient(circle 700px at 50% -15%, rgba(239, 68, 68, 0.25), transparent 70%),
+                        radial-gradient(circle 500px at 90% 30%, rgba(185, 28, 28, 0.15), transparent 60%);
+        }
+        .browser-mockup {
+            background: #111116;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 40px -10px rgba(239, 68, 68, 0.2);
+        }
+        .card-feature {
+            background: linear-gradient(180deg, rgba(22, 22, 30, 0.8) 0%, rgba(14, 14, 20, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-feature:hover {
+            border-color: rgba(239, 68, 68, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white antialiased">
+    <!-- Top Banner (Firefox Style) -->
+    <aside aria-label="Announcement" class="bg-zinc-950 border-b border-zinc-800/80 text-xs py-2.5 px-6 text-center text-zinc-400 flex items-center justify-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" aria-hidden="true"></span>
+        <span>Built for HiganveinOS &amp; Arch Linux. Tri-Stack Native Engine (Rust + C++ + Python).</span>
+        <a href="#download" class="text-red-400 hover:text-red-300 font-semibold underline underline-offset-2 ml-1">Get the Binary &rarr;</a>
+    </aside>
+
+    <!-- Header Navigation -->
+    <header class="border-b border-zinc-800/60 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-red-600 to-rose-500 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-red-950/60" aria-hidden="true">H</div>
+                <span class="text-lg font-extrabold tracking-tight text-white flex items-center gap-1">
+                    <span>Higan<span class="text-red-500">Browser</span></span>
+                </span>
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-zinc-400" aria-label="Navigation">
+                <a href="#features" class="hover:text-white transition">Features</a>
+                <a href="#architecture" class="hover:text-white transition">Tri-Stack Core</a>
+                <a href="#comparison" class="hover:text-white transition">Us vs Monoliths</a>
+                <a href="#download" class="hover:text-white transition">Install</a>
+            </nav>
+            <div class="hidden md:block">
+                <a href="#download" class="bg-red-600 hover:bg-red-500 text-white px-5 py-2 rounded-full font-bold text-xs tracking-wide transition shadow-lg shadow-red-950/40">
+                    Download HiganBrowser
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section (Firefox Bold Two-Column Copy & Hero Mockup) -->
+    <main class="flex-grow hero-glow">
+        <section class="max-w-6xl mx-auto px-6 pt-16 pb-20">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Column: Copy -->
+                <div class="lg:col-span-6 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-zinc-900/90 border border-zinc-800 px-3.5 py-1 rounded-full text-xs font-medium text-zinc-300">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse" aria-hidden="true"></span>
+                        <span>Zero Telemetry · Pure Web · Independent</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.08]">
+                        The browser built to <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-500 to-amber-500">strip away the noise</span>.
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-zinc-400 leading-relaxed font-normal">
+                        No background telemetry daemons. No bloated accounts. Powered by native <b>Rust</b>, heap-trimming <b>C++</b>, and clean <b>Google Pure Web</b> routing.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#download" class="w-full sm:w-auto px-7 py-3.5 rounded-full bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition shadow-xl shadow-red-950/60 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            Download for Linux (.tar.zst)
+                        </a>
+                        <a href="#features" class="w-full sm:w-auto px-6 py-3.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 font-semibold text-sm transition text-center">
+                            Explore Specs &darr;
+                        </a>
+                    </div>
+
+                    <div class="pt-4 flex items-center justify-center lg:justify-start gap-6 text-xs font-mono text-zinc-500">
+                        <span>✓ ~45 MiB Baseline RAM</span>
+                        <span>✓ No Ad ID Fingerprints</span>
+                        <span>✓ Linux Native</span>
+                    </div>
+                </div>
+
+                <!-- Right Column: Firefox-style Browser Window Mockup -->
+                <div class="lg:col-span-6">
+                    <div class="browser-mockup rounded-2xl overflow-hidden">
+                        <!-- Chrome / URL Bar -->
+                        <div class="bg-zinc-950/90 px-4 py-3 border-b border-zinc-800/80 flex items-center gap-3">
+                            <div class="flex items-center gap-1.5" aria-hidden="true">
+                                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                            </div>
+                            <!-- Address Input -->
+                            <div class="flex-grow bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-1.5 text-xs font-mono text-zinc-300 flex items-center justify-between">
+                                <div class="flex items-center gap-2 truncate">
+                                    <span class="text-emerald-400 font-bold">🔒</span>
+                                    <span class="text-zinc-500">https://</span>
+                                    <span class="text-white">google.com/search?q=arch+linux&amp;<span class="text-red-400 font-semibold">udm=14</span></span>
+                                </div>
+                                <span class="text-[10px] bg-red-950 text-red-400 border border-red-800 px-1.5 py-0.5 rounded font-bold uppercase">Shield Active</span>
+                            </div>
+                        </div>
+
+                        <!-- Web View Mock Content -->
+                        <div class="p-6 bg-zinc-950/50 space-y-4 text-xs font-sans">
+                            <div class="space-y-1">
+                                <div class="text-[11px] text-zinc-500">google.com &rsaquo; arch linux</div>
+                                <div class="text-red-400 hover:underline font-bold text-sm cursor-pointer">Arch Linux - A lightweight and flexible Linux distribution</div>
+                                <p class="text-zinc-400 leading-relaxed">A minimal, lightweight, cutting-edge distribution targeting computers with x86-64 architecture...</p>
+                            </div>
+                            <div class="h-px bg-zinc-800/60 my-2"></div>
+                            <div class="p-3 bg-zinc-900/60 rounded-xl border border-zinc-800/60 flex items-center justify-between text-zinc-400 font-mono text-[11px]">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                    C++ Malloc Heap Trim: <b>Active</b>
+                                </span>
+                                <span class="text-zinc-500">Live Memory: <b>46.8 MiB</b></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Architecture (3 Languages) -->
+        <section id="architecture" class="max-w-6xl mx-auto px-6 py-16 border-t border-zinc-800/80">
+            <div class="text-center max-w-2xl mx-auto space-y-2 mb-12">
+                <div class="text-xs font-mono font-bold text-red-500 uppercase tracking-widest">Tri-Engine Core</div>
+                <h2 class="text-3xl font-extrabold text-white">Three Languages. Zero Compromise.</h2>
+                <p class="text-sm text-zinc-400">Each layer is written in the exact right tool for the job.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Rust -->
+                <div class="card-feature p-6 rounded-2xl space-y-3">
+                    <div class="text-red-400 font-mono font-bold text-xs uppercase tracking-wider">01 · Rust</div>
+                    <h3 class="text-white font-bold text-lg">Memory-Safe Engine</h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed">
+                        Powers windowing, IPC messaging, and custom protocol filtering. Intercepts outgoing requests to strip tracking tokens and telemetry headers before they touch the wire.
+                    </p>
+                    <div class="text-[11px] font-mono text-zinc-500 pt-2 border-t border-zinc-800">wry · tao · zero panic</div>
+                </div>
+
+                <!-- C++ -->
+                <div class="card-feature p-6 rounded-2xl space-y-3">
+                    <div class="text-red-400 font-mono font-bold text-xs uppercase tracking-wider">02 · C++</div>
+                    <h3 class="text-white font-bold text-lg">Aggressive RAM Trimmer</h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed">
+                        A native hook executing <code class="text-zinc-300">malloc_trim(0)</code> upon every page load. Forces glibc to surrender allocated heap pages back to the Linux kernel immediately.
+                    </p>
+                    <div class="text-[11px] font-mono text-zinc-500 pt-2 border-t border-zinc-800">libhigan_trim.so · -O3 PIC</div>
+                </div>
+
+                <!-- Python -->
+                <div class="card-feature p-6 rounded-2xl space-y-3">
+                    <div class="text-red-400 font-mono font-bold text-xs uppercase tracking-wider">03 · Python</div>
+                    <h3 class="text-white font-bold text-lg">Clean Query Orchestrator</h3>
+                    <p class="text-zinc-400 text-xs leading-relaxed">
+                        Handles command-line invocation, profile routing, and URL query sanitization. Automatically injects <code class="text-zinc-300">udm=14</code> into Google searches to enforce pure web mode.
+                    </p>
+                    <div class="text-[11px] font-mono text-zinc-500 pt-2 border-t border-zinc-800">Zero startup lag · Native CLI</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Firefox-Style "Us vs Them" Comparison Table -->
+        <section id="comparison" class="max-w-4xl mx-auto px-6 py-16 border-t border-zinc-800/80">
+            <div class="text-center max-w-xl mx-auto space-y-2 mb-10">
+                <div class="text-xs font-mono font-bold text-red-500 uppercase tracking-widest">Comparison</div>
+                <h2 class="text-3xl font-extrabold text-white">How We Stack Up</h2>
+                <p class="text-sm text-zinc-400">Why we refused to embed Chromium or ship pre-bundled ad spyware.</p>
+            </div>
+
+            <div class="rounded-2xl border border-zinc-800 bg-zinc-950/70 overflow-hidden text-xs">
+                <div class="grid grid-cols-12 bg-zinc-900/80 p-4 border-b border-zinc-800 font-bold text-zinc-300 font-mono">
+                    <div class="col-span-6">Capability</div>
+                    <div class="col-span-3 text-center text-red-400">HiganBrowser</div>
+                    <div class="col-span-3 text-center text-zinc-500">Mainstream Browsers</div>
+                </div>
+
+                <div class="divide-y divide-zinc-800/60 font-sans">
+                    <div class="grid grid-cols-12 p-4 items-center">
+                        <div class="col-span-6 text-zinc-300 font-medium">Telemetry &amp; Crash Reporting</div>
+                        <div class="col-span-3 text-center text-emerald-400 font-bold">100% Zero / Stripped</div>
+                        <div class="col-span-3 text-center text-zinc-500">Continuous background sync</div>
+                    </div>
+
+                    <div class="grid grid-cols-12 p-4 items-center">
+                        <div class="col-span-6 text-zinc-300 font-medium">Idle Memory Footprint (Cold Tab)</div>
+                        <div class="col-span-3 text-center text-emerald-400 font-bold">~45 - 60 MiB</div>
+                        <div class="col-span-3 text-center text-zinc-500">400 - 800 MiB</div>
+                    </div>
+
+                    <div class="grid grid-cols-12 p-4 items-center">
+                        <div class="col-span-6 text-zinc-300 font-medium">Search Engine Experience</div>
+                        <div class="col-span-3 text-center text-emerald-400 font-bold">Pure Web (udm=14, No AI Ads)</div>
+                        <div class="col-span-3 text-center text-zinc-500">Sponsored links &amp; trackers</div>
+                    </div>
+
+                    <div class="grid grid-cols-12 p-4 items-center">
+                        <div class="col-span-6 text-zinc-300 font-medium">Heap Memory Management</div>
+                        <div class="col-span-3 text-center text-emerald-400 font-bold">Native C++ malloc_trim Hook</div>
+                        <div class="col-span-3 text-center text-zinc-500">Hoarded cache</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Install Section -->
+        <section id="download" class="max-w-4xl mx-auto px-6 py-16 border-t border-zinc-800/80 text-center space-y-6">
+            <h2 class="text-3xl font-extrabold text-white">Get Started with HiganBrowser</h2>
+            <p class="text-sm text-zinc-400 max-w-lg mx-auto">
+                Shipped directly on HiganveinOS or installable via source on any Arch-based Linux machine.
+            </p>
+
+            <div class="max-w-md mx-auto bg-zinc-950 border border-zinc-800 rounded-xl p-4 text-left font-mono text-xs text-zinc-300 space-y-2">
+                <div class="text-zinc-500"># Run directly from terminal:</div>
+                <div class="text-red-400 select-all">higan-browser "your search query"</div>
+            </div>
+
+            <div class="pt-2">
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-8 py-3.5 rounded-full transition shadow-lg shadow-red-950/50">
+                    <span>View GitHub Source</span>
+                    <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-800/80 bg-zinc-950 py-8 px-6 text-xs text-zinc-500 text-center space-y-2">
+        <p>&copy; 2026 HiganBrowser Project. Created for HiganveinOS by D-P.</p>
+        <p class="text-[11px] text-zinc-600">Zero telemetry · Zero tracking cookies · 100% Free &amp; Open Source</p>
+    </footer>
+</body>
+</html>

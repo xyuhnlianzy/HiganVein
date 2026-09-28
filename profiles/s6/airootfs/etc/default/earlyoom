@@ -1,0 +1,1 @@
+EARLYOOM_ARGS="-m 5 -s 10 -r 60 --avoid '(^|/)(systemd|fish|sshd)$'"

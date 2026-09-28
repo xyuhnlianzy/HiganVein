@@ -1,0 +1,9 @@
+#!/bin/sh
+# HiganveinOS Clean System Shutdown
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+
+echo "=== Syncing & Unmounting Filesystems ==="
+sync
+swapoff -a 2>/dev/null || true
+umount -a -r 2>/dev/null || true
+mount -o remount,ro / 2>/dev/null || true

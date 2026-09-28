@@ -1,0 +1,6 @@
+[Libinput][Touchpad]
+tapToClick=true
+naturalScroll=true
+clickMethod=2
+disableWhileTyping=true
+middleEmulation=true

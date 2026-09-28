@@ -1,0 +1,9 @@
+#!/bin/sh
+if command -v openrc-shutdown >/dev/null 2>&1; then
+    exec openrc-shutdown -p now
+elif [ -e /run/runit.stopit ]; then
+    rm -f /etc/runit/reboot
+    exec kill -INT 1
+else
+    exec echo o > /proc/sysrq-trigger
+fi

@@ -1,0 +1,6 @@
+#!/bin/sh
+case "$1" in
+    -r|--reboot) exec openrc-shutdown -r now ;;
+    -h|-P|--poweroff) exec openrc-shutdown -p now ;;
+    *) exec openrc-shutdown -p now ;;
+esac

@@ -1,0 +1,372 @@
+#!/usr/bin/env bash
+# HiganveinOS Modular Core CLI Installer
+# Interactive TUI Installer: Filesystem, Init System, Firmware/Bootloader Selection
+
+set -e
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+WHITE='\033[1;37m'
+NC='\033[0m'
+
+echo -e "${RED}"
+echo "  _   _ _                               _        ____ ____  _____ "
+echo " | | | (_) __ _  __ _ _ ____   _____  (_)_ __  / ___|  _ \|_   _|"
+echo " | |_| | |/ _\` |/ _\` | '_ \ \ / / _ \ | | '_ \| |   | |_) | | |  "
+echo " |  _  | | (_| | (_| | | | \ V /  __/ | | | | | |___|  _ <  | |  "
+echo " |_| |_|_|\__, |\__,_|_| |_|\_/ \___| |_|_| |_|\____|_| \_\ |_|  "
+echo "          |___/                                                  "
+echo -e "${NC}"
+echo -e "${CYAN}=== HiganveinOS Core Installer (Modular Penta-Init Engine) ===${NC}\n"
+
+if [ "$EUID" -ne 0 ]; then
+  echo -e "${RED}Error: Jalankan installer ini sebagai root (sudo higan-core-installer)${NC}"
+  exit 1
+fi
+
+# Detect Firmware
+IS_UEFI=0
+FIRMWARE_TYPE="Legacy BIOS (MBR)"
+if [ -d "/sys/firmware/efi" ]; then
+  IS_UEFI=1
+  FIRMWARE_TYPE="Modern UEFI (GPT)"
+fi
+
+echo -e "${WHITE}Detected Firmware Environment:${NC} ${YELLOW}$FIRMWARE_TYPE${NC}\n"
+
+# 1. Target Disk Selection
+echo -e "${CYAN}[1/6] Target Storage Disk:${NC}"
+lsblk -d -n -o NAME,SIZE,MODEL | grep -v "loop" | grep -v "airootfs"
+echo ""
+read -p "Ketik nama disk target (contoh: sda / nvme0n1 / vda): " TARGET_DEV
+
+DISK="/dev/$TARGET_DEV"
+if [ ! -b "$DISK" ]; then
+  echo -e "${RED}Error: Disk $DISK tidak valid!${NC}"
+  exit 1
+fi
+
+# 2. Filesystem Selection
+echo -e "\n${CYAN}[2/6] Pilih Filesystem:${NC}"
+echo -e "  ${WHITE}1)${NC} Btrfs (Recommended: Subvolumes @/@home, ZSTD Compression, Snapshots)"
+echo -e "  ${WHITE}2)${NC} Ext4  (Classic, Battle-tested, Ultra-stable)"
+echo -e "  ${WHITE}3)${NC} XFS   (High performance for large data/databases)"
+read -p "Pilihan Filesystem [1-3] (default 1): " FS_CHOICE
+FS_CHOICE=${FS_CHOICE:-1}
+
+case "$FS_CHOICE" in
+  1) FS_TYPE="btrfs" ;;
+  2) FS_TYPE="ext4" ;;
+  3) FS_TYPE="xfs" ;;
+  *) FS_TYPE="btrfs" ;;
+esac
+echo -e "${GREEN}Filesystem dipilih: ${FS_TYPE}${NC}"
+
+# 3. Init System Selection (Penta-Init)
+echo -e "\n${CYAN}[3/6] Pilih Init System (Penta-Init Engine):${NC}"
+echo -e "  ${WHITE}1)${NC} Systemd   (Standard / Full Stack / Ecosystem Default)"
+echo -e "  ${WHITE}2)${NC} OpenRC    (Dependency-based Shell Init / Gentoo/Alpine style)"
+echo -e "  ${WHITE}3)${NC} Runit     (Ultra-fast Process Supervision / Void Linux style)"
+echo -e "  ${WHITE}4)${NC} Dinit     (Modern C++ Dependency Service Manager)"
+echo -e "  ${WHITE}5)${NC} s6        (High-Reliability Supervision / Zero-downtime)"
+read -p "Pilihan Init System [1-5] (default 1): " INIT_CHOICE
+INIT_CHOICE=${INIT_CHOICE:-1}
+
+case "$INIT_CHOICE" in
+  1) INIT_SYS="systemd"; INIT_CMDLINE="" ;;
+  2) INIT_SYS="openrc";  INIT_CMDLINE="init=/usr/bin/openrc-init" ;;
+  3) INIT_SYS="runit";   INIT_CMDLINE="init=/usr/bin/runit-init" ;;
+  4) INIT_SYS="dinit";   INIT_CMDLINE="init=/usr/bin/dinit" ;;
+  5) INIT_SYS="s6";      INIT_CMDLINE="init=/etc/s6-init.sh" ;;
+  *) INIT_SYS="systemd"; INIT_CMDLINE="" ;;
+esac
+echo -e "${GREEN}Init System dipilih: ${INIT_SYS} (${INIT_CMDLINE:-default systemd})${NC}"
+
+# 4. Bootloader Selection
+echo -e "\n${CYAN}[4/6] Pilih Bootloader:${NC}"
+if [ "$IS_UEFI" -eq 1 ]; then
+  echo -e "  ${WHITE}1)${NC} GRUB         (Feature-rich, Dual-Boot detection, Themes)"
+  echo -e "  ${WHITE}2)${NC} Limine       (Modern UEFI, fast, lightweight, minimal UI)"
+  echo -e "  ${WHITE}3)${NC} systemd-boot (Simple EFI stub loader, zero overhead)"
+  read -p "Pilihan Bootloader [1-3] (default 1): " BL_CHOICE
+  BL_CHOICE=${BL_CHOICE:-1}
+  case "$BL_CHOICE" in
+    1) BOOTLOADER="grub" ;;
+    2) BOOTLOADER="limine" ;;
+    3) BOOTLOADER="systemd-boot" ;;
+    *) BOOTLOADER="grub" ;;
+  esac
+else
+  echo -e "  ${WHITE}1)${NC} GRUB BIOS/MBR (Legacy standard)"
+  BOOTLOADER="grub"
+fi
+echo -e "${GREEN}Bootloader dipilih: ${BOOTLOADER}${NC}"
+
+# 5. Hostname & User Account
+echo -e "\n${CYAN}[5/6] Akun & Hostname:${NC}"
+read -p "Masukkan Hostname (default: higan-core): " HOSTNAME
+HOSTNAME=${HOSTNAME:-higan-core}
+
+read -p "Masukkan Username baru: " USERNAME
+while [ -z "$USERNAME" ]; do
+  read -p "Username tidak boleh kosong: " USERNAME
+done
+
+read -s -p "Masukkan Password user $USERNAME: " USER_PASS
+echo ""
+read -s -p "Konfirmasi Password: " USER_PASS2
+echo ""
+if [ "$USER_PASS" != "$USER_PASS2" ]; then
+  echo -e "${RED}Error: Password tidak cocok!${NC}"
+  exit 1
+fi
+
+# Summary Confirmation
+echo -e "\n${YELLOW}=== Ringkasan Konfigurasi Instalasi ===${NC}"
+echo -e "Target Disk : ${WHITE}$DISK${NC}"
+echo -e "Firmware    : ${WHITE}$FIRMWARE_TYPE${NC}"
+echo -e "Filesystem  : ${WHITE}$FS_TYPE${NC}"
+echo -e "Init System : ${WHITE}$INIT_SYS${NC}"
+echo -e "Bootloader  : ${WHITE}$BOOTLOADER${NC}"
+echo -e "Hostname    : ${WHITE}$HOSTNAME${NC}"
+echo -e "Username    : ${WHITE}$USERNAME${NC}"
+echo -e "${RED}PERINGATAN: Semua data di $DISK akan DIHAPUS TOTAL!${NC}"
+read -p "Ketik 'YA' untuk mulai instalasi: " CONFIRM
+if [ "$CONFIRM" != "YA" ]; then
+  echo "Instalasi dibatalkan."
+  exit 0
+fi
+
+# 6. Disk Partitioning & Formatting
+echo -e "\n${CYAN}[6/6] Menyiapkan Partisi & Menyalin Sistem...${NC}"
+umount -R /mnt/higan-target 2>/dev/null || true
+wipefs -af "$DISK"
+sgdisk -Z "$DISK"
+
+if [ "$IS_UEFI" -eq 1 ]; then
+  sgdisk -n 1:0:+512M -t 1:ef00 -c 1:"EFI-SP" "$DISK"
+  sgdisk -n 2:0:0 -t 2:8300 -c 2:"HIGAN-ROOT" "$DISK"
+  PART_EFI="${DISK}1"
+  PART_ROOT="${DISK}2"
+  [[ "$DISK" =~ "nvme" || "$DISK" =~ "mmcblk" ]] && PART_EFI="${DISK}p1" && PART_ROOT="${DISK}p2"
+  mkfs.fat -F32 "$PART_EFI"
+else
+  parted -s "$DISK" mklabel msdos
+  parted -s "$DISK" mkpart primary ext4 1MiB 100%
+  parted -s "$DISK" set 1 boot on
+  PART_ROOT="${DISK}1"
+  [[ "$DISK" =~ "nvme" || "$DISK" =~ "mmcblk" ]] && PART_ROOT="${DISK}p1"
+fi
+
+mkdir -p /mnt/higan-target
+
+# Format Root
+if [ "$FS_TYPE" == "btrfs" ]; then
+  mkfs.btrfs -f -L "HIGAN_ROOT" "$PART_ROOT"
+  mount "$PART_ROOT" /mnt/higan-target
+  btrfs subvolume create /mnt/higan-target/@
+  btrfs subvolume create /mnt/higan-target/@home
+  btrfs subvolume create /mnt/higan-target/@snapshots
+  umount /mnt/higan-target
+
+  mount -o noatime,compress=zstd:3,subvol=@ "$PART_ROOT" /mnt/higan-target
+  mkdir -p /mnt/higan-target/{home,.snapshots,boot}
+  mount -o noatime,compress=zstd:3,subvol=@home "$PART_ROOT" /mnt/higan-target/home
+  mount -o noatime,compress=zstd:3,subvol=@snapshots "$PART_ROOT" /mnt/higan-target/.snapshots
+elif [ "$FS_TYPE" == "ext4" ]; then
+  mkfs.ext4 -F -L "HIGAN_ROOT" "$PART_ROOT"
+  mount "$PART_ROOT" /mnt/higan-target
+elif [ "$FS_TYPE" == "xfs" ]; then
+  # Use compat options for legacy BIOS GRUB support (bigtime=0, inobtcount=0)
+  mkfs.xfs -f -m bigtime=0,inobtcount=0 -L "HIGAN_ROOT" "$PART_ROOT"
+  mount "$PART_ROOT" /mnt/higan-target
+fi
+
+if [ "$IS_UEFI" -eq 1 ]; then
+  mkdir -p /mnt/higan-target/boot/efi
+  mount "$PART_EFI" /mnt/higan-target/boot/efi
+fi
+
+# Copy Rootfs
+echo -e "${WHITE}Menyalin Root Filesystem...${NC}"
+rsync -aAX --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/work*","/out*"} / /mnt/higan-target/
+
+# Post install cleanup
+rm -f /mnt/higan-target/etc/systemd/system/getty@tty1.service.d/autologin.conf 2>/dev/null || true
+rm -f /mnt/higan-target/usr/local/bin/pacman 2>/dev/null || true
+rm -f /mnt/higan-target/etc/systemd/system/display-manager.service 2>/dev/null || true
+rm -rf /mnt/higan-target/etc/sddm.conf.d 2>/dev/null || true
+rm -f /mnt/higan-target/etc/xdg/autostart/higan-*.desktop 2>/dev/null || true
+rm -f /mnt/higan-target/home/*/Desktop/higan-*.desktop 2>/dev/null || true
+rm -f /mnt/higan-target/root/Desktop/higan-*.desktop 2>/dev/null || true
+rm -rf /mnt/higan-target/work* /mnt/higan-target/out* 2>/dev/null || true
+# Remove live autologin scripts from installed target so it uses standard login prompt
+rm -f /mnt/higan-target/etc/local.d/00-higan-autologin.start 2>/dev/null || true
+rm -f /mnt/higan-target/etc/openrc/conf.d/agetty.tty1 2>/dev/null || true
+
+# Config system
+echo "$HOSTNAME" > /mnt/higan-target/etc/hostname
+echo -e "127.0.0.1   localhost\n::1         localhost\n127.0.1.1   $HOSTNAME.localdomain $HOSTNAME" > /mnt/higan-target/etc/hosts
+echo -e "nameserver 1.1.1.1\nnameserver 8.8.8.8" > /mnt/higan-target/etc/resolv.conf
+genfstab -U /mnt/higan-target >> /mnt/higan-target/etc/fstab
+
+# Copy kernel & microcodes to target /boot
+mkdir -p /mnt/higan-target/boot
+KERNEL_SRC=$(ls -d /mnt/higan-target/usr/lib/modules/*/vmlinuz 2>/dev/null | sort -V | tail -n 1)
+[ -f "$KERNEL_SRC" ] && cp -v "$KERNEL_SRC" /mnt/higan-target/boot/vmlinuz-linux-cachyos
+for ucode in /boot/*ucode.img /run/archiso/bootmnt/*ucode.img; do
+  [ -f "$ucode" ] && cp -f "$ucode" /mnt/higan-target/boot/ 2>/dev/null || true
+done
+if [ "$IS_UEFI" -eq 1 ]; then
+  for f in /mnt/higan-target/boot/*ucode.img /mnt/higan-target/boot/vmlinuz-linux-cachyos; do
+    [ -f "$f" ] && cp -f "$f" /mnt/higan-target/boot/efi/ 2>/dev/null || true
+  done
+fi
+
+# User creation / handling
+if arch-chroot /mnt/higan-target id -u "$USERNAME" >/dev/null 2>&1; then
+  arch-chroot /mnt/higan-target usermod -aG wheel,network,storage,power -s /usr/bin/fish "$USERNAME"
+else
+  arch-chroot /mnt/higan-target useradd -m -G wheel,network,storage,power -s /usr/bin/fish "$USERNAME"
+fi
+
+if [ "$USERNAME" != "higan" ]; then
+  arch-chroot /mnt/higan-target userdel -r higan 2>/dev/null || true
+fi
+
+echo "$USERNAME:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
+echo "root:$USER_PASS" | arch-chroot /mnt/higan-target chpasswd
+
+# Sudoers permissions
+echo "%wheel ALL=(ALL:ALL) ALL" > /mnt/higan-target/etc/sudoers.d/10-wheel
+chmod 0440 /mnt/higan-target/etc/sudoers.d/10-wheel
+
+# Build clean initramfs
+rm -f /mnt/higan-target/etc/mkinitcpio.conf.d/archiso.conf 2>/dev/null || true
+cat << 'EOF' > /mnt/higan-target/etc/mkinitcpio.d/linux-cachyos.preset
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-cachyos"
+PRESETS=('default')
+default_image="/boot/initramfs-linux-cachyos.img"
+default_options=""
+EOF
+arch-chroot /mnt/higan-target mkinitcpio -P
+
+if [ "$IS_UEFI" -eq 1 ] && [ -f /mnt/higan-target/boot/initramfs-linux-cachyos.img ]; then
+  cp -f /mnt/higan-target/boot/initramfs-linux-cachyos.img /mnt/higan-target/boot/efi/
+fi
+
+# Bootloader Execution with Rootflags & Init Parameter
+CMDLINE_EXTRAS=""
+[ "$FS_TYPE" == "btrfs" ] && CMDLINE_EXTRAS="rootflags=subvol=@ "
+[ -n "$INIT_CMDLINE" ] && CMDLINE_EXTRAS="${CMDLINE_EXTRAS}${INIT_CMDLINE} "
+
+echo -e "\n${WHITE}Mengonfigurasi Bootloader ($BOOTLOADER)...${NC}"
+if [ "$BOOTLOADER" == "grub" ]; then
+  if [ "$IS_UEFI" -eq 1 ]; then
+    arch-chroot /mnt/higan-target grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=HIGANVEIN-CORE --recheck
+  else
+    arch-chroot /mnt/higan-target grub-install --target=i386-pc --modules="btrfs ext2 xfs part_msdos part_gpt" "$DISK"
+  fi
+
+  # Use | delimiter in sed to prevent crash from slashes in init=/usr/bin/...
+  sed -i "s|GRUB_CMDLINE_LINUX_DEFAULT=\"\(.*\)\"|GRUB_CMDLINE_LINUX_DEFAULT=\"\1 ${CMDLINE_EXTRAS}\"|" /mnt/higan-target/etc/default/grub
+  sed -i "s/^#\?GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR=\"HiganveinOS ($INIT_SYS)\"/" /mnt/higan-target/etc/default/grub
+  arch-chroot /mnt/higan-target grub-mkconfig -o /boot/grub/grub.cfg
+
+  # Fix Btrfs Subvolume Prefix in Legacy BIOS mode
+  if [ "$FS_TYPE" == "btrfs" ] && [ "$IS_UEFI" -ne 1 ]; then
+    # Mirror grub.cfg to root of Btrfs partition so GRUB core can find it before mounting subvol
+    mkdir -p /mnt/higan-target/boot/grub
+    # Embed fallback prefix
+    if [ -f /mnt/higan-target/boot/grub/grub.cfg ]; then
+      cp -f /mnt/higan-target/boot/grub/grub.cfg /mnt/higan-target/boot/grub.cfg 2>/dev/null || true
+    fi
+  fi
+
+elif [ "$BOOTLOADER" == "limine" ] && [ "$IS_UEFI" -eq 1 ]; then
+  ROOT_UUID=$(blkid -s UUID -o value "$PART_ROOT")
+  mkdir -p /mnt/higan-target/boot/efi/EFI/BOOT
+  cp -f /usr/share/limine/BOOTX64.EFI /mnt/higan-target/boot/efi/EFI/BOOT/ 2>/dev/null || true
+  cat << EOF > /mnt/higan-target/boot/efi/limine.conf
+timeout: 3
+/HiganveinOS Core ($INIT_SYS)
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux-cachyos
+    kernel_cmdline: root=UUID=${ROOT_UUID} ${CMDLINE_EXTRAS}quiet splash
+    module_path: boot():/initramfs-linux-cachyos.img
+EOF
+  arch-chroot /mnt/higan-target efibootmgr --create --disk "$DISK" --part 1 --label "HiganveinOS Limine" --loader '\EFI\BOOT\BOOTX64.EFI' 2>/dev/null || true
+
+elif [ "$BOOTLOADER" == "systemd-boot" ] && [ "$IS_UEFI" -eq 1 ]; then
+  arch-chroot /mnt/higan-target bootctl --esp-path=/boot/efi install 2>/dev/null || true
+  ROOT_UUID=$(blkid -s UUID -o value "$PART_ROOT")
+  mkdir -p /mnt/higan-target/boot/efi/loader/entries
+  cat << EOF > /mnt/higan-target/boot/efi/loader/entries/higanvein.conf
+title   HiganveinOS Core ($INIT_SYS)
+linux   /vmlinuz-linux-cachyos
+initrd  /initramfs-linux-cachyos.img
+options root=UUID=${ROOT_UUID} ${CMDLINE_EXTRAS}quiet splash
+EOF
+fi
+
+# If non-systemd selected, link default init if available
+if [ -n "$INIT_CMDLINE" ]; then
+  INIT_BIN=$(echo "$INIT_CMDLINE" | cut -d= -f2)
+  if [ -f "/mnt/higan-target$INIT_BIN" ]; then
+    ln -sf "$INIT_BIN" /mnt/higan-target/sbin/init
+    ln -sf "$INIT_BIN" /mnt/higan-target/usr/bin/init
+  fi
+  # Install reboot/poweroff wrapper so sudo reboot works under non-systemd
+  cp -f /usr/local/bin/reboot /mnt/higan-target/usr/local/bin/reboot 2>/dev/null || true
+  cp -f /usr/local/bin/poweroff /mnt/higan-target/usr/local/bin/poweroff 2>/dev/null || true
+  cp -f /usr/local/bin/shutdown /mnt/higan-target/usr/local/bin/shutdown 2>/dev/null || true
+  # Hard-overwrite /usr/bin/reboot, poweroff, shutdown so nothing calls systemctl
+  ln -sf /usr/local/bin/reboot /mnt/higan-target/usr/bin/reboot 2>/dev/null || true
+  ln -sf /usr/local/bin/poweroff /mnt/higan-target/usr/bin/poweroff 2>/dev/null || true
+  ln -sf /usr/local/bin/shutdown /mnt/higan-target/usr/bin/shutdown 2>/dev/null || true
+  ln -sf /usr/local/bin/reboot /usr/bin/reboot 2>/dev/null || true
+  ln -sf /usr/local/bin/poweroff /usr/bin/poweroff 2>/dev/null || true
+  ln -sf /usr/local/bin/shutdown /usr/bin/shutdown 2>/dev/null || true
+fi
+
+# Essential System Services (NTP & Keyring anti-timewarp)
+hwclock --hctosys 2>/dev/null || true
+arch-chroot /mnt/higan-target hwclock --hctosys 2>/dev/null || true
+arch-chroot /mnt/higan-target hwclock --systohc 2>/dev/null || true
+
+if [ "$INIT_SYS" == "systemd" ]; then
+  arch-chroot /mnt/higan-target systemctl enable NetworkManager.service 2>/dev/null || true
+  arch-chroot /mnt/higan-target systemctl enable earlyoom.service 2>/dev/null || true
+  arch-chroot /mnt/higan-target systemctl enable systemd-timesyncd.service 2>/dev/null || true
+elif [ "$INIT_SYS" == "openrc" ]; then
+  arch-chroot /mnt/higan-target rc-update add networkmanager default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add dbus default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add elogind boot 2>/dev/null || true
+  ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty1 2>/dev/null || true
+  ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty2 2>/dev/null || true
+  ln -sf agetty /mnt/higan-target/etc/openrc/init.d/agetty.tty3 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add agetty.tty1 default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add agetty.tty2 default 2>/dev/null || true
+  arch-chroot /mnt/higan-target rc-update add agetty.tty3 default 2>/dev/null || true
+elif [ "$INIT_SYS" == "runit" ]; then
+  for srv in networkmanager dbus elogind agetty-tty1; do
+    if [ -d "/mnt/higan-target/etc/sv/$srv" ]; then
+      mkdir -p /mnt/higan-target/etc/runit/runsvdir/default
+      ln -sf "/etc/sv/$srv" "/mnt/higan-target/etc/runit/runsvdir/default/$srv" 2>/dev/null || true
+    fi
+  done
+fi
+
+# Keyring initialization
+echo -e "${WHITE}Menginisialisasi Pacman Keyring...${NC}"
+mkdir -p /mnt/higan-target/etc/pacman.d/gnupg
+chmod 700 /mnt/higan-target/etc/pacman.d/gnupg
+arch-chroot /mnt/higan-target pacman-key --init || true
+arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos || true
+
+echo -e "\n${GREEN}=== INSTALASI SELESAI DENGAN SUKSES! ===${NC}"
+echo -e "Init System: ${YELLOW}$INIT_SYS${NC} | Filesystem: ${YELLOW}$FS_TYPE${NC} | Bootloader: ${YELLOW}$BOOTLOADER${NC}"
+echo -e "Silakan ketik: ${CYAN}reboot${NC} lalu cabut media instalasi."

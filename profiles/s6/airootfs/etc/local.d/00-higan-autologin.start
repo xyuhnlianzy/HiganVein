@@ -1,0 +1,5 @@
+#!/bin/sh
+# Trigger autologin on tty1 if no getty is attached
+if ! ps -ef | grep -v grep | grep -q "agetty.*tty1"; then
+    /usr/bin/agetty --autologin higan --noclear 38400 tty1 linux &
+fi

@@ -1,0 +1,15 @@
+#!/usr/bin/ash
+
+run_earlyhook() {
+    # Ensure loop-control and basic loop block devices exist in /dev
+    # Essential for non-systemd initramfs (Artix / OpenRC)
+    if [ ! -c /dev/loop-control ]; then
+        mknod -m 0660 /dev/loop-control c 10 237
+    fi
+    for i in 0 1 2 3 4 5 6 7; do
+        if [ ! -b /dev/loop$i ]; then
+            mknod -m 0660 /dev/loop$i b 7 $i
+        fi
+    done
+    modprobe -q loop 2>/dev/null || true
+}

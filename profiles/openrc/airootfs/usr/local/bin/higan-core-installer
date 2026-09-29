@@ -372,7 +372,7 @@ echo -e "${WHITE}Menginisialisasi Pacman Keyring...${NC}"
 mkdir -p /mnt/higan-target/etc/pacman.d/gnupg
 chmod 700 /mnt/higan-target/etc/pacman.d/gnupg
 arch-chroot /mnt/higan-target pacman-key --init || true
-arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos || true
+arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos artix 2>/dev/null || arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos || true
 
 echo -e "\n${GREEN}=== INSTALASI SELESAI DENGAN SUKSES! ===${NC}"
 echo -e "Init System: ${YELLOW}$INIT_SYS${NC} | Filesystem: ${YELLOW}$FS_TYPE${NC} | Bootloader: ${YELLOW}$BOOTLOADER${NC}"

@@ -64,25 +64,29 @@ case "$FS_CHOICE" in
 esac
 echo -e "${GREEN}Filesystem dipilih: ${FS_TYPE}${NC}"
 
-# 3. Init System Selection (Penta-Init)
-echo -e "\n${CYAN}[3/6] Pilih Init System (Penta-Init Engine):${NC}"
-echo -e "  ${WHITE}1)${NC} Systemd   (Standard / Full Stack / Ecosystem Default)"
-echo -e "  ${WHITE}2)${NC} OpenRC    (Dependency-based Shell Init / Gentoo/Alpine style)"
-echo -e "  ${WHITE}3)${NC} Runit     (Ultra-fast Process Supervision / Void Linux style)"
-echo -e "  ${WHITE}4)${NC} Dinit     (Modern C++ Dependency Service Manager)"
-echo -e "  ${WHITE}5)${NC} s6        (High-Reliability Supervision / Zero-downtime)"
-read -p "Pilihan Init System [1-5] (default 1): " INIT_CHOICE
-INIT_CHOICE=${INIT_CHOICE:-1}
-
-case "$INIT_CHOICE" in
-  1) INIT_SYS="systemd"; INIT_CMDLINE="" ;;
-  2) INIT_SYS="openrc";  INIT_CMDLINE="init=/usr/bin/openrc-init" ;;
-  3) INIT_SYS="runit";   INIT_CMDLINE="init=/usr/bin/runit-init" ;;
-  4) INIT_SYS="dinit";   INIT_CMDLINE="init=/usr/bin/dinit" ;;
-  5) INIT_SYS="s6";      INIT_CMDLINE="init=/etc/s6-init.sh" ;;
-  *) INIT_SYS="systemd"; INIT_CMDLINE="" ;;
-esac
-echo -e "${GREEN}Init System dipilih: ${INIT_SYS} (${INIT_CMDLINE:-default systemd})${NC}"
+# 3. Init System Detection
+echo -e "\n${CYAN}[3/6] Init System Engine:${NC}"
+if [ -f "/usr/bin/openrc-init" ]; then
+  INIT_SYS="openrc"
+  INIT_CMDLINE="init=/usr/bin/openrc-init"
+  echo -e "${GREEN}Detected Dedicated Image: Locked to OpenRC Engine (${INIT_CMDLINE})${NC}"
+elif [ -f "/usr/bin/runit-init" ]; then
+  INIT_SYS="runit"
+  INIT_CMDLINE="init=/usr/bin/runit-init"
+  echo -e "${GREEN}Detected Dedicated Image: Locked to Runit Engine (${INIT_CMDLINE})${NC}"
+elif [ -f "/usr/bin/dinit" ]; then
+  INIT_SYS="dinit"
+  INIT_CMDLINE="init=/usr/bin/dinit"
+  echo -e "${GREEN}Detected Dedicated Image: Locked to Dinit Engine (${INIT_CMDLINE})${NC}"
+elif [ -f "/etc/s6-init.sh" ]; then
+  INIT_SYS="s6"
+  INIT_CMDLINE="init=/etc/s6-init.sh"
+  echo -e "${GREEN}Detected Dedicated Image: Locked to s6 Engine (${INIT_CMDLINE})${NC}"
+else
+  INIT_SYS="systemd"
+  INIT_CMDLINE=""
+  echo -e "${GREEN}Detected Dedicated Image: Locked to Systemd Engine (Standard)${NC}"
+fi
 
 # 4. Bootloader Selection
 echo -e "\n${CYAN}[4/6] Pilih Bootloader:${NC}"

@@ -329,6 +329,7 @@ if [ -n "$INIT_CMDLINE" ]; then
   cp -f /usr/local/bin/reboot /mnt/higan-target/usr/local/bin/reboot 2>/dev/null || true
   cp -f /usr/local/bin/poweroff /mnt/higan-target/usr/local/bin/poweroff 2>/dev/null || true
   cp -f /usr/local/bin/shutdown /mnt/higan-target/usr/local/bin/shutdown 2>/dev/null || true
+  chmod +x /mnt/higan-target/usr/local/bin/{reboot,poweroff,shutdown} /usr/local/bin/{reboot,poweroff,shutdown} 2>/dev/null || true
   # Hard-overwrite /usr/bin/reboot, poweroff, shutdown so nothing calls systemctl
   ln -sf /usr/local/bin/reboot /mnt/higan-target/usr/bin/reboot 2>/dev/null || true
   ln -sf /usr/local/bin/poweroff /mnt/higan-target/usr/bin/poweroff 2>/dev/null || true

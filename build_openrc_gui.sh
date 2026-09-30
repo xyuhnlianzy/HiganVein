@@ -5,14 +5,15 @@ set -e
 PROFILE="openrc-gui"
 WORK_DIR="/home/yahn/HiganveinOS/profiles/$PROFILE/work-$PROFILE"
 OUT_DIR="/home/yahn/HiganveinOS/profiles/$PROFILE/out"
+CACHE_DIR="/home/yahn/HiganveinOS/.cache/openrc-gui-pacman"
 
-echo "=== [1/2] Purging corrupted package cache & previous workdir ==="
-rm -rf "$WORK_DIR" "$OUT_DIR"
-mkdir -p "$OUT_DIR"
+echo "=== [1/2] Removing previous work and dedicated build cache ==="
+rm -rf "$WORK_DIR" "$OUT_DIR" "$CACHE_DIR"
+mkdir -p "$OUT_DIR" "$CACHE_DIR"
 
-# Purge incomplete / corrupted packages
+# ponytail: Dedicated cache isolates ISO builds from host-cache corruption.
+# Upgrade path: cache verified artifacts only after repeatable builds.
 rm -f /var/cache/pacman/pkg/*.part
-rm -f /var/cache/pacman/pkg/{serd,zix,sord,lv2,sratom,lilv,sbc,spandsp,abseil-cpp,webrtc-audio-processing-1,pipewire-audio,libwireplumber,lua,wireplumber,pipewire-pulse}* 2>/dev/null || true
 
 # Refresh database with up-to-date checksums
 pacman -Syy --noconfirm

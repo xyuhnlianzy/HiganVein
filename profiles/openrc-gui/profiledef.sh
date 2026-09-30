@@ -1,5 +1,5 @@
 iso_name="higanveinos-openrc-gui"
-iso_label="HIGANVEINOS_GUI_$(date +%Y%m)"
+iso_label="HIGANVEINOS_202609"
 iso_version="2026.09.20"
 install_dir="arch"
 buildmodes=('iso')

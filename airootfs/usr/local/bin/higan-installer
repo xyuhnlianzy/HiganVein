@@ -148,6 +148,8 @@ class InstallWorker(QThread):
             timezone = self.config['timezone']
             install_mode = self.config['install_mode']
             autologin = self.config.get('autologin', True)
+            init_choice = self.config.get('init_system', 'openrc').lower()
+            bootloader = self.config.get('bootloader', 'grub').lower()
 
             def log(msg):
                 print(f"[HiganInstall] {msg}")
@@ -321,11 +323,12 @@ class InstallWorker(QThread):
                 subprocess.run(["arch-chroot", target, "systemctl", "enable", "bluetooth.service"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-timesyncd.service"], stderr=subprocess.DEVNULL)
             elif init_choice == "openrc":
-                # Register OpenRC runlevels
-                subprocess.run(["arch-chroot", target, "rc-update", "add", "networkmanager", "default"], stderr=subprocess.DEVNULL)
+                # Artix service names are case-sensitive. Keep target GUI bootable.
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "NetworkManager", "default"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "rc-update", "add", "dbus", "default"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "rc-update", "add", "elogind", "boot"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "rc-update", "add", "acpid", "default"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "rc-update", "add", "lightdm", "default"], stderr=subprocess.DEVNULL)
             elif init_choice == "runit":
                 # Create runit runsvdir service symlinks
                 for srv in ["networkmanager", "dbus", "elogind", "agetty-tty1"]:
@@ -390,14 +393,13 @@ class InstallWorker(QThread):
                 f.write(f"{username} ALL=(ALL) ALL\n")
             os.chmod(sudoers, 0o440)
 
-            sddm_conf = f"{target}/etc/sddm.conf.d/autologin.conf"
+            lightdm_conf = f"{target}/etc/lightdm/lightdm.conf.d/20-autologin.conf"
             if autologin:
-                os.makedirs(os.path.dirname(sddm_conf), exist_ok=True)
-                with open(sddm_conf, "w") as f:
-                    f.write(f"[Autologin]\nUser={username}\nSession=plasma\n")
-            else:
-                if os.path.exists(sddm_conf):
-                    os.remove(sddm_conf)
+                os.makedirs(os.path.dirname(lightdm_conf), exist_ok=True)
+                with open(lightdm_conf, "w") as f:
+                    f.write(f"[Seat:*]\nautologin-user={username}\nautologin-user-timeout=0\nuser-session=xfce\ngreeter-session=lightdm-gtk-greeter\n")
+            elif os.path.exists(lightdm_conf):
+                os.remove(lightdm_conf)
 
             # ── 1. GENERATE KERNEL & INITRAMFS FIRST ──
             self.current_pct = 85
@@ -1501,13 +1503,9 @@ class HiganInstallerApp(QWidget):
         lbl_i.setStyleSheet("color: #52525b; font-size: 8pt; font-weight: 600; letter-spacing: 1px;")
         col_i.addWidget(lbl_i)
         self.combo_init = QComboBox()
-        self.combo_init.addItems([
-            "Systemd (Standard / Full Stack)",
-            "OpenRC (Dependency-based Shell Init)",
-            "Runit (Ultra-fast Process Supervisor)",
-            "Dinit (Modern C++ Service Manager)",
-            "s6 (High-Reliability Supervision)"
-        ])
+        self.combo_init.addItem("OpenRC (This edition)")
+        self.combo_init.setEnabled(False)
+        self.combo_init.setToolTip("This ISO installs its matching OpenRC stack only.")
         col_i.addWidget(self.combo_init)
         drv_row.addLayout(col_i, stretch=2)
         l.addLayout(drv_row)

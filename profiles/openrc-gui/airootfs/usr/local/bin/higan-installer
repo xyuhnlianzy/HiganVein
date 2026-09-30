@@ -148,6 +148,8 @@ class InstallWorker(QThread):
             timezone = self.config['timezone']
             install_mode = self.config['install_mode']
             autologin = self.config.get('autologin', True)
+            init_choice = self.config.get('init_system', 'openrc').lower()
+            bootloader = self.config.get('bootloader', 'grub').lower()
 
             def log(msg):
                 print(f"[HiganInstall] {msg}")

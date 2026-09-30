@@ -1,0 +1,35 @@
+#!/bin/sh
+# HiganveinOS Standard System Initialization (Runit / Minimal inits)
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
+
+echo "=== HiganveinOS System Initialization ==="
+
+# Mount proc, sys, dev
+mount -t proc proc /proc 2>/dev/null || true
+mount -t sysfs sys /sys 2>/dev/null || true
+mount -t devtmpfs dev /dev 2>/dev/null || true
+mkdir -p /dev/pts /dev/shm
+mount -t devpts devpts /dev/pts 2>/dev/null || true
+mount -t tmpfs shm /dev/shm 2>/dev/null || true
+
+# Remount root RW
+mount -o remount,rw / 2>/dev/null || true
+
+# Mount all entries in fstab (supports Btrfs @/@home, Ext4, XFS)
+echo "Mounting filesystems from /etc/fstab..."
+mount -a 2>/dev/null || true
+
+# Set hostname
+if [ -f /etc/hostname ]; then
+    hostname $(cat /etc/hostname | tr -d ' \n\r') 2>/dev/null || true
+fi
+
+# Set loopback
+ip link set up dev lo 2>/dev/null || true
+
+# Trigger coldplug udev events
+udevadm trigger --action=add --type=subsystems 2>/dev/null || true
+udevadm trigger --action=add --type=devices 2>/dev/null || true
+udevadm settle 2>/dev/null || true
+
+echo "=== Hardware & Filesystems Ready ==="

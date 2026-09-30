@@ -1,0 +1,3 @@
+term_type="linux"
+baud="38400"
+agetty_options="--autologin higan --noclear"

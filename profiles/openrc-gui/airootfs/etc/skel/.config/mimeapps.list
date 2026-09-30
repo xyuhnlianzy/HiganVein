@@ -1,0 +1,11 @@
+[Default Applications]
+application/x-ms-dos-executable=wine.desktop
+application/x-msdownload=wine.desktop
+application/x-dosexec=wine.desktop
+application/x-msi=wine.desktop
+
+[Added Associations]
+application/x-ms-dos-executable=wine.desktop;
+application/x-msdownload=wine.desktop;
+application/x-dosexec=wine.desktop;
+application/x-msi=wine.desktop;

@@ -1,0 +1,38 @@
+# HiganveinOS Frieren Void GRUB Theme
+# Inspired by anime character art split-screen layout
+
+desktop-image: "background.jpg"
+desktop-color: "#09090b"
+terminal-font: "DejaVu Sans Regular 12"
+terminal-box: "select_*.png"
+terminal-left: "70"
+terminal-top: "240"
+terminal-width: "650"
+terminal-height: "420"
+terminal-border: "0"
+
++ boot_menu {
+  left = 70
+  top = 240
+  width = 650
+  height = 420
+  item_font = "DejaVu Sans Regular 14"
+  item_color = "#a1a1aa"
+  selected_item_font = "DejaVu Sans Bold 14"
+  selected_item_color = "#ffffff"
+  selected_item_pixmap_style = "select_*.png"
+  item_height = 42
+  item_padding = 12
+  item_spacing = 10
+}
+
++ progress_bar {
+  id = "__timeout__"
+  left = 70
+  top = 690
+  width = 650
+  height = 4
+  show_text = false
+  bg_color = "#27272a"
+  fg_color = "#ef4444"
+}

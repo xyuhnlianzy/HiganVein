@@ -22,3 +22,4 @@ uucp:x:984:
 video:x:983:higan
 users:x:982:higan
 higan:x:1000:
+autologin:x:960:higan

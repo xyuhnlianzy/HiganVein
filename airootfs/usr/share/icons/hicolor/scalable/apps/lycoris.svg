@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="lycoris-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0c0c0e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="petal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="50%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circular base -->
+  <rect width="128" height="128" rx="28" fill="#121217"/>
+  <rect width="128" height="128" rx="28" fill="none" stroke="#262633" stroke-width="2"/>
+  <circle cx="64" cy="64" r="54" fill="url(#lycoris-glow)"/>
+  
+  <!-- Stylized Lycoris Radiata / Spider Lily Spider-Petals -->
+  <g transform="translate(64, 68)">
+    <!-- Central Pistil -->
+    <circle cx="0" cy="-6" r="5" fill="#f87171"/>
+    
+    <!-- Long curving filaments & anthers -->
+    <path d="M 0 -6 Q -15 -35 -40 -40 Q -35 -30 -10 -15" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="-40" cy="-40" r="2.5" fill="#fca5a5"/>
+    
+    <path d="M 0 -6 Q -25 -20 -48 -15 Q -38 -10 -12 -5" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="-48" cy="-15" r="2.5" fill="#fca5a5"/>
+    
+    <path d="M 0 -6 Q -10 -45 -18 -55 Q -10 -40 -4 -18" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="-18" cy="-55" r="2.5" fill="#fca5a5"/>
+    
+    <path d="M 0 -6 Q 10 -45 18 -55 Q 10 -40 4 -18" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="18" cy="-55" r="2.5" fill="#fca5a5"/>
+    
+    <path d="M 0 -6 Q 15 -35 40 -40 Q 35 -30 10 -15" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="40" cy="-40" r="2.5" fill="#fca5a5"/>
+    
+    <path d="M 0 -6 Q 25 -20 48 -15 Q 38 -10 12 -5" fill="none" stroke="url(#petal-grad)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="48" cy="-15" r="2.5" fill="#fca5a5"/>
+
+    <!-- Stem and lower petals -->
+    <path d="M 0 -6 Q -8 15 -14 26 Q -4 18 0 0" fill="url(#petal-grad)"/>
+    <path d="M 0 -6 Q 8 15 14 26 Q 4 18 0 0" fill="url(#petal-grad)"/>
+    <path d="M 0 0 L 0 35" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

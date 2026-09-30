@@ -21,6 +21,7 @@ cava
 inetutils
 man-db
 man-pages
+webkit2gtk-4.1
 openrc
 dbus-openrc
 elogind-openrc

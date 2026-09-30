@@ -1,0 +1,23 @@
+[
+    {"trigger": {"url-filter": ".*doubleclick.net.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*google-analytics.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*googlesyndication.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*googletagservices.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*adservice.google.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*adnxs.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*taboola.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*outbrain.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*scorecardresearch.com.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*facebook.net.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*telemetry.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*analytics.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*adserver.*"}, "action": {"type": "block"}},
+    {"trigger": {"url-filter": ".*banner.*"}, "action": {"type": "block"}},
+    {
+        "trigger": {"url-filter": ".*"},
+        "action": {
+            "type": "css-display-none",
+            "selector": ".adsbygoogle, [id^='google_ads_'], div[class*='ad-banner'], div[id*='ad-slot'], iframe[src*='ads'], [data-ad-client]"
+        }
+    }
+]

@@ -1,0 +1,22 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Lycoris
+GenericName=Web Browser
+Comment=Fast, private, zero-telemetry sovereign browser for HiganveinOS
+Icon=lycoris
+Exec=/usr/bin/lycoris %U
+Terminal=false
+StartupNotify=true
+StartupWMClass=lycoris
+Categories=Network;WebBrowser;GTK;
+MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/about;x-scheme-handler/unknown;
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=/usr/bin/lycoris
+
+[Desktop Action new-private-window]
+Name=New Private Window
+Exec=/usr/bin/lycoris --private

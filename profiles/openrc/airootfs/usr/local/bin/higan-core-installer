@@ -200,6 +200,11 @@ rsync -aAX --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/m
 # Post install cleanup
 rm -f /mnt/higan-target/etc/systemd/system/getty@tty1.service.d/autologin.conf 2>/dev/null || true
 rm -f /mnt/higan-target/usr/local/bin/pacman 2>/dev/null || true
+
+# Patch OpenRC boot banner in target from Artix Linux to HiganveinOS
+if [ -f "/mnt/higan-target/usr/bin/openrc" ]; then
+  sed -i 's/Artix Linux/HiganveinOS/g' /mnt/higan-target/usr/bin/openrc 2>/dev/null || true
+fi
 rm -f /mnt/higan-target/etc/systemd/system/display-manager.service 2>/dev/null || true
 rm -rf /mnt/higan-target/etc/sddm.conf.d 2>/dev/null || true
 rm -f /mnt/higan-target/etc/xdg/autostart/higan-*.desktop 2>/dev/null || true

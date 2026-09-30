@@ -15,7 +15,6 @@ file_permissions=(
   ["/usr/local/bin/reboot"]="0:0:755"
   ["/usr/local/bin/poweroff"]="0:0:755"
   ["/usr/local/bin/shutdown"]="0:0:755"
-  ["/usr/bin/openrc"]="0:0:755"
   ["/etc/shadow"]="0:0:400"
   ["/etc/sudoers.d"]="0:0:750"
   ["/etc/sudoers.d/00-wheel-nopasswd"]="0:0:440"

@@ -1221,8 +1221,19 @@ class HiganInstallerApp(QWidget):
                 self.start_installation()
         elif curr == 7:
             if self.chk_restart.isChecked():
-                subprocess.Popen(["systemctl", "reboot"])
-                subprocess.Popen(["reboot", "-f"])
+                for cmd in [
+                    ["/usr/local/bin/reboot"],
+                    ["sudo", "openrc-shutdown", "-r", "now"],
+                    ["openrc-shutdown", "-r", "now"],
+                    ["sudo", "reboot"],
+                    ["reboot"],
+                    ["systemctl", "reboot"]
+                ]:
+                    try:
+                        subprocess.Popen(cmd)
+                        break
+                    except Exception:
+                        pass
             self.close()
         elif curr < 5:
             self.set_step(curr + 1)

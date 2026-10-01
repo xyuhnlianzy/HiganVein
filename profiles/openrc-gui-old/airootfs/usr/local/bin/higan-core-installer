@@ -168,7 +168,7 @@ mkdir -p /mnt/higan-target
 
 # Format Root
 if [ "$FS_TYPE" == "btrfs" ]; then
-  mkfs.btrfs -f -K -L "HIGAN_ROOT" "$PART_ROOT"
+  mkfs.btrfs -f -L "HIGAN_ROOT" "$PART_ROOT"
   mount "$PART_ROOT" /mnt/higan-target
   btrfs subvolume create /mnt/higan-target/@
   btrfs subvolume create /mnt/higan-target/@home
@@ -183,8 +183,8 @@ elif [ "$FS_TYPE" == "ext4" ]; then
   mkfs.ext4 -F -L "HIGAN_ROOT" "$PART_ROOT"
   mount "$PART_ROOT" /mnt/higan-target
 elif [ "$FS_TYPE" == "xfs" ]; then
-  # Standard reliable XFS format with -K nodiscard
-  mkfs.xfs -f -K -L "HIGAN_ROOT" "$PART_ROOT" || mkfs.xfs -f -L "HIGAN_ROOT" "$PART_ROOT"
+  # Use compat options for legacy BIOS GRUB support (bigtime=0, inobtcount=0)
+  mkfs.xfs -f -m bigtime=0,inobtcount=0 -L "HIGAN_ROOT" "$PART_ROOT"
   mount "$PART_ROOT" /mnt/higan-target
 fi
 
@@ -297,12 +297,11 @@ if [ "$BOOTLOADER" == "grub" ]; then
     fi
   fi
 
-elif [ "$BOOTLOADER" == "limine" ]; then
+elif [ "$BOOTLOADER" == "limine" ] && [ "$IS_UEFI" -eq 1 ]; then
   ROOT_UUID=$(blkid -s UUID -o value "$PART_ROOT")
-  if [ "$IS_UEFI" -eq 1 ]; then
-    mkdir -p /mnt/higan-target/boot/efi/EFI/BOOT
-    cp -f /usr/share/limine/BOOTX64.EFI /mnt/higan-target/boot/efi/EFI/BOOT/ 2>/dev/null || true
-    cat << EOF > /mnt/higan-target/boot/efi/limine.conf
+  mkdir -p /mnt/higan-target/boot/efi/EFI/BOOT
+  cp -f /usr/share/limine/BOOTX64.EFI /mnt/higan-target/boot/efi/EFI/BOOT/ 2>/dev/null || true
+  cat << EOF > /mnt/higan-target/boot/efi/limine.conf
 timeout: 3
 /HiganveinOS Core ($INIT_SYS)
     protocol: linux
@@ -310,25 +309,7 @@ timeout: 3
     kernel_cmdline: root=UUID=${ROOT_UUID} ${CMDLINE_EXTRAS}quiet splash
     module_path: boot():/initramfs-linux-cachyos.img
 EOF
-    arch-chroot /mnt/higan-target efibootmgr --create --disk "$DISK" --part 1 --label "HiganveinOS Limine" --loader '\EFI\BOOT\BOOTX64.EFI' 2>/dev/null || true
-  else
-    # Limine Legacy BIOS (MBR) Mode
-    mkdir -p /mnt/higan-target/boot/limine
-    for l_bin in limine-bios.sys limine-bios-cd.bin; do
-      [ -f "/usr/share/limine/$l_bin" ] && cp -f "/usr/share/limine/$l_bin" /mnt/higan-target/boot/limine/
-    done
-    cat << EOF > /mnt/higan-target/boot/limine/limine.conf
-timeout: 3
-default_entry: 1
-
-/HiganveinOS Core ($INIT_SYS)
-    protocol: linux
-    kernel_path: boot():/boot/vmlinuz-linux-cachyos
-    kernel_cmdline: root=UUID=${ROOT_UUID} ${CMDLINE_EXTRAS}quiet splash
-    module_path: boot():/boot/initramfs-linux-cachyos.img
-EOF
-    arch-chroot /mnt/higan-target limine bios-install "$DISK" 2>/dev/null || true
-  fi
+  arch-chroot /mnt/higan-target efibootmgr --create --disk "$DISK" --part 1 --label "HiganveinOS Limine" --loader '\EFI\BOOT\BOOTX64.EFI' 2>/dev/null || true
 
 elif [ "$BOOTLOADER" == "systemd-boot" ] && [ "$IS_UEFI" -eq 1 ]; then
   arch-chroot /mnt/higan-target bootctl --esp-path=/boot/efi install 2>/dev/null || true

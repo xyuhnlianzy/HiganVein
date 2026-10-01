@@ -206,22 +206,51 @@ class InstallWorker(QThread):
             elif install_mode == "alongside":
                 allocated_gb = self.config.get('allocated_gb', 64)
                 log(f"> Dual-boot: allocating {allocated_gb} GB on {disk}")
-                esp_part = find_existing_esp(disk)
-                if not esp_part:
-                    log("! No existing ESP found. Creating new one.")
-                    subprocess.run(["parted", "-s", disk, "mkpart", "ESP", "fat32", "1MiB", "513MiB"], check=True)
-                    subprocess.run(["parted", "-s", disk, "set", "1", "esp", "on"], check=True)
-                    esp_part = f"{disk}p1" if "nvme" in disk else f"{disk}1"
+
+                # Detect existing partition table type
+                ptable_out = subprocess.run(["parted", "-s", disk, "print"], capture_output=True, text=True).stdout
+                is_gpt = "Partition Table: gpt" in ptable_out
+                part_type_arg = "" if is_gpt else "primary"
+
+                esp_part = find_existing_esp(disk) if is_efi else None
+                if is_efi and not esp_part:
+                    log("! No existing ESP found in UEFI mode. Searching free space for ESP...")
+                    # Only create ESP if there is room and in UEFI mode
+                    try:
+                        cmd = ["parted", "-s", "-a", "optimal", disk, "mkpart"]
+                        if part_type_arg:
+                            cmd.append(part_type_arg)
+                        cmd += ["fat32", "1MiB", "513MiB"]
+                        subprocess.run(cmd, check=True)
+                        subprocess.run(["parted", "-s", disk, "set", "1", "esp", "on"], check=True)
+                        esp_part = f"{disk}p1" if "nvme" in disk else f"{disk}1"
+                    except Exception as e:
+                        log(f"! Notice: skipping ESP creation ({e})")
 
                 out = subprocess.run(["parted", "-s", disk, "unit", "MB", "print", "free"], capture_output=True, text=True).stdout
                 free_start = None
+                free_end_limit = None
                 for line in out.splitlines():
                     if "Free Space" in line:
                         parts = line.split()
                         free_start = parts[0]
+                        if len(parts) >= 2:
+                            free_end_limit = parts[1]
+                
                 if free_start:
-                    end = f"{int(free_start.replace('MB', '')) + allocated_gb * 1024}MB"
-                    subprocess.run(["parted", "-s", disk, "mkpart", "higanvein", free_start, end], check=True)
+                    start_val = int(free_start.replace('MB', '').split('.')[0])
+                    target_end = start_val + allocated_gb * 1024
+                    if free_end_limit:
+                        max_end = int(free_end_limit.replace('MB', '').split('.')[0])
+                        if target_end > max_end:
+                            target_end = max_end
+                    end = f"{target_end}MB"
+                    
+                    cmd_root = ["parted", "-s", "-a", "optimal", disk, "mkpart"]
+                    if part_type_arg:
+                        cmd_root.append(part_type_arg)
+                    cmd_root += [fs, f"{start_val}MB", end]
+                    subprocess.run(cmd_root, check=True)
                     subprocess.run(["partprobe", disk], check=True)
                     time.sleep(1)
 

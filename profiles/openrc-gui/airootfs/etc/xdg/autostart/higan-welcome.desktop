@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=HiganveinOS Installer
-Comment=Install HiganveinOS
-Exec=/usr/local/bin/higan-installer-launcher
+Name=Welcome to HiganveinOS
+Comment=Live Session Welcome & Installer Launcher
+Exec=/usr/local/bin/higan-welcome
 Icon=drive-harddisk
 Terminal=false
 Categories=System;

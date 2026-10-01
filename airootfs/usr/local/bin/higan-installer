@@ -519,8 +519,39 @@ fallback_options="-S autodetect"
             root_flags = f"{init_cmdline}rootflags=subvol=@ " if fs == "btrfs" else init_cmdline
 
             if not is_efi:
-                # Legacy BIOS (MBR) Bootloader: GRUB BIOS
-                log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
+                # Legacy BIOS (MBR) Mode
+                if bootloader == "limine":
+                    log(f"> Legacy BIOS mode detected with Limine selected. Installing Limine BIOS ({disk})...")
+                    # Limine BIOS deployment
+                    os.makedirs(f"{target}/boot/limine", exist_ok=True)
+                    for l_bin in ["limine-bios.sys", "limine-bios-cd.bin"]:
+                        if os.path.exists(f"{target}/usr/share/limine/{l_bin}"):
+                            shutil.copy2(f"{target}/usr/share/limine/{l_bin}", f"{target}/boot/limine/{l_bin}")
+                    
+                    limine_conf_path = f"{target}/boot/limine/limine.conf"
+                    with open(limine_conf_path, "w") as f:
+                        f.write(f"""timeout: 3
+default_entry: 1
+wallpaper: boot():/boot/limine/limine-wallpaper.jpg
+wallpaper_style: stretched
+term_background: 8009090b
+term_foreground: fafafa
+
+/HiganveinOS ({init_choice.upper()})
+    protocol: linux
+    kernel_path: boot():/boot/vmlinuz-{pkgbase_name}
+    kernel_cmdline: root=UUID={root_uuid} rw loglevel=3 quiet {root_flags}
+    module_path: boot():/boot/initramfs-{pkgbase_name}.img
+""")
+                    if os.path.exists(f"{target}/usr/share/limine/limine-wallpaper.jpg"):
+                        shutil.copy2(f"{target}/usr/share/limine/limine-wallpaper.jpg", f"{target}/boot/limine/limine-wallpaper.jpg")
+
+                    subprocess.run(["arch-chroot", target, "limine", "bios-install", disk], check=True)
+                    log("  Limine BIOS bootloader deployed successfully.")
+
+                else:
+                    # Legacy BIOS (MBR) Bootloader: GRUB BIOS
+                    log(f"> Legacy BIOS mode detected. Installing GRUB for MBR ({disk})...")
                 # Configure GRUB cmdline with rootflags & init parameters
                 grub_default = f"{target}/etc/default/grub"
                 if os.path.exists(grub_default):

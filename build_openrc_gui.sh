@@ -44,6 +44,12 @@ print(f'Synced {count} packages locally.')
 # Refresh database with up-to-date checksums
 pacman -Syy --noconfirm
 
+# Patch OpenRC binary in airootfs so even the Live ISO boots as HiganveinOS
+AIROOTFS="/home/yahn/HiganveinOS/profiles/$PROFILE/work-$PROFILE/x86_64/airootfs"
+if [ -f "$AIROOTFS/usr/bin/openrc" ]; then
+    sed -i 's/Artix Linux/HiganveinOS/g' "$AIROOTFS/usr/bin/openrc" 2>/dev/null || true
+fi
+
 echo "=== [2/2] Running mkarchiso for $PROFILE ==="
 cd "/home/yahn/HiganveinOS/profiles/$PROFILE"
 mkarchiso -v -w "$WORK_DIR" -o "$OUT_DIR" .

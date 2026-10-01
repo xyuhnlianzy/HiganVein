@@ -744,6 +744,12 @@ options root=UUID={root_uuid} {root_flags}rw
             self.current_pct = 98
             self.current_msg = "Cleaning up..."
             log("> Removing live installer autostart and live user artifacts from target...")
+            # Patch OpenRC boot banner to display HiganveinOS instead of Artix Linux
+            if os.path.exists(f"{target}/usr/bin/openrc"):
+                try:
+                    subprocess.run(["sed", "-i", "s/Artix Linux/HiganveinOS/g", f"{target}/usr/bin/openrc"], stderr=subprocess.DEVNULL)
+                except Exception:
+                    pass
             for stale in [
                 f"{target}/usr/local/bin/pacman",
                 f"{target}/etc/xdg/autostart/higan-welcome.desktop",

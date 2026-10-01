@@ -13,6 +13,7 @@ file_permissions=(
   ["/usr/local/bin/higan-installer"]="0:0:755"
   ["/usr/local/bin/higan-installer-launcher"]="0:0:755"
   ["/usr/local/bin/higan-welcome"]="0:0:755"
+  ["/usr/local/bin/higan-bundle"]="0:0:755"
   ["/home/higan/Desktop/higan-installer.desktop"]="1000:1000:755"
   ["/etc/skel/Desktop/higan-installer.desktop"]="0:0:755"
   ["/home/higan/Desktop"]="1000:1000:755"

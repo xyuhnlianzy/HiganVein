@@ -4,6 +4,12 @@
 # 1. Ensure user higan owns their home folder
 chown -R 1000:1000 /home/higan 2>/dev/null || true
 
+# 1b. Ensure Lycoris is default browser in XFCE helpers.rc (applied at runtime to avoid package file collision)
+mkdir -p /etc/xdg/xfce4
+echo "WebBrowser=lycoris" > /etc/xdg/xfce4/helpers.rc
+echo "FileManager=Thunar" >> /etc/xdg/xfce4/helpers.rc
+echo "TerminalEmulator=xfce4-terminal" >> /etc/xdg/xfce4/helpers.rc
+
 # 2. Restore kernel and ucodes to live /boot so they exist in live filesystem
 mkdir -p /boot
 for mod_dir in /usr/lib/modules/*; do

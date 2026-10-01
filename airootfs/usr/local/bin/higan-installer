@@ -265,8 +265,17 @@ class InstallWorker(QThread):
 
             if root_part:
                 log(f"> Formatting root: {root_part} as {fs}")
+                # Ensure partition is not mounted and device nodes are settled
+                subprocess.run(["umount", "-l", root_part], stderr=subprocess.DEVNULL)
+                subprocess.run(["wipefs", "-a", "--force", root_part], stderr=subprocess.DEVNULL)
+                time.sleep(1)
+                
                 if fs == "btrfs":
-                    subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
+                    # -K to skip discard/trim for instant formatting in VMs and real disks
+                    res = subprocess.run(["mkfs.btrfs", "-f", "-K", root_part], capture_output=True, text=True)
+                    if res.returncode != 0:
+                        log(f"! mkfs.btrfs retry without -K: {res.stderr}")
+                        subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
                 elif fs == "xfs":
                     # XFS with GRUB BIOS compatibility
                     subprocess.run(["mkfs.xfs", "-f", "-m", "bigtime=0,inobtcount=0", root_part], check=True)

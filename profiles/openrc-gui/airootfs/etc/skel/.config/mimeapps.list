@@ -1,11 +1,15 @@
 [Default Applications]
+x-scheme-handler/http=lycoris.desktop
+x-scheme-handler/https=lycoris.desktop
+text/html=lycoris.desktop
+application/xhtml+xml=lycoris.desktop
 application/x-ms-dos-executable=wine.desktop
-application/x-msdownload=wine.desktop
-application/x-dosexec=wine.desktop
 application/x-msi=wine.desktop
 
 [Added Associations]
+x-scheme-handler/http=lycoris.desktop;
+x-scheme-handler/https=lycoris.desktop;
+text/html=lycoris.desktop;
+application/xhtml+xml=lycoris.desktop;
 application/x-ms-dos-executable=wine.desktop;
-application/x-msdownload=wine.desktop;
-application/x-dosexec=wine.desktop;
 application/x-msi=wine.desktop;

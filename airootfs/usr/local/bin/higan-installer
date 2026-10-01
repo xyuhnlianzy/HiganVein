@@ -277,8 +277,11 @@ class InstallWorker(QThread):
                         log(f"! mkfs.btrfs retry without -K: {res.stderr}")
                         subprocess.run(["mkfs.btrfs", "-f", root_part], check=True)
                 elif fs == "xfs":
-                    # XFS with GRUB BIOS compatibility
-                    subprocess.run(["mkfs.xfs", "-f", "-m", "bigtime=0,inobtcount=0", root_part], check=True)
+                    # XFS with fallback (standard vs legacy compatibility)
+                    res = subprocess.run(["mkfs.xfs", "-f", "-K", root_part], capture_output=True, text=True)
+                    if res.returncode != 0:
+                        log(f"! mkfs.xfs standard failed ({res.stderr.strip()}), retrying basic: ")
+                        subprocess.run(["mkfs.xfs", "-f", root_part], check=True)
                 else:
                     subprocess.run(["mkfs.ext4", "-F", root_part], check=True)
 

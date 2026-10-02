@@ -4,6 +4,12 @@
 # 1. Ensure user higan owns their home folder
 chown -R 1000:1000 /home/higan 2>/dev/null || true
 
+# 1a. Apply Higanvein Void wallpaper over XFCE defaults at runtime to prevent pacman file conflicts
+if [ -f /usr/share/backgrounds/xfce/higanvein-wallpaper.jpg ]; then
+    cp -f /usr/share/backgrounds/xfce/higanvein-wallpaper.jpg /usr/share/backgrounds/xfce/xfce-blue.jpg 2>/dev/null || true
+    cp -f /usr/share/backgrounds/xfce/higanvein-wallpaper.jpg /usr/share/backgrounds/xfce/xfce-stripes.png 2>/dev/null || true
+fi
+
 # 1b. Ensure Lycoris is default browser in XFCE helpers.rc (applied at runtime to avoid package file collision)
 mkdir -p /etc/xdg/xfce4
 echo "WebBrowser=lycoris" > /etc/xdg/xfce4/helpers.rc

@@ -19,7 +19,7 @@ echo -e "${WHITE}HiganveinOS Profile Bundle Manager${NC}"
 echo -e "${GRAY}Modular software stack installer for gamers, developers, and ricers.${NC}\n"
 
 if [[ $EUID -ne 0 ]]; then
-   echo -e "${RED}[!] Jalankan perintah ini dengan sudo.${NC}" 
+   echo -e "${RED}[!] Please run this command with sudo.${NC}" 
    exit 1
 fi
 
@@ -237,28 +237,28 @@ install_nvidia() {
 }
 
 show_menu() {
-    echo -e "${WHITE}Pilih bundle yang ingin di-install:${NC}"
+    echo -e "${WHITE}Select the bundle you want to install:${NC}"
     echo -e "  ${RED}1)${NC} Gamer Stack       ${GRAY}(Steam, Lutris, MangoHud, GameMode, Wine)${NC}"
     echo -e "  ${RED}2)${NC} Developer Stack   ${GRAY}(Neovim, Docker, eza, bat, ripgrep, fzf)${NC}"
-    echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Cava, Starship, Rofi)${NC}"
-    echo -e "  ${RED}4)${NC} Cyber Stack       ${GRAY}(Nmap, Wireshark, Metasploit, Ghidra, Hydra)${NC}"
-    echo -e "  ${RED}5)${NC} BlackArch Repo    ${GRAY}(Tambahkan repo resmi BlackArch 2800+ tools)${NC}"
-    echo -e "  ${RED}6)${NC} Agentic AI Stack  ${GRAY}(Ollama, Hermes Agent, 9Router Multi-Gateway)${NC}"
-    echo -e "  ${RED}7)${NC} NVIDIA Suite      ${GRAY}(Driver Open-Kernel 615+, Vulkan, Control Panel)${NC}"
-    echo -e "  ${RED}8)${NC} All Bundles       ${GRAY}(Install semua profil sekaligus)${NC}"
-    echo -e "  ${RED}q)${NC} Keluar\n"
-    read -rp "Pilihan Anda [1-8/q]: " choice
+    echo -e "  ${RED}3)${NC} Ricing Stack      ${GRAY}(Hyprland, Waybar, Rofi, Serpantinum Shell)${NC}"
+    echo -e "  ${RED}4)${NC} Security Arsenal  ${GRAY}(Nmap, Wireshark, Metasploit, Burp, Hydra)${NC}"
+    echo -e "  ${RED}5)${NC} BlackArch Repo    ${GRAY}(Add official repo with 2800+ security tools)${NC}"
+    echo -e "  ${RED}6)${NC} Agentic AI Stack  ${GRAY}(Ollama Local Engine, Hermes Agent, 9Router)${NC}"
+    echo -e "  ${RED}7)${NC} NVIDIA Driver     ${GRAY}(Proprietary kernel modules & Vulkan libs)${NC}"
+    echo -e "  ${RED}8)${NC} All Bundles       ${GRAY}(Install all available standard profiles)${NC}"
+    echo -e "  ${RED}q)${NC} Quit\n"
+    read -rp "Your choice [1-8/q]: " choice
     case "$choice" in
         1) install_gamer ;;
         2) install_dev ;;
         3) install_ricer ;;
         4) install_cyber ;;
-        5) setup_blackarch ;;
+        5) install_blackarch ;;
         6) install_ai_agent ;;
         7) install_nvidia ;;
         8) install_gamer; install_dev; install_ricer; install_cyber; install_ai_agent ;;
         q|Q) exit 0 ;;
-        *) echo "Pilihan tidak valid."; exit 1 ;;
+        *) echo "Invalid choice."; exit 1 ;;
     esac
 }
 

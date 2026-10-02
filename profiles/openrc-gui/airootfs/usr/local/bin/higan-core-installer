@@ -22,7 +22,7 @@ echo -e "${NC}"
 echo -e "${CYAN}=== HiganveinOS Core Installer (Modular Penta-Init Engine) ===${NC}\n"
 
 if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}Error: Jalankan installer ini sebagai root (sudo higan-core-installer)${NC}"
+  echo -e "${RED}Error: Please run this installer as root (sudo higan-core-installer)${NC}"
   exit 1
 fi
 
@@ -40,20 +40,20 @@ echo -e "${WHITE}Detected Firmware Environment:${NC} ${YELLOW}$FIRMWARE_TYPE${NC
 echo -e "${CYAN}[1/6] Target Storage Disk:${NC}"
 lsblk -d -n -o NAME,SIZE,MODEL | grep -v "loop" | grep -v "airootfs"
 echo ""
-read -p "Ketik nama disk target (contoh: sda / nvme0n1 / vda): " TARGET_DEV
+read -p "Enter target disk name (e.g. sda / nvme0n1 / vda): " TARGET_DEV
 
 DISK="/dev/$TARGET_DEV"
 if [ ! -b "$DISK" ]; then
-  echo -e "${RED}Error: Disk $DISK tidak valid!${NC}"
+  echo -e "${RED}Error: Disk $DISK is invalid!${NC}"
   exit 1
 fi
 
 # 2. Filesystem Selection
-echo -e "\n${CYAN}[2/6] Pilih Filesystem:${NC}"
+echo -e "\n${CYAN}[2/6] Select Filesystem:${NC}"
 echo -e "  ${WHITE}1)${NC} Btrfs (Recommended: Subvolumes @/@home, ZSTD Compression, Snapshots)"
 echo -e "  ${WHITE}2)${NC} Ext4  (Classic, Battle-tested, Ultra-stable)"
 echo -e "  ${WHITE}3)${NC} XFS   (High performance for large data/databases)"
-read -p "Pilihan Filesystem [1-3] (default 1): " FS_CHOICE
+read -p "Filesystem Choice [1-3] (default 1): " FS_CHOICE
 FS_CHOICE=${FS_CHOICE:-1}
 
 case "$FS_CHOICE" in
@@ -62,7 +62,7 @@ case "$FS_CHOICE" in
   3) FS_TYPE="xfs" ;;
   *) FS_TYPE="btrfs" ;;
 esac
-echo -e "${GREEN}Filesystem dipilih: ${FS_TYPE}${NC}"
+echo -e "${GREEN}Selected filesystem: ${FS_TYPE}${NC}"
 
 # 3. Init System Detection
 echo -e "\n${CYAN}[3/6] Init System Engine:${NC}"
@@ -89,12 +89,12 @@ else
 fi
 
 # 4. Bootloader Selection
-echo -e "\n${CYAN}[4/6] Pilih Bootloader:${NC}"
+echo -e "\n${CYAN}[4/6] Select Bootloader:${NC}"
 if [ "$IS_UEFI" -eq 1 ]; then
   echo -e "  ${WHITE}1)${NC} GRUB         (Feature-rich, Dual-Boot detection, Themes)"
   echo -e "  ${WHITE}2)${NC} Limine       (Modern UEFI, fast, lightweight, minimal UI)"
   echo -e "  ${WHITE}3)${NC} systemd-boot (Simple EFI stub loader, zero overhead)"
-  read -p "Pilihan Bootloader [1-3] (default 1): " BL_CHOICE
+  read -p "Bootloader Choice [1-3] (default 1): " BL_CHOICE
   BL_CHOICE=${BL_CHOICE:-1}
   case "$BL_CHOICE" in
     1) BOOTLOADER="grub" ;;
@@ -106,29 +106,29 @@ else
   echo -e "  ${WHITE}1)${NC} GRUB BIOS/MBR (Legacy standard)"
   BOOTLOADER="grub"
 fi
-echo -e "${GREEN}Bootloader dipilih: ${BOOTLOADER}${NC}"
+echo -e "${GREEN}Selected bootloader: ${BOOTLOADER}${NC}"
 
 # 5. Hostname & User Account
-echo -e "\n${CYAN}[5/6] Akun & Hostname:${NC}"
-read -p "Masukkan Hostname (default: higan-core): " HOSTNAME
+echo -e "\n${CYAN}[5/6] Account & Hostname:${NC}"
+read -p "Enter Hostname (default: higan-core): " HOSTNAME
 HOSTNAME=${HOSTNAME:-higan-core}
 
-read -p "Masukkan Username baru: " USERNAME
+read -p "Enter new Username: " USERNAME
 while [ -z "$USERNAME" ]; do
-  read -p "Username tidak boleh kosong: " USERNAME
+  read -p "Username cannot be empty: " USERNAME
 done
 
-read -s -p "Masukkan Password user $USERNAME: " USER_PASS
+read -s -p "Enter Password for $USERNAME: " USER_PASS
 echo ""
-read -s -p "Konfirmasi Password: " USER_PASS2
+read -s -p "Confirm Password: " USER_PASS2
 echo ""
 if [ "$USER_PASS" != "$USER_PASS2" ]; then
-  echo -e "${RED}Error: Password tidak cocok!${NC}"
+  echo -e "${RED}Error: Passwords do not match!${NC}"
   exit 1
 fi
 
 # Summary Confirmation
-echo -e "\n${YELLOW}=== Ringkasan Konfigurasi Instalasi ===${NC}"
+echo -e "\n${YELLOW}=== Installation Summary ===${NC}"
 echo -e "Target Disk : ${WHITE}$DISK${NC}"
 echo -e "Firmware    : ${WHITE}$FIRMWARE_TYPE${NC}"
 echo -e "Filesystem  : ${WHITE}$FS_TYPE${NC}"
@@ -136,15 +136,15 @@ echo -e "Init System : ${WHITE}$INIT_SYS${NC}"
 echo -e "Bootloader  : ${WHITE}$BOOTLOADER${NC}"
 echo -e "Hostname    : ${WHITE}$HOSTNAME${NC}"
 echo -e "Username    : ${WHITE}$USERNAME${NC}"
-echo -e "${RED}PERINGATAN: Semua data di $DISK akan DIHAPUS TOTAL!${NC}"
-read -p "Ketik 'YA' untuk mulai instalasi: " CONFIRM
-if [ "$CONFIRM" != "YA" ]; then
-  echo "Instalasi dibatalkan."
+echo -e "${RED}WARNING: All existing data on $DISK will be PERMANENTLY ERASED!${NC}"
+read -p "Type 'YES' to begin installation: " CONFIRM
+if [ "$CONFIRM" != "YES" ]; then
+  echo "Installation canceled."
   exit 0
 fi
 
 # 6. Disk Partitioning & Formatting
-echo -e "\n${CYAN}[6/6] Menyiapkan Partisi & Menyalin Sistem...${NC}"
+echo -e "\n${CYAN}[6/6] Preparing Partitions & Deploying System...${NC}"
 umount -R /mnt/higan-target 2>/dev/null || true
 wipefs -af "$DISK"
 sgdisk -Z "$DISK"
@@ -194,7 +194,7 @@ if [ "$IS_UEFI" -eq 1 ]; then
 fi
 
 # Copy Rootfs
-echo -e "${WHITE}Menyalin Root Filesystem...${NC}"
+echo -e "${WHITE}Copying Root Filesystem to Target...${NC}"
 rsync -aAX --exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found","/work*","/out*"} / /mnt/higan-target/
 
 # Post install cleanup
@@ -392,12 +392,12 @@ elif [ "$INIT_SYS" == "runit" ]; then
 fi
 
 # Keyring initialization
-echo -e "${WHITE}Menginisialisasi Pacman Keyring...${NC}"
+echo -e "${WHITE}Initializing Pacman Keyring...${NC}"
 mkdir -p /mnt/higan-target/etc/pacman.d/gnupg
 chmod 700 /mnt/higan-target/etc/pacman.d/gnupg
 arch-chroot /mnt/higan-target pacman-key --init || true
 arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos artix 2>/dev/null || arch-chroot /mnt/higan-target pacman-key --populate archlinux cachyos || true
 
-echo -e "\n${GREEN}=== INSTALASI SELESAI DENGAN SUKSES! ===${NC}"
+echo -e "\n${GREEN}=== INSTALLATION COMPLETED SUCCESSFULLY! ===${NC}"
 echo -e "Init System: ${YELLOW}$INIT_SYS${NC} | Filesystem: ${YELLOW}$FS_TYPE${NC} | Bootloader: ${YELLOW}$BOOTLOADER${NC}"
-echo -e "Silakan ketik: ${CYAN}reboot${NC} lalu cabut media instalasi."
+echo -e "Type: ${CYAN}reboot${NC} and remove installation media."

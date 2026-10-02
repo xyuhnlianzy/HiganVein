@@ -17,6 +17,10 @@ chown -R root:root "$CACHE_DIR" 2>/dev/null || true
 # Clean broken partial downloads
 rm -f "$CACHE_DIR"/*.part
 
+# Clean corrupted packages (checksum failures)
+rm -f "$CACHE_DIR"/glibc* 2>/dev/null || true
+rm -f /var/cache/pacman/pkg/glibc* 2>/dev/null || true
+
 # Copy valid packages from host cache into isolated build cache
 echo "Syncing valid host packages into build cache (avoiding slow download)..."
 python3 -c "
@@ -24,7 +28,7 @@ import glob, shutil, os
 
 src_dir = '/var/cache/pacman/pkg'
 dst_dir = '/home/yahn/HiganveinOS/.cache/openrc-gui-pacman'
-bad_keywords = ['pipewire', 'wireplumber', 'abseil-cpp', 'spandsp', 'lilv', 'sord', 'serd', 'sbc', 'lua']
+bad_keywords = ['pipewire', 'wireplumber', 'abseil-cpp', 'spandsp', 'lilv', 'sord', 'serd', 'sbc', 'lua', 'glibc']
 
 count = 0
 for f in glob.glob(os.path.join(src_dir, '*.pkg.tar.zst')):

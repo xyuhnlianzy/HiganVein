@@ -1420,7 +1420,7 @@ class HiganInstallerApp(QWidget):
         self.lbl_selected_tz = QLabel("Asia/Jakarta")
         self.lbl_selected_tz.setStyleSheet("color: #ef4444; font-size: 14pt; font-weight: 700; font-family: monospace;")
         cl.addWidget(self.lbl_selected_tz)
-        tz_note = QLabel("systemd-timesyncd enabled. Clock syncs automatically after install.")
+        tz_note = QLabel("Automatic network time synchronization (timesyncd / openrc ntp) enabled.")
         tz_note.setObjectName("label_muted")
         tz_note.setStyleSheet("color: #52525b; font-size: 8pt;")
         cl.addWidget(tz_note)
@@ -1481,6 +1481,7 @@ class HiganInstallerApp(QWidget):
         self.on_region_changed(self.combo_region.currentText())
         if "Asia" in self.tz_data and "Jakarta" in self.tz_data["Asia"]:
             self.combo_zone.setCurrentText("Jakarta")
+        self.lbl_selected_tz.setText(f"{self.combo_region.currentText()}/{self.combo_zone.currentText()}")
 
     def on_region_changed(self, region):
         self.combo_zone.clear()

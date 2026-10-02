@@ -29,7 +29,6 @@ networkmanager
 # sddm
 wayland
 wayland-protocols
-wlroots
 gtk3
 cairo
 pam

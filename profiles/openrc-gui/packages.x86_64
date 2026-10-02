@@ -44,7 +44,6 @@ lightdm-openrc
 # (gtk3, wayland, pam, cairo native compositor)
 wayland
 wayland-protocols
-wlroots
 gtk3
 cairo
 pam

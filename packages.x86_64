@@ -24,9 +24,17 @@ cava
 git
 networkmanager
 
-# --- Desktop Environment (KDE Plasma Only) ---
-plasma-meta
-sddm
+# --- Desktop Environment (Replaced with Native Higanvein Unified Shell) ---
+# plasma-meta
+# sddm
+wayland
+wayland-protocols
+wlroots
+gtk3
+cairo
+pam
+libxkbcommon
+xdg-utils
 
 # --- Graphical Installer & System Tools ---
 arch-install-scripts

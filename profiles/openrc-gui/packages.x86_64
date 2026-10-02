@@ -39,7 +39,18 @@ jq
 lightdm
 lightdm-gtk-greeter
 lightdm-openrc
-# ==================== LIGHTWEIGHT GUI STACK ====================
+# ==================== HIGANVEIN UNIFIED SHELL STACK ====================
+# Replacing XFWM4/XFCE desktop with native higan-wdm + higanvein-shell
+# (gtk3, wayland, pam, cairo native compositor)
+wayland
+wayland-protocols
+wlroots
+gtk3
+cairo
+pam
+libxkbcommon
+xdg-utils
+# Base apps retained for shell execution (Terminal, Thunar, Lycoris)
 limine
 linux-cachyos
 linux-cachyos-headers
@@ -85,13 +96,13 @@ wget
 wireplumber
 xf86-video-fbdev
 xf86-video-vesa
-xfce4-panel
-xfce4-session
-xfce4-settings
+# xfce4-panel
+# xfce4-session
+# xfce4-settings
 xfce4-terminal
-xfdesktop
+# xfdesktop
 xfsprogs
-xfwm4
+# xfwm4
 xorg-server
 xorg-xinit
 zip

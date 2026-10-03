@@ -36,9 +36,9 @@ htop
 inetutils
 intel-ucode
 jq
-lightdm
-lightdm-gtk-greeter
-lightdm-openrc
+#lightdm
+#lightdm-gtk-greeter
+#lightdm-openrc
 # ==================== HIGANVEIN UNIFIED SHELL STACK ====================
 # Replacing XFWM4/XFCE desktop with native higan-wdm + higanvein-shell
 # (gtk3, wayland, pam, cairo native compositor)

@@ -35,10 +35,7 @@ for bootmnt in /run/archiso/bootmnt /run/archiso/bootmnt/arch/boot; do
     fi
 done
 
-# 3. Auto-initialize Pacman Keyring if not present
-if [ ! -d /etc/pacman.d/gnupg ] || [ ! -f /etc/pacman.d/gnupg/pubring.gpg ]; then
-    mkdir -p /etc/pacman.d/gnupg
-    chmod 700 /etc/pacman.d/gnupg
-    pacman-key --init 2>/dev/null || true
-    pacman-key --populate archlinux cachyos 2>/dev/null || true
+# 4. Auto-launch Higanvein Unified Shell on tty1 login
+if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ]; then
+    exec /usr/local/bin/higanvein-shell
 fi

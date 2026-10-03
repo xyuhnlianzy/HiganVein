@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Higanvein Unified Shell
+Comment=Sovereign Wayland Compositor & Shell (Higan-WDM + Vein-WM)
+Exec=/usr/local/bin/higanvein-shell
+Type=Application
+DesktopNames=Higanvein

@@ -12,7 +12,12 @@
     "separator": " ──❵ "
   },
   "modules": [
-    "title", "separator", "os", "host", "kernel", "uptime", "packages",
+    "title", "separator",
+    {
+      "type": "os",
+      "format": "HiganveinOS Sovereign Linux x86_64"
+    },
+    "host", "kernel", "initsystem", "uptime", "packages",
     "shell", "display", "de", "wm", "terminal", "cpu", "gpu", "memory",
     "swap", "disk", "localip", "break", "colors"
   ]

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+build() {
+    add_module "loop"
+    add_runscript
+}
+
+help() {
+    cat <<HELPEOF
+Creates /dev/loop-control and /dev/loop[0-7] character and block device nodes
+in early initramfs for non-systemd architectures.
+HELPEOF
+}

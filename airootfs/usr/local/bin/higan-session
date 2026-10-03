@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Higanvein Unified Shell Direct Boot Wrapper
+exec /usr/local/bin/higanvein-shell

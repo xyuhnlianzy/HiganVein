@@ -16,9 +16,8 @@ l4:4:wait:/usr/bin/openrc default
 l5:5:wait:/usr/bin/openrc default
 l6:6:wait:/usr/bin/openrc reboot
 
-# Automatic Live Login & Terminals
-# In GUI profile: lightdm handles display, tty1-tty4 as fallback virtual consoles
-c1:12345:respawn:/usr/bin/agetty 38400 tty1 linux
+# Automatic Live Login & Terminals (Auto-login higan on tty1 into Higanvein Unified Shell)
+c1:12345:respawn:/usr/bin/agetty --autologin higan --noclear 38400 tty1 linux
 c2:2345:respawn:/usr/bin/agetty 38400 tty2 linux
 c3:2345:respawn:/usr/bin/agetty 38400 tty3 linux
 c4:2345:respawn:/usr/bin/agetty 38400 tty4 linux

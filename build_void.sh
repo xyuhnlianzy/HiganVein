@@ -29,6 +29,8 @@ cd "$MKLIVE_DIR"
 sudo env PATH="$PATH" ./mklive.sh \
     -a x86_64 \
     -p "$PKGS" \
+    -S "seatd dbus NetworkManager" \
+    -T "HiganveinOS Sovereign Linux (Void Base)" \
     -I "$PROFILE_DIR/include" \
     -o "$OUT_DIR/higanveinos-void-2026.10-x86_64.iso"
 

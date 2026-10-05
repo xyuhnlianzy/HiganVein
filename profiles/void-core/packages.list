@@ -1,0 +1,65 @@
+# ==============================================================================
+# HiganveinOS Void Edition — Package Manifesto
+# Base: Void Linux (glibc x86_64) + runit + elogind + dbus
+# ==============================================================================
+
+# Core System & Init
+base-system
+runit
+runit-void
+elogind
+dbus
+polkit
+
+# Linux Kernel & Firmware
+linux
+linux-firmware-network
+linux-firmware-amd
+linux-firmware-intel
+
+# Filesystem Tooling
+btrfs-progs
+xfsprogs
+e2fsprogs
+dosfstools
+
+# Bootloader
+grub-i386-efi
+grub-x86_64-efi
+grub
+
+# Graphics & Wayland Subsystem
+mesa-dri
+mesa-vulkan-radeon
+mesa-vulkan-intel
+wayland
+wlroots0.20
+cairo
+pango
+gtk+3
+libxkbcommon
+seatd
+
+# Terminal & Shell Experience
+fish-shell
+fastfetch
+btop
+curl
+wget
+git
+tar
+xz
+zstd
+
+# Audio Subsystem (PipeWire without systemd)
+pipewire
+wireplumber
+alsa-utils
+
+# Networking
+NetworkManager
+wpa_supplicant
+
+# Desktop Utilities (Minimal base for apps)
+Thunar
+xfce4-terminal

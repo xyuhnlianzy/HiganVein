@@ -1,0 +1,10 @@
+NAME="HiganveinOS"
+PRETTY_NAME="HiganveinOS Sovereign Linux (Void Base)"
+ID=higanveinos
+ID_LIKE="void"
+BUILD_ID="2026.10-void"
+ANSI_COLOR="38;2;239;68;68"
+HOME_URL="https://higanvein.pages.dev"
+SUPPORT_URL="https://github.com/xyuhnlianzy/HiganVein/issues"
+BUG_REPORT_URL="https://github.com/xyuhnlianzy/HiganVein/issues"
+LOGO=higanveinos

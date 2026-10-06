@@ -62,4 +62,5 @@ wpa_supplicant
 
 # Desktop Utilities (Minimal base for apps)
 Thunar
-xfce4-terminal
+vte3
+

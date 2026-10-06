@@ -6,6 +6,8 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
+export PATH="/usr/local/bin:$PATH"
+
 # Ensure user runtime directory
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 if [ ! -d "$XDG_RUNTIME_DIR" ]; then

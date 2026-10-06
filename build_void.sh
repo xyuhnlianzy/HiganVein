@@ -30,6 +30,7 @@ sudo env PATH="$PATH" ./mklive.sh \
     -a x86_64 \
     -p "$PKGS" \
     -S "seatd dbus NetworkManager" \
+    -C "live.autologin=higan live.user=higan" \
     -T "HiganveinOS Sovereign Linux (Void Base)" \
     -I "$PROFILE_DIR/include" \
     -o "$OUT_DIR/higanveinos-void-2026.10-x86_64.iso"

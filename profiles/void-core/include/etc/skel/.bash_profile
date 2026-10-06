@@ -18,6 +18,8 @@ export LIBSEAT_BACKEND=seatd
 # Fallback software renderer for virtual environments without hardware 3D
 export WLR_RENDERER=pixman
 export WLR_NO_HARDWARE_CURSORS=1
+export GDK_BACKEND=wayland
+export QT_QPA_PLATFORM=wayland
 
 # Auto-launch Higanvein Sovereign Compositor on tty1
 if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ]; then

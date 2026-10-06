@@ -12,12 +12,17 @@ floppy:x:11:
 mail:x:12:
 audio:x:18:anon,higan
 video:x:19:anon,higan
+cdrom:x:20:anon,higan
+dialout:x:21:anon,higan
+tape:x:22:anon,higan
 input:x:23:anon,higan
 _seatd:x:24:anon,higan
 kvm:x:25:anon,higan
 optical:x:28:anon,higan
 storage:x:31:anon,higan
 network:x:36:anon,higan
+sgx:x:40:anon,higan
+usbmon:x:41:anon,higan
 nobody:x:99:
 anon:x:1000:
 higan:x:1001:

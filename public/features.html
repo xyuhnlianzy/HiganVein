@@ -62,9 +62,9 @@
             </div>
 
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Higan-Installer v5.0 (Penta-Init Engine)</h3>
+                <h3 class="text-white font-bold text-base">Higan-Installer (Native Rust Engine)</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">
-                    Custom 8-step wizard inspired by Calamares and Anaconda. Features interactive Dual-Boot storage allocation slider, real-time color-coded partition visualization bars, and Phase 2 modular Init System selection supporting five distinct init paradigms: <b>Systemd</b> (Standard/Full), <b>OpenRC</b>, <b>Runit</b>, <b>Dinit</b>, and <b>s6</b> with automated kernel commandline handoffs.
+                    Ultra-lean disk installer rewritten in native Rust (419 KB static binary, &lt;2 MB RAM) replacing heavy Python/Qt dependencies on potato hardware. Features smart automatic partitioning for NVMe (<code class="text-zinc-300">nvme0n1p3</code>), eMMC, SATA, and VirtIO with automatic hybrid UEFI/BIOS bootloader generation and dotfiles synchronization.
                 </p>
             </div>
 
@@ -118,9 +118,9 @@
             </div>
 
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Full GPU Tri-Stack (Intel, AMD, NVIDIA)</h3>
+                <h3 class="text-white font-bold text-base">Full GPU Hardware Acceleration (All Vendors)</h3>
                 <p class="text-zinc-400 text-xs leading-relaxed">
-                    Out-of-the-box hardware acceleration for all Big 3 GPU vendors. Intel HD/Iris via <code class="text-zinc-300">intel-media-driver</code>, AMD Radeon via <code class="text-zinc-300">Mesa RADV</code> (64 &amp; 32-bit), and NVIDIA Wayland integration via <code class="text-zinc-300">egl-wayland</code> with automated installer DRM modesetting. Dedicated proprietary suite available via <code class="text-zinc-300">sudo higan-bundle --nvidia</code>.
+                    Out-of-the-box hardware acceleration for AMD Radeon RX (RDNA 1–4, Vega, Polaris), NVIDIA GeForce GTX/RTX (Maxwell to Blackwell via open Nouveau/NVK), and Intel Arc/Xe. Signed firmware microcode blobs and Vulkan userspace drivers are pre-baked, eliminating CPU software fallback rendering on physical machines.
                 </p>
             </div>
 

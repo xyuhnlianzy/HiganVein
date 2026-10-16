@@ -56,9 +56,9 @@
         <div class="space-y-4 text-sm leading-relaxed">
             <h2 class="text-white font-bold text-lg">Project Background</h2>
             <p>
-                HiganveinOS is an independent operating system project created by <b>D-P</b>. The project started from a simple goal: 
-                having an Arch Linux installation with CachyOS kernel optimizations, predictable low-latency desktop responsiveness, 
-                and a clean multi-boot installer that does not break existing Windows partitions.
+                HiganveinOS is an independent operating system project created by <b>Yu Dyan</b>. The project is engineered around sovereign computing:
+                eliminating telemetry, stripping unnecessary daemon bloat, minimizing RAM usage via native Rust tools (hein, higan-installer),
+                and delivering two hardened editions: <b>Sovereign Void Linux</b> (runit, ~180 MiB idle RAM) and <b>Arch Linux</b> (CachyOS BORE kernel, Higanvein Unified Shell).
             </p>
             <p>
                 Rather than bundling dozens of default applications or marketing gimmicks, HiganveinOS focuses strictly on 
@@ -70,13 +70,15 @@
             <h2 class="text-white font-bold text-lg">Upstream Acknowledgments</h2>
             <p class="text-zinc-400">HiganveinOS relies on the work of foundational open-source projects:</p>
             <ul class="space-y-2 list-disc list-inside text-zinc-400">
-                <li><b class="text-white">Arch Linux</b> — Rolling release package ecosystem, base tooling, and archiso.</li>
-                <li><b class="text-white">CachyOS</b> — Kernel patches, BORE CPU scheduler, and high-performance package toolchains.</li>
-                <li><b class="text-white">Artix Linux</b> — OpenRC package ports, standalone elogind/dbus service scripts, and non-systemd init engineering.</li>
-                <li><b class="text-white">OpenRC Project</b> — Dependency-based init system and service supervision lifecycle.</li>
-                <li><b class="text-white">Higanvein Unified Shell (Higan-WDM & Vein-WM)</b> — Sovereign Wayland compositor, Cairo live Higanbana background particle engine, and Caelestia-style Super-key app launcher.</li>
-                <li><b class="text-white">WebKitGTK & GNOME</b> — Embedded web rendering engine and GTK3 interface libraries powering Lycoris Browser.</li>
-                <li><b class="text-white">Wine & Valve Proton</b> — Windows application binary compatibility layer and DXVK/VKD3D Vulkan translation.</li>
+                <li><b class="text-white">Void Linux</b> — Independent x86_64 base, XBPS package management, and pure runit initialization supervision.</li>
+                <li><b class="text-white">Arch Linux</b> — Bleeding-edge rolling release package ecosystem, base tooling, and archiso framework.</li>
+                <li><b class="text-white">CachyOS</b> — Upstream performance patches, BORE CPU scheduler, and compiler optimizations.</li>
+                <li><b class="text-white">Hein Package Engine</b> — Native Rust wrapper around XBPS providing clean syntax, colorized logging, and cache management.</li>
+                <li><b class="text-white">Higan-Installer (Rust)</b> — Native zero-runtime disk installer engineered for potato hardware and reliable EFI/BIOS deployment.</li>
+                <li><b class="text-white">HiganTerm (GNOME Ptyxis)</b> — Container-ready modern Wayland terminal emulator with custom Tech-Noir Spider Lily palettes.</li>
+                <li><b class="text-white">Lycoris Browser</b> — WebKitGTK privacy-hardened browser with embedded ad/tracker sinkholes and aggressive malloc RAM trimming.</li>
+                <li><b class="text-white">Higanvein Unified Shell &amp; Labwc</b> — Sovereign Wayland desktop session, ext-session-lock screenlocker (higan-lock), and integrated hardware controls.</li>
+                <li><b class="text-white">Wine &amp; Valve Proton</b> — Windows application binary compatibility layer and DXVK/VKD3D Vulkan translation.</li>
                 <li><b class="text-white">Illia Miroshnichenko (ilyamiro)</b> — Creator of <a href="https://github.com/ilyamiro/serpantinum" target="_blank" class="text-red-400 hover:underline">Serpantinum Shell</a>, featured in the HiganveinOS Ricing suite.</li>
             </ul>
         </div>

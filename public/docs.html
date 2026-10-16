@@ -59,10 +59,10 @@
                 <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 1</div>
                 <h3 class="text-white font-bold text-base">Write ISO to USB Media</h3>
                 <p class="text-zinc-400 leading-relaxed text-xs">
-                    Flash the downloaded ISO image using Ventoy, Rufus (in DD image mode), or directly via Linux terminal:
+                    Write the ISO image using Ventoy, Rufus (in DD image mode), or directly via Linux terminal:
                 </p>
                 <div class="bg-zinc-950 p-3 rounded-lg font-mono text-xs text-zinc-300 border border-zinc-800 overflow-x-auto">
-                    sudo dd if=higanveinos-2026.09.23-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync
+                    sudo dd if=higanveinos-sovereign-2026.10.09-x86_64.iso of=/dev/sdX bs=4M status=progress oflag=sync
                 </div>
                 <div class="pt-2 flex flex-wrap gap-2">
                     <a href="https://huggingface.co/datasets/fryss/Higanvein-ISO/resolve/main/higanveinos-x86_64.iso" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg font-semibold text-xs transition">
@@ -87,14 +87,14 @@
             <!-- Step 3 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-3">
                 <div class="text-red-400 font-bold text-xs uppercase tracking-wider">Step 3</div>
-                <h3 class="text-white font-bold text-base">Running Higan-Installer</h3>
+                <h3 class="text-white font-bold text-base">Running Higan-Installer (Rust Native)</h3>
                 <p class="text-zinc-400 leading-relaxed text-xs">
-                    Launch <b>HiganveinOS Setup</b> from the desktop. Follow the 8-step wizard:
+                    Launch the installer directly from your terminal or desktop menu (<code class="text-zinc-200">sudo higan-installer</code>):
                 </p>
                 <ul class="list-disc list-inside space-y-1 text-xs text-zinc-400 pl-2">
-                    <li><b>Partitioning:</b> Pick <i>Erase Disk</i>, <i>Dual-Boot</i> (with storage slider), or <i>Manual Partitioning</i> via KDE Partition Manager.</li>
-                    <li><b>Bootloader:</b> Choose between <i>Limine</i> (fast modern EFI), <i>GRUB</i> (universal dual-boot with Windows auto-detect), or <i>systemd-boot</i>.</li>
-                    <li><b>Filesystem:</b> Select <i>Btrfs</i> (recommended, auto-creates @, @home, @snapshots subvolumes with ZSTD compression) or <i>Ext4</i>.</li>
+                    <li><b>Target Edition:</b> Choose between <i>GUI Desktop Edition</i> (Wayland/Labwc) or <i>CLI Server Edition</i>.</li>
+                    <li><b>Automatic Storage Partitioning:</b> Auto-formats NVMe/eMMC/SATA drives with GPT, creates 512 MB ESP, and installs Ext4 rootfs.</li>
+                    <li><b>Dual-Boot Bootloader:</b> Automatically deploys hybrid UEFI and BIOS MBR GRUB loaders.</li>
                 </ul>
             </div>
 

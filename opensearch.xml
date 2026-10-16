@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Lycoris Search</ShortName>
+  <Description>Lycoris Sovereign Anti-Telemetry Search Engine for HiganveinOS</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/svg+xml">https://higanvein.pages.dev/favicon.svg</Image>
+  <Url type="text/html" template="https://higanvein.pages.dev/search.html?q={searchTerms}"/>
+  <Url type="application/x-suggestions+json" template="https://higanvein.pages.dev/api/suggest?q={searchTerms}"/>
+  <Developer>Yu Dyan (HiganveinOS)</Developer>
+  <Attribution>Zero Telemetry Web Protocol</Attribution>
+  <SyndicationRight>open</SyndicationRight>
+  <AdultContent>false</AdultContent>
+  <Language>en-us</Language>
+  <OutputEncoding>UTF-8</OutputEncoding>
+</OpenSearchDescription>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lycoris Search — Sovereign Web</title>
+    <meta name="description" content="Lycoris Sovereign Anti-Telemetry Web Search Engine for HiganveinOS. Pure Web, Zero Ads, and Zero Tracking.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="search" type="application/opensearchdescription+xml" title="Lycoris Search" href="/opensearch.xml">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c060d; color: #f5e6ed; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .spider-glow { filter: drop-shadow(0 0 25px rgba(225, 29, 72, 0.45)); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rose-600 selection:text-white">
+    <!-- Header -->
+    <header class="border-b border-zinc-900/80 bg-zinc-950/80 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <a href="index.html" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-rose-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-rose-950/50">L</div>
+                <span class="text-base font-bold tracking-tight text-white">Lycoris <span class="text-rose-500 font-mono text-xs">Search</span></span>
+            </a>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-mono text-zinc-400">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Zero Telemetry</span>
+            </span>
+            <a href="browser.html" class="text-rose-400 hover:text-rose-300">Lycoris Browser &rarr;</a>
+        </div>
+    </header>
+
+    <!-- Main Search Interface -->
+    <main class="max-w-3xl mx-auto px-6 py-16 flex-grow flex flex-col justify-center items-center w-full space-y-8">
+        <!-- Spider Lily Emblem -->
+        <div class="spider-glow transition-transform hover:scale-105 duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="96" height="96">
+                <defs>
+                    <radialGradient id="lycoris-core-glow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#e11d48" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#0c060d" stop-opacity="0"/>
+                    </radialGradient>
+                    <linearGradient id="spider-petal" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#fda4af"/>
+                        <stop offset="40%" stop-color="#e11d48"/>
+                        <stop offset="100%" stop-color="#881337"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="64" cy="64" r="56" fill="url(#lycoris-core-glow)"/>
+                <g transform="translate(64, 68)">
+                    <circle cx="0" cy="-6" r="4.5" fill="#f43f5e"/>
+                    <path d="M 0 -6 Q -15 -35 -40 -40 Q -35 -30 -10 -15" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="-40" cy="-40" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q -25 -20 -48 -15 Q -38 -10 -12 -5" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="-48" cy="-15" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q -10 -45 -18 -55 Q -10 -40 -4 -18" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="-18" cy="-55" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q 10 -45 18 -55 Q 10 -40 4 -18" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="18" cy="-55" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q 15 -35 40 -40 Q 35 -30 10 -15" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="40" cy="-40" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q 25 -20 48 -15 Q 38 -10 12 -5" fill="none" stroke="url(#spider-petal)" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="48" cy="-15" r="2.5" fill="#fca5a5"/>
+                    <path d="M 0 -6 Q -8 15 -14 26 Q -4 18 0 0" fill="url(#spider-petal)"/>
+                    <path d="M 0 -6 Q 8 15 14 26 Q 4 18 0 0" fill="url(#spider-petal)"/>
+                    <path d="M 0 0 L 0 35" stroke="#e11d48" stroke-width="3" stroke-linecap="round"/>
+                </g>
+            </svg>
+        </div>
+
+        <div class="text-center space-y-1">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+                Lycoris <span class="text-rose-500">Search</span>
+            </h1>
+            <p class="text-zinc-400 text-xs font-mono">Sovereign Decentralized Web Crawler &amp; Query Engine</p>
+        </div>
+
+        <!-- Search Form -->
+        <form id="lycoris-form" onsubmit="executeSearch(event)" class="w-full space-y-4">
+            <div class="relative w-full">
+                <input 
+                    type="text" 
+                    id="search-query" 
+                    placeholder="Search the web with zero telemetry or enter URL..."
+                    autofocus
+                    autocomplete="off"
+                    class="w-full pl-12 pr-24 py-4 rounded-2xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-zinc-500 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/30 text-sm md:text-base shadow-2xl transition"
+                >
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 text-lg">
+                    🔍
+                </div>
+                <button 
+                    type="submit" 
+                    class="absolute right-3 top-1/2 -translate-y-1/2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-md shadow-rose-950/50"
+                >
+                    Search
+                </button>
+            </div>
+
+            <!-- Backend Engine Switcher -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-zinc-400 pt-1">
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-white transition">
+                    <input type="radio" name="backend" value="pureweb" checked class="accent-rose-500">
+                    <span>Google Pure Web (<b class="text-rose-400">udm=14</b> Anti-AI/Ads)</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-white transition">
+                    <input type="radio" name="backend" value="searx" class="accent-rose-500">
+                    <span>SearXNG (Decentralized)</span>
+                </label>
+                <label class="flex items-center gap-1.5 cursor-pointer hover:text-white transition">
+                    <input type="radio" name="backend" value="brave" class="accent-rose-500">
+                    <span>Brave Search</span>
+                </label>
+            </div>
+        </form>
+
+        <!-- Quick Protocol Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-6 pt-6 text-[11px] font-mono text-zinc-500 border-t border-zinc-900/80 w-full">
+            <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>NO PROFILING COOKIES</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>NO IP LOGGING</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>OPENSEARCH READY</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-900/80 bg-zinc-950 py-6 text-center text-xs text-zinc-500 px-6 font-mono">
+        <p>&copy; 2026 Lycoris Search Project. Engineered by Yu Dyan for HiganveinOS.</p>
+    </footer>
+
+    <script>
+        function executeSearch(e) {
+            e.preventDefault();
+            const query = document.getElementById('search-query').value.trim();
+            if (!query) return;
+
+            // Direct URL Check
+            if (query.startsWith('http://') || query.startsWith('https://')) {
+                window.location.href = query;
+                return;
+            }
+            if (query.includes('.') && !query.includes(' ')) {
+                window.location.href = 'https://' + query;
+                return;
+            }
+
+            const backend = document.querySelector('input[name="backend"]:checked').value;
+            let targetUrl = '';
+
+            if (backend === 'pureweb') {
+                targetUrl = 'https://www.google.com/search?q=' + encodeURIComponent(query) + '&udm=14';
+            } else if (backend === 'searx') {
+                targetUrl = 'https://searx.be/search?q=' + encodeURIComponent(query);
+            } else if (backend === 'brave') {
+                targetUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(query);
+            }
+
+            window.location.href = targetUrl;
+        }
+
+        // Auto-run if accessed via ?q=
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const q = urlParams.get('q');
+            if (q) {
+                document.getElementById('search-query').value = q;
+                executeSearch(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

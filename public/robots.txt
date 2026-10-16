@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://higanvein.pages.dev/sitemap.xml

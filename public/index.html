@@ -121,7 +121,7 @@
                     Download Flagship GUI (v1.0)
                 </a>
                 <a href="#downloads" class="w-full sm:w-auto px-8 py-4 rounded-full bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 hover:border-zinc-700 font-semibold text-sm md:text-base transition">
-                    View All 6 Editions &darr;
+                    View Dual Sovereign Editions &darr;
                 </a>
             </div>
 
@@ -151,124 +151,69 @@
                         <h2 class="text-2xl md:text-3xl font-extrabold text-white">Choose Your Architecture</h2>
                     </div>
                     <p class="text-xs text-zinc-400 max-w-md">
-                        Flagship and Core editions are verified Stable v1.0. Non-systemd modular inits are in active lab testing for Phase 2.
+                        HiganveinOS is consolidated into two sovereign release editions: <b>Void Linux (Sovereign)</b> and <b>Arch Linux (Flagship)</b> with Unified GUI & CLI hybrid ISOs.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- 1. Systemd Flagship GUI -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between border-red-900/40 relative overflow-hidden group">
-                        <div class="absolute -right-12 -top-12 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 1. Sovereign Void Linux Edition -->
+                    <div class="card-firefox p-8 rounded-3xl flex flex-col justify-between border-red-600/50 bg-gradient-to-b from-zinc-900/90 to-zinc-950 relative overflow-hidden group shadow-2xl">
+                        <div class="absolute -right-12 -top-12 w-40 h-40 bg-red-600/20 rounded-full blur-3xl pointer-events-none"></div>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-white">Arch Edition (Flagship)</span>
-                                <span class="bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">Stable v1.0</span>
+                                <span class="font-extrabold text-xl text-white">Sovereign Void Linux</span>
+                                <span class="bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] font-mono px-3 py-1 rounded-full font-bold">Stable v1.0 · Recommended</span>
                             </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                CachyOS Linux kernel with BORE scheduler, Higanvein Unified Shell (Wayland/SDDM), HiganTerm, full GPU firmware microcode, and Vulkan gaming acceleration.
+                            <p class="text-zinc-300 text-sm leading-relaxed">
+                                Independent Void Linux core with pure Runit init stages. Powered by Linux 6.6 LTS, custom micro-initramfs, Wayland Labwc, HiganTerm, and a Native Rust installer.
                             </p>
+                            <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-mono">
+                                <div class="p-2.5 rounded-xl bg-zinc-950/80 border border-zinc-800 text-zinc-300">
+                                    <span class="text-zinc-500 block text-[10px]">INIT &amp; KERNEL</span>
+                                    <span>Runit · Linux 6.6 LTS</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-zinc-950/80 border border-zinc-800 text-zinc-300">
+                                    <span class="text-zinc-500 block text-[10px]">IDLE MEMORY</span>
+                                    <span class="text-emerald-400 font-bold">~180 MiB RAM</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~2.8 GB · Systemd</span>
-                            <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-2026.09.20-x86_64.iso" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-md shadow-red-950/40">
+                            <span class="text-xs font-mono text-zinc-400">800 MB · Unified Hybrid ISO</span>
+                            <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-red-950/50">
                                 Download ISO
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
                         </div>
                     </div>
 
-                    <!-- 2. Core Server / CLI -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between group">
+                    <!-- 2. Arch Linux Flagship Edition -->
+                    <div class="card-firefox p-8 rounded-3xl flex flex-col justify-between border-zinc-800 bg-zinc-900/60 relative overflow-hidden group shadow-2xl">
                         <div class="space-y-4">
                             <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-white">Core CLI / Server</span>
-                                <span class="bg-emerald-950 text-emerald-400 border border-emerald-800/60 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">Stable v1.0</span>
+                                <span class="font-extrabold text-xl text-white">Arch Linux Edition</span>
+                                <span class="bg-emerald-950 text-emerald-400 border border-emerald-800/60 text-[10px] font-mono px-3 py-1 rounded-full font-bold">Stable v1.0 · Performance</span>
                             </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                Ultra-lean headless base for homelabs and development servers. ~316 MiB cold idle RAM, Fish shell, native paru helper, and bundled AI/Cyber toolsets.
+                            <p class="text-zinc-300 text-sm leading-relaxed">
+                                Bleeding-edge Arch rolling release base with CachyOS BORE optimized kernel, Higanvein Unified Shell, full GPU acceleration, and dual GUI/CLI boot targets.
                             </p>
+                            <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-mono">
+                                <div class="p-2.5 rounded-xl bg-zinc-950/80 border border-zinc-800 text-zinc-300">
+                                    <span class="text-zinc-500 block text-[10px]">INIT &amp; KERNEL</span>
+                                    <span>Systemd · CachyOS 7.x</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-zinc-950/80 border border-zinc-800 text-zinc-300">
+                                    <span class="text-zinc-500 block text-[10px]">TARGET USE</span>
+                                    <span class="text-red-400 font-bold">Gaming &amp; Heavy Workstation</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~1.5 GB · Systemd</span>
-                            <a href="https://downloads.sourceforge.net/project/higanvein/higanveinos-core-2026.09.20-x86_64.iso" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+                            <span class="text-xs font-mono text-zinc-400">~2.8 GB · Unified Hybrid ISO</span>
+                            <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition flex items-center gap-2">
                                 Download ISO
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
-                        </div>
-                    </div>
-
-                    <!-- 3. OpenRC Edition -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between opacity-85">
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-zinc-300">OpenRC Edition</span>
-                                <span class="bg-red-950/60 text-red-400 border border-red-800/40 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">Verified Stable</span>
-                            </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                True non-systemd sovereign architecture. Ultra-clean lifecycle powered by native OpenRC, Artix shims, zero background jitter, and ~220 MiB idle RAM footprint.
-                            </p>
-                        </div>
-                        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~1.5 GB · OpenRC</span>
-                            <span class="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                Verified & Tested
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- 4. Sovereign Void Linux Edition -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between border-red-900/40 relative overflow-hidden group">
-                        <div class="absolute -right-12 -top-12 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-white">Sovereign Void Linux</span>
-                                <span class="bg-red-600/20 text-red-400 border border-red-500/30 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">Stable v1.0</span>
-                            </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                Pure Void Linux / Runit base. Linux 6.6 LTS, custom micro-initramfs, Wayland Labwc desktop + CLI dual boot, Native Rust Installer, and ~180 MiB idle RAM footprint.
-                            </p>
-                        </div>
-                        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~800 MB · Runit</span>
-                            <span class="text-xs font-mono text-emerald-400 font-semibold flex items-center gap-1">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                Verified ISO Build
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- 5. Dinit Edition -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between opacity-85">
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-zinc-300">Dinit Edition</span>
-                                <span class="bg-zinc-800/80 text-zinc-400 border border-zinc-700/50 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">will be continued soon</span>
-                            </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                Modern fast C++ dependency graph service manager. Combines declarative dependency resolution with lean resource consumption.
-                            </p>
-                        </div>
-                        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~1.2 GB · Dinit</span>
-                            <span class="text-xs font-mono text-zinc-500 font-semibold">Phase 2 Target</span>
-                        </div>
-                    </div>
-
-                    <!-- 6. s6 Supervision Edition -->
-                    <div class="card-firefox p-6 rounded-2xl flex flex-col justify-between opacity-85">
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-lg text-zinc-300">s6 Edition</span>
-                                <span class="bg-zinc-800/80 text-zinc-400 border border-zinc-700/50 text-[10px] font-mono px-2.5 py-0.5 rounded-full font-bold">will be continued soon</span>
-                            </div>
-                            <p class="text-zinc-400 text-xs leading-relaxed">
-                                Skarnet high-reliability supervision suite with execline scripting. Fault-tolerant architecture engineered for zero-downtime nodes.
-                            </p>
-                        </div>
-                        <div class="pt-6 border-t border-zinc-800/80 mt-6 flex items-center justify-between">
-                            <span class="text-xs font-mono text-zinc-400">~1.2 GB · s6-rc</span>
-                            <span class="text-xs font-mono text-zinc-500 font-semibold">Phase 2 Target</span>
                         </div>
                     </div>
                 </div>

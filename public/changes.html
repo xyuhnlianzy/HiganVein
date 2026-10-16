@@ -54,18 +54,35 @@
         </div>
 
         <div class="space-y-6">
-            <!-- 2026.09.24 -->
+            <!-- 2026.10.16 -->
             <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
                 <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.09.24 (Global Mirrors &amp; AI Stack)</span>
+                    <span class="text-white font-bold text-base">Release 2026.10.16 (Sovereign Dual-Edition &amp; Native Rust Overhaul)</span>
                     <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
                 </div>
                 <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Global Mirror Migration (SourceForge):</b> Established official project mirror at SourceForge with high-speed global CDN routing, automatic resume capability, and direct download links across all editions.</li>
-                    <li><b class="text-zinc-200">Cybersecurity Arsenal &amp; BlackArch Integration:</b> Upgraded <code class="text-zinc-300">higan-bundle --cyber</code> with offensive security tools from Kali, ParrotOS, and BlackArch (Nmap, Wireshark, Metasploit, Ghidra, Bettercap, Proxychains). Added automated BlackArch repository integration via <code class="text-zinc-300">higan-bundle --blackarch</code> to access 2,800+ specialized packages.</li>
-                    <li><b class="text-zinc-200">Agentic AI Infrastructure Stack:</b> Introduced <code class="text-zinc-300">higan-bundle --ai-agent</code> enabling out-of-the-box local and cloud AI agent workflows. Packages Ollama daemon, 9Router multi-provider rate-limiting gateway, Hermes autonomous agent environment, and system health utility <code class="text-zinc-300">higan-ai-status</code>.</li>
-                    <li><b class="text-zinc-200">Core CLI v6 Integrity Fixes:</b> Resolved GPG time-warp clock issues via automated <code class="text-zinc-300">systemd-timesyncd</code> &amp; <code class="text-zinc-300">hwclock</code> target synchronization, initialized <code class="text-zinc-300">archlinux-keyring</code>, and cleaned bootloader menu branding to <code class="text-zinc-300">HiganveinOS Core</code> with ~316 MiB idle memory footprint.</li>
+                    <li><b class="text-zinc-200">Sovereign Void Linux Base &amp; Kernel 6.6 LTS:</b> Released non-systemd sovereign edition running pure Runit stages, tickless 1000Hz preemption kernel (6.6.158 LTS), custom micro-initramfs (3.4 MB), and an idle RAM footprint of ~180 MiB.</li>
+                    <li><b class="text-zinc-200">Unified Dual-Mode Bootloader (One ISO per Edition):</b> Both Arch and Void variants now pack GUI Desktop (Wayland / Labwc / Higanvein-Shell) and CLI Pure Console modes into a single unified hybrid ISO, selectable directly at the GRUB / Syslinux bootloader menu.</li>
+                    <li><b class="text-zinc-200">Native Rust Installer (higan-installer):</b> Rebuilt core disk installer in pure native Rust (419 KB static binary, &lt;2 MB RAM), replacing legacy Python interpreters and saving memory on potato hardware. Added automatic NVMe, eMMC, SATA SSD, and VirtIO detection with hybrid BIOS/UEFI GRUB generation.</li>
+                    <li><b class="text-zinc-200">Full Hardware GPU &amp; Acceleration Stack:</b> Injected signed firmware microcode blobs for AMD Radeon RX (RDNA 1–4, Polaris, Vega), NVIDIA GeForce GTX/RTX (Maxwell to Blackwell), and Intel Arc/Xe (GuC/HuC). Full Vulkan userspace drivers (<code class="text-zinc-300">mesa-vulkan-nouveau/NVK</code>, <code class="text-zinc-300">radv</code>, <code class="text-zinc-300">anv</code>) and VA-API hardware acceleration out of the box.</li>
+                    <li><b class="text-zinc-200">HiganTerm (Ptyxis Rebranding) &amp; Wayland Desktop Stack:</b> Adopted GNOME Ptyxis rebranded as <code class="text-zinc-300">HiganTerm</code> with custom Spider Lily crimson palette (<code class="text-zinc-300">#0b070f</code>, <code class="text-zinc-300">#e11d48</code>). Integrated <code class="text-zinc-300">higan-lock</code> (ext-session-lock-v1), <code class="text-zinc-300">higan-shot</code> screenshot suite (grim + slurp), Thunar file manager, brightnessctl backlight, and PipeWire audio Fn-key bindings.</li>
+                    <li><b class="text-zinc-200">Universal higan-bundle Architecture:</b> Refactored <code class="text-zinc-300">higan-bundle</code> to run seamlessly across both Void Linux (<code class="text-zinc-300">hein</code> / <code class="text-zinc-300">xbps</code> + <code class="text-zinc-300">runit</code>) and Arch Linux (<code class="text-zinc-300">pacman</code> + <code class="text-zinc-300">systemd</code>) for Gamer, Dev, Ricer, Cyber, and Agentic AI stacks.</li>
                 </ul>
+            </div>
+
+            <!-- 2026.09.24 -->
+            <div class="flex gap-4">
+                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
+                <div class="pb-8">
+                    <span class="text-xs text-zinc-500 font-mono">2026.09.24</span>
+                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.24 (Global Mirrors &amp; AI Stack)</span>
+                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
+                        <li>Global Mirror Migration (SourceForge) with high-speed CDN routing</li>
+                        <li>Cybersecurity Arsenal &amp; BlackArch Integration (2,800+ specialized packages)</li>
+                        <li>Agentic AI Infrastructure Stack (Ollama, Hermes Agent, 9Router)</li>
+                        <li>Core CLI v6 Integrity Fixes and systemd-timesyncd clock stabilization</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- 2026.09.23 -->

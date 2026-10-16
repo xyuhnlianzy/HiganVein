@@ -157,12 +157,12 @@
             const backend = document.querySelector('input[name="backend"]:checked').value;
             let targetUrl = '';
 
-            if (backend === 'pureweb') {
-                targetUrl = 'https://www.google.com/search?q=' + encodeURIComponent(query) + '&udm=14';
-            } else if (backend === 'searx') {
+            if (backend === 'searx') {
                 targetUrl = 'https://searx.be/search?q=' + encodeURIComponent(query);
             } else if (backend === 'brave') {
                 targetUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(query);
+            } else {
+                targetUrl = 'https://www.google.com/search?q=' + encodeURIComponent(query) + '&udm=14';
             }
 
             window.location.href = targetUrl;

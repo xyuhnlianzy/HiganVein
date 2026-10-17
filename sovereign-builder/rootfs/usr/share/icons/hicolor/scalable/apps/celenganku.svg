@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="celengan-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0b070f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb7185"/>
+      <stop offset="50%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </linearGradient>
+    <linearGradient id="coin-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="60%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Glow & Base Plate -->
+  <rect width="128" height="128" rx="28" fill="#120a17"/>
+  <rect width="128" height="128" rx="28" fill="none" stroke="#271b2e" stroke-width="2"/>
+  <circle cx="64" cy="64" r="54" fill="url(#celengan-glow)"/>
+
+  <!-- Gold Coin Dropping In -->
+  <ellipse cx="64" cy="30" rx="14" ry="7" fill="url(#coin-grad)"/>
+  <ellipse cx="64" cy="27" rx="14" ry="7" fill="#fde047"/>
+  <path d="M 50 27 L 50 30 A 14 7 0 0 0 78 30 L 78 27 Z" fill="url(#coin-grad)"/>
+
+  <!-- Piggy Bank Body -->
+  <ellipse cx="64" cy="74" rx="40" ry="32" fill="url(#body-grad)"/>
+
+  <!-- Snout -->
+  <ellipse cx="26" cy="74" rx="10" ry="14" fill="#fda4af"/>
+  <ellipse cx="24" cy="71" rx="2" ry="3" fill="#881337"/>
+  <ellipse cx="24" cy="77" rx="2" ry="3" fill="#881337"/>
+
+  <!-- Ear -->
+  <path d="M 44 48 L 56 46 L 50 58 Z" fill="#fda4af"/>
+
+  <!-- Eye -->
+  <circle cx="42" cy="65" r="3.5" fill="#0b070f"/>
+  <circle cx="43" cy="64" r="1.2" fill="#ffffff"/>
+
+  <!-- Legs -->
+  <rect x="38" y="98" width="10" height="12" rx="4" fill="#be123c"/>
+  <rect x="78" y="98" width="10" height="12" rx="4" fill="#be123c"/>
+
+  <!-- Coin Slot -->
+  <rect x="52" y="44" width="24" height="4" rx="2" fill="#0b070f"/>
+
+  <!-- Cute Tail -->
+  <path d="M 102 70 Q 112 66 108 76 Q 104 84 112 80" fill="none" stroke="#fda4af" stroke-width="3" stroke-linecap="round"/>
+</svg>

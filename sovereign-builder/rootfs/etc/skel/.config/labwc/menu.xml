@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<openbox_menu>
+  <menu id="root-menu" label="HiganveinOS">
+    <item label="Terminal (HiganTerm)"><action name="Execute" command="ptyxis"/></item>
+    <item label="Files (Thunar)"><action name="Execute" command="thunar"/></item>
+    <item label="Celenganku"><action name="Execute" command="celenganku"/></item>
+    <item label="Profile Bundles"><action name="Execute" command="ptyxis -- sudo higan-bundle"/></item>
+    <item label="Lycoris Browser"><action name="Execute" command="lycoris"/></item>
+    <item label="Take Screenshot"><action name="Execute" command="higan-shot"/></item>
+    <item label="System Installer"><action name="Execute" command="ptyxis -- sudo higan-installer"/></item>
+    <item label="Lock Screen"><action name="Execute" command="higan-lock"/></item>
+    <separator/>
+    <item label="Reboot"><action name="Execute" command="sudo reboot"/></item>
+    <item label="Power Off"><action name="Execute" command="sudo poweroff"/></item>
+  </menu>
+</openbox_menu>

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Celenganku
+GenericName=Savings & Goal Tracker
+Comment=Catat tabungan target celengan mandiri dengan zero telemetry
+Exec=celenganku
+Icon=celenganku
+Terminal=false
+Categories=Office;Finance;Utility;
+Keywords=celengan;tabungan;target;money;finance;saving;
+StartupNotify=true

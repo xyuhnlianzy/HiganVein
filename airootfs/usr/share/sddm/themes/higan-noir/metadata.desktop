@@ -1,0 +1,8 @@
+[General]
+type=sync
+name=higan-noir
+description=Tech-Noir Spider Lily Minimal Login Theme for HiganveinOS
+author=Yu Dyan
+version=1.0
+website=https://higanvein.pages.dev
+main=Main.qml

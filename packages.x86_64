@@ -24,13 +24,17 @@ cava
 git
 networkmanager
 
-# --- Desktop Environment (Replaced with Native Higanvein Unified Shell) ---
-# plasma-meta
-# sddm
+# --- Display Manager & Wayland Stack ---
+sddm
 wayland
 wayland-protocols
 gtk3
 cairo
+grim
+slurp
+wl-clipboard
+brightnessctl
+swaylock
 pam
 libxkbcommon
 xdg-utils
@@ -102,8 +106,12 @@ vulkan-radeon
 lib32-vulkan-radeon
 vulkan-intel
 lib32-vulkan-intel
+vulkan-nouveau
+lib32-vulkan-nouveau
 intel-media-driver
 libva-intel-driver
+libva-mesa-driver
+lib32-libva-mesa-driver
 egl-wayland
 
 # --- Windows Compatibility Layer ---

@@ -148,7 +148,7 @@ class InstallWorker(QThread):
             timezone = self.config['timezone']
             install_mode = self.config['install_mode']
             autologin = self.config.get('autologin', True)
-            init_choice = self.config.get('init_system', 'openrc').lower()
+            init_choice = "systemd"
             bootloader = self.config.get('bootloader', 'grub').lower()
 
             def log(msg):
@@ -363,6 +363,7 @@ class InstallWorker(QThread):
                 subprocess.run(["arch-chroot", target, "systemctl", "enable", "acpid.service"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "systemctl", "enable", "bluetooth.service"], stderr=subprocess.DEVNULL)
                 subprocess.run(["arch-chroot", target, "systemctl", "enable", "systemd-timesyncd.service"], stderr=subprocess.DEVNULL)
+                subprocess.run(["arch-chroot", target, "systemctl", "enable", "display-manager.service"], stderr=subprocess.DEVNULL)
             elif init_choice == "openrc":
                 # Artix service names are case-sensitive. Keep target GUI bootable.
                 subprocess.run(["arch-chroot", target, "rc-update", "add", "NetworkManager", "default"], stderr=subprocess.DEVNULL)
@@ -434,13 +435,13 @@ class InstallWorker(QThread):
                 f.write(f"{username} ALL=(ALL) ALL\n")
             os.chmod(sudoers, 0o440)
 
-            lightdm_conf = f"{target}/etc/lightdm/lightdm.conf.d/20-autologin.conf"
+            sddm_auto = f"{target}/etc/sddm.conf.d/autologin.conf"
             if autologin:
-                os.makedirs(os.path.dirname(lightdm_conf), exist_ok=True)
-                with open(lightdm_conf, "w") as f:
-                    f.write(f"[Seat:*]\nautologin-user={username}\nautologin-user-timeout=0\nuser-session=xfce\ngreeter-session=lightdm-gtk-greeter\n")
-            elif os.path.exists(lightdm_conf):
-                os.remove(lightdm_conf)
+                os.makedirs(os.path.dirname(sddm_auto), exist_ok=True)
+                with open(sddm_auto, "w") as f:
+                    f.write(f"[Autologin]\nUser={username}\nSession=higanvein-shell.desktop\nRelogin=false\n")
+            elif os.path.exists(sddm_auto):
+                os.remove(sddm_auto)
 
             # ── 1. GENERATE KERNEL & INITRAMFS FIRST ──
             self.current_pct = 85
@@ -535,24 +536,12 @@ fallback_options="-S autodetect"
             # ── 2. INSTALL BOOTLOADER ──
             self.current_pct = 92
             bootloader = self.config.get('bootloader', 'limine')
-            init_choice = self.config.get('init_system', 'systemd')
+            init_choice = "systemd"
             self.current_msg = f"Installing bootloader ({bootloader.upper()})..."
-            log(f"> Installing chosen bootloader: {bootloader.upper()} | Init: {init_choice.upper()}...")
+            log(f"> Installing chosen bootloader: {bootloader.upper()} | Init: SYSTEMD (Native)...")
 
-            # Phase 2 Init System Hook
+            # Native SystemD - clean standard cmdline
             init_cmdline = ""
-            if init_choice == "openrc":
-                init_cmdline = "init=/usr/bin/openrc-init "
-                log("> Phase 2: OpenRC init hook registered in kernel cmdline.")
-            elif init_choice == "runit":
-                init_cmdline = "init=/usr/bin/runit-init "
-                log("> Phase 2: Runit init hook registered in kernel cmdline.")
-            elif init_choice == "dinit":
-                init_cmdline = "init=/usr/bin/dinit "
-                log("> Phase 2: Dinit init hook registered in kernel cmdline.")
-            elif init_choice == "s6":
-                init_cmdline = "init=/etc/s6-init.sh "
-                log("> Phase 2: s6 init hook registered in kernel cmdline.")
 
             root_uuid = subprocess.run(["blkid", "-s", "UUID", "-o", "value", root_part], capture_output=True, text=True).stdout.strip()
 
@@ -1593,9 +1582,9 @@ class HiganInstallerApp(QWidget):
         lbl_i.setStyleSheet("color: #52525b; font-size: 8pt; font-weight: 600; letter-spacing: 1px;")
         col_i.addWidget(lbl_i)
         self.combo_init = QComboBox()
-        self.combo_init.addItem("OpenRC (This edition)")
+        self.combo_init.addItem("Systemd (Native Flagship)")
         self.combo_init.setEnabled(False)
-        self.combo_init.setToolTip("This ISO installs its matching OpenRC stack only.")
+        self.combo_init.setToolTip("HiganveinOS Flagship Edition is powered natively by SystemD.")
         col_i.addWidget(self.combo_init)
         drv_row.addLayout(col_i, stretch=2)
         l.addLayout(drv_row)

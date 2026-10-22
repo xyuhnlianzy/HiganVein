@@ -1,3 +1,10 @@
-#!/usr/bin/env bash
-# Higanvein Unified Shell Direct Boot Wrapper
-exec /usr/local/bin/higanvein-shell
+#!/bin/sh
+# HiganveinOS Standalone Wayland Session Launcher
+export XDG_CURRENT_DESKTOP="Higanvein"
+export XDG_SESSION_TYPE="wayland"
+
+if [ -x /usr/local/bin/higanvein-shell ]; then
+    exec /usr/local/bin/higanvein-shell
+elif [ -x /usr/local/bin/higan-compositor ]; then
+    exec /usr/local/bin/higan-compositor
+fi

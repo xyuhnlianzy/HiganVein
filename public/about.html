@@ -1,130 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About — HiganveinOS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
-    </style>
+    <title>About &amp; Acknowledgments — HiganveinOS</title>
+    <meta name="description" content="Design goals, upstream acknowledgments, and development context of the HiganveinOS project.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
-    <!-- Navbar -->
-    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
-                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
-            </div>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
-                <a href="index.html" class="hover:text-white transition">Home</a>
-                <a href="features.html" class="hover:text-white transition">Features</a>
-                <a href="bundles.html" class="hover:text-white transition">Bundles</a>
-                <a href="changes.html" class="hover:text-white transition">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="about.html" class="text-white font-semibold">About</a>
-            </nav>
-            <div class="hidden md:block">
-                <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
-                    Download ISO
-                </a>
-            </div>
-            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
-            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
-            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
-            <a href="bundles.html" class="block text-zinc-400 hover:text-white py-1">Bundles</a>
-            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
-            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
-            <a href="about.html" class="block text-white font-semibold py-1">About</a>
-            <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">H</span>
+                <span>Higanvein Linux</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#downloads">Download</a></li>
+                <li><a href="features.html">Architecture</a></li>
+                <li><a href="bundles.html">Bundles</a></li>
+                <li><a href="changes.html">News &amp; Changes</a></li>
+                <li><a href="docs.html">Handbook</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-3xl mx-auto px-6 py-14 flex-grow space-y-8 text-zinc-300">
-        <div class="space-y-2">
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">About the Project</h1>
-            <p class="text-zinc-400 text-sm">Design goals, upstream acknowledgments, and development context.</p>
-        </div>
+    <div class="main-wrapper" style="max-width: 880px;">
+        <h1 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px;">About the HiganveinOS Project</h1>
+        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 24px;">
+            HiganveinOS is an independent open-source Linux distribution project led by <strong>Yu Dyan</strong>.
+        </p>
 
-        <div class="space-y-4 text-sm leading-relaxed">
-            <h2 class="text-white font-bold text-lg">Project Background</h2>
-            <p>
-                HiganveinOS is an independent operating system project created by <b>Yu Dyan</b>. The project is engineered around sovereign computing:
-                eliminating telemetry, stripping unnecessary daemon bloat, minimizing RAM usage via native Rust tools (hein, higan-installer),
-                and delivering two hardened editions: <b>Sovereign Void Linux</b> (runit, ~180 MiB idle RAM) and <b>Arch Linux</b> (CachyOS BORE kernel, Higanvein Unified Shell).
-            </p>
-            <p>
-                Rather than bundling dozens of default applications or marketing gimmicks, HiganveinOS focuses strictly on 
-                system-level tuning: BORE CPU scheduler, earlyoom memory protection, ZRAM swap, Wine binary associations, and hardware firmware.
-            </p>
-        </div>
+        <hr class="divider">
 
-        <div class="space-y-4 text-sm leading-relaxed border-t border-zinc-800/80 pt-6">
-            <h2 class="text-white font-bold text-lg">Upstream Acknowledgments</h2>
-            <p class="text-zinc-400">HiganveinOS relies on the work of foundational open-source projects:</p>
-            <ul class="space-y-2 list-disc list-inside text-zinc-400">
-                <li><b class="text-white">Void Linux</b> — Independent x86_64 base, XBPS package management, and pure runit initialization supervision.</li>
-                <li><b class="text-white">Arch Linux</b> — Bleeding-edge rolling release package ecosystem, base tooling, and archiso framework.</li>
-                <li><b class="text-white">CachyOS</b> — Upstream performance patches, BORE CPU scheduler, and compiler optimizations.</li>
-                <li><b class="text-white">Hein Package Engine</b> — Native Rust wrapper around XBPS providing clean syntax, colorized logging, and cache management.</li>
-                <li><b class="text-white">Higan-Installer (Rust)</b> — Native zero-runtime disk installer engineered for potato hardware and reliable EFI/BIOS deployment.</li>
-                <li><b class="text-white">HiganTerm (GNOME Ptyxis)</b> — Container-ready modern Wayland terminal emulator with custom Tech-Noir Spider Lily palettes.</li>
-                <li><b class="text-white">Lycoris Browser</b> — WebKitGTK privacy-hardened browser with embedded ad/tracker sinkholes and aggressive malloc RAM trimming.</li>
-                <li><b class="text-white">Higanvein Unified Shell &amp; Labwc</b> — Sovereign Wayland desktop session, ext-session-lock screenlocker (higan-lock), and integrated hardware controls.</li>
-                <li><b class="text-white">Wine &amp; Valve Proton</b> — Windows application binary compatibility layer and DXVK/VKD3D Vulkan translation.</li>
-                <li><b class="text-white">Illia Miroshnichenko (ilyamiro)</b> — Creator of <a href="https://github.com/ilyamiro/serpantinum" target="_blank" class="text-red-400 hover:underline">Serpantinum Shell</a>, featured in the HiganveinOS Ricing suite.</li>
-            </ul>
-        </div>
+        <h2 class="section-title">Design Philosophy</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 14px; line-height: 1.7;">
+            The project was conceived around computing sovereignty: rejecting intrusive telemetry, removing heavy runtime dependencies, and optimizing low-spec hardware responsiveness. We maintain two release tracks:
+        </p>
+        <ul style="margin-left: 20px; margin-bottom: 24px; font-size: 14px; color: var(--text-muted); list-style-type: square; line-height: 1.7;">
+            <li><strong>Sovereign Void Linux:</strong> Pure runit service supervision, Linux 6.6 LTS, custom micro-initramfs, and an idle memory footprint of ~180 MiB RAM.</li>
+            <li><strong>Arch Linux Flagship:</strong> CachyOS BORE scheduler, Higanvein Unified Shell (GTK3/C), and complete development and gaming toolchains.</li>
+        </ul>
 
-        <!-- Special Thanks & Community Contributors -->
-        <div class="space-y-4 text-sm leading-relaxed border-t border-zinc-800/80 pt-6">
-            <h2 class="text-white font-bold text-lg">Special Thanks</h2>
-            <div class="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <div class="font-semibold text-white">Al-Fajri</div>
-                    <div class="text-xs text-zinc-400 mt-0.5">Feature Ideas: Native Windows App (.exe) support out-of-the-box, custom Bootloader Artwork, &amp; multi-OS partition preservation (Windows, macOS, BSD family, other Linux distros)</div>
-                </div>
-                <!-- Linked Social Icons -->
-                <div class="flex items-center gap-3 text-zinc-400">
-                    <!-- LinkedIn -->
-                    <a href="https://www.linkedin.com/in/muhammad-al-fajri-silmi-9a7a643a2/" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="p-2 rounded-lg bg-zinc-800/60 hover:bg-red-950 hover:text-red-400 transition border border-zinc-800">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c.92 0 1.67-.75 1.67-1.67 0-.92-.75-1.67-1.67-1.67-.92 0-1.67.75-1.67 1.67 0 .92.75 1.67 1.67 1.67m1.39 9.74v-8.37H5.07v8.37h2.78z"/></svg>
-                    </a>
-                    <!-- Threads -->
-                    <a href="https://threads.net/@mhfajri.silmi" target="_blank" rel="noopener noreferrer" title="Threads" class="p-2 rounded-lg bg-zinc-800/60 hover:bg-red-950 hover:text-red-400 transition border border-zinc-800">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.186 24C5.46 24 0 18.663 0 12.083 0 5.503 5.46.166 12.186.166c6.643 0 11.956 5.187 11.956 11.758 0 .53-.037 1.054-.108 1.569h-2.316c.058-.515.088-1.037.088-1.569 0-5.263-4.246-9.424-9.62-9.424-5.375 0-9.851 4.298-9.851 9.583 0 5.286 4.476 9.583 9.851 9.583 3.997 0 7.42-2.38 8.922-5.765l2.073 1.077C20.354 21.055 16.536 24 12.186 24zm2.148-7.518c-1.423 0-2.457-.862-2.457-2.051 0-1.19.98-2.023 2.457-2.023 1.08 0 1.957.388 2.378.966-.27 1.834-1.198 3.108-2.378 3.108zm2.464-5.215c-.655-.658-1.637-1.025-2.736-1.025-2.617 0-4.636 1.777-4.636 4.093 0 2.317 1.966 4.103 4.582 4.103 1.764 0 3.252-.89 3.992-2.372.483.743 1.258 1.187 2.217 1.187 1.637 0 2.87-1.282 2.87-2.977 0-3.354-2.827-5.918-6.386-5.918-4.218 0-7.545 3.11-7.545 7.18 0 4.07 3.327 7.18 7.545 7.18 2.766 0 5.21-1.34 6.368-3.414l-1.89-1.066c-.84 1.488-2.52 2.404-4.478 2.404-2.923 0-5.263-2.182-5.263-5.104 0-2.922 2.34-5.104 5.263-5.104 2.392 0 4.238 1.69 4.238 3.842 0 .914-.523 1.485-1.157 1.485-.634 0-1.024-.46-1.024-1.236v-3.766h-1.841v.794z"/></svg>
-                    </a>
-                    <!-- Instagram -->
-                    <a href="https://instagram.com/mhfajri.silmi" target="_blank" rel="noopener noreferrer" title="Instagram" class="p-2 rounded-lg bg-zinc-800/60 hover:bg-red-950 hover:text-red-400 transition border border-zinc-800">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                    </a>
-                    <!-- TikTok -->
-                    <a href="https://tiktok.com/@mhfajri.silmi" target="_blank" rel="noopener noreferrer" title="TikTok" class="p-2 rounded-lg bg-zinc-800/60 hover:bg-red-950 hover:text-red-400 transition border border-zinc-800">
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31 0 2.6.45 3.65 1.27 1.05.81 1.83 1.95 2.22 3.25 1.13.04 2.23.4 3.2.98.07.04.14.09.21.14v3.52c-.67-.22-1.38-.34-2.11-.34-1.07 0-2.08.3-2.94.83v7.71c0 3.7-3.01 6.7-6.72 6.7-3.71 0-6.72-3-6.72-6.7 0-3.5 2.69-6.38 6.14-6.68v3.42c-1.57.25-2.78 1.6-2.78 3.26 0 1.83 1.49 3.32 3.36 3.32 1.87 0 3.36-1.49 3.36-3.32V0h-0.61c-.32 0-.64.01-.96.02h-.04z"/></svg>
-                    </a>
-                </div>
+        <hr class="divider">
+
+        <h2 class="section-title">Upstream Acknowledgments</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 14px;">
+            HiganveinOS builds directly upon the work of several foundational open-source efforts:
+        </p>
+        <ul style="margin-left: 20px; margin-bottom: 24px; font-size: 13.5px; color: var(--text-muted); list-style-type: square; line-height: 1.8;">
+            <li><strong style="color: #fff;">Void Linux</strong> — Independent base, XBPS package management, and runit supervisor design.</li>
+            <li><strong style="color: #fff;">Arch Linux</strong> — Rolling distribution ecosystem, pacman toolchain, and archiso engine.</li>
+            <li><strong style="color: #fff;">CachyOS</strong> — Linux kernel performance patches and the BORE (Burst-Oriented Response Enhancer) CPU scheduler.</li>
+            <li><strong style="color: #fff;">hein</strong> — Native Rust wrapper around XBPS providing clean terminal interface and package caching.</li>
+            <li><strong style="color: #fff;">higan-installer</strong> — Native compiled Rust disk partitioner and EFI/BIOS bootloader configurator.</li>
+            <li><strong style="color: #fff;">Labwc &amp; Ptyxis</strong> — Lightweight Wayland stacking compositor and container-ready terminal emulator.</li>
+            <li><strong style="color: #fff;">WebKitGTK</strong> — The rendering foundation powering our low-RAM Lycoris web browser.</li>
+        </ul>
+
+        <hr class="divider">
+
+        <h2 class="section-title">Community &amp; Source Code</h2>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 12px;">
+            Development is organized openly across Git repositories:
+        </p>
+        <ul style="margin-left: 20px; font-size: 14px; color: var(--text-muted); list-style-type: square; line-height: 1.7;">
+            <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">github.com/xyuhnlianzy/HiganVein</a> — Operating system build trees and packages.</li>
+            <li><a href="https://discord.gg/HQANxjyfKx" target="_blank" rel="noopener noreferrer">Discord Server</a> — Technical discussions, testing, and feedback.</li>
+            <li><a href="https://sourceforge.net/projects/higanvein/files/" target="_blank" rel="noopener noreferrer">SourceForge Releases</a> — ISO download mirrors and SHA256 checksums.</li>
+        </ul>
+    </div>
+
+    <!-- Minimal Open Source Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                &copy; 2026 HiganveinOS Project. Developed by Yu Dyan. Released under open-source licenses.
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="changes.html">Changelog</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">Source Code</a>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
-        <div class="flex flex-wrap justify-center gap-6 text-zinc-400 mb-2"><a href="privacy.html" class="hover:text-white transition">Privacy Policy</a><a href="terms.html" class="hover:text-white transition">Terms <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>amp; Conditions</a><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" class="hover:text-white transition">Source Code</a></div><p><p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>copy; 2026 HiganveinOS Project. Zero Telemetry. Provided AS-IS.</p>
     </footer>
 
-    <script>
-        const btn = document.getElementById('menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>

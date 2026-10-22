@@ -1,429 +1,207 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HiganveinOS — Sovereign, Independent Linux Distribution</title>
-    <meta name="description" content="A sovereign, independent Linux distribution engineered with native Runit init, low-latency BORE scheduler, native Rust toolchains, and zero corporate telemetry. Built for technical sovereignty.">
-    
-    <!-- Design System Typography: Inter Variable + JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        void: {
-                            DEFAULT: '#0b070f',
-                            deep: '#060309',
-                            card: '#120b17',
-                            surface: '#18101f',
-                            border: 'rgba(255, 255, 255, 0.08)',
-                            subtle: 'rgba(255, 255, 255, 0.04)',
-                        },
-                        crimson: {
-                            DEFAULT: '#e11d48',
-                            hover: '#f43f5e',
-                            glow: 'rgba(225, 29, 72, 0.18)',
-                            dark: '#9f1239'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        :root {
-            --bg-canvas: #0b070f;
-            --bg-card: rgba(255, 255, 255, 0.025);
-            --border-subtle: rgba(255, 255, 255, 0.06);
-            --border-active: rgba(225, 29, 72, 0.35);
-            --crimson-accent: #e11d48;
-        }
-        
-        body {
-            background-color: var(--bg-canvas);
-            color: #d0d6e0;
-            font-feature-settings: "cv01", "ss03";
-            -webkit-font-smoothing: antialiased;
-        }
-        
-        /* Subtle radial ambient glow */
-        .ambient-glow {
-            background: 
-                radial-gradient(1000px 500px at 50% -50px, rgba(225, 29, 72, 0.12), transparent 70%),
-                radial-gradient(800px 400px at 80% 20%, rgba(159, 18, 57, 0.06), transparent 60%);
-        }
-
-        /* Precision engineered cards */
-        .spec-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .spec-card:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: var(--border-active);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 36px -12px rgba(225, 29, 72, 0.15);
-        }
-
-        /* Sleek scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b070f; }
-        ::-webkit-scrollbar-thumb { background: #261b2f; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #e11d48; }
-    </style>
+    <meta name="description" content="HiganveinOS is an independent, non-systemd Linux distribution based on Void Linux with runit supervision, low-RAM native Rust/C toolchains, and zero telemetry.">
+    <link rel="stylesheet" href="style.css">
     <link rel="search" type="application/opensearchdescription+xml" title="Lycoris Search" href="/opensearch.xml">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-crimson selection:text-white">
+<body>
 
-    <!-- Top Technical Banner -->
-    <aside class="border-b border-void-border bg-[#08040a] text-xs py-2 px-6 text-center text-zinc-400 flex items-center justify-center gap-2">
-        <span class="inline-block w-1.5 h-1.5 rounded-full bg-crimson animate-pulse" aria-hidden="true"></span>
-        <span class="font-mono text-zinc-300">HiganveinOS 2026.10 Sovereign Edition</span>
-        <span class="text-zinc-600">·</span>
-        <span class="hidden sm:inline text-zinc-400">Pure Runit Stages + Linux 6.6 LTS &amp; CachyOS BORE Kernel</span>
-        <a href="https://sourceforge.net/projects/higanvein/files/" target="_blank" rel="noopener noreferrer" class="text-crimson hover:text-crimson-hover font-semibold underline underline-offset-2 ml-1">Mirror Status &rarr;</a>
-    </aside>
-
-    <!-- Navigation Header -->
-    <header class="border-b border-void-border bg-[#0b070f]/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <a href="index.html" class="flex items-center gap-2.5 group focus:outline-none">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-crimson to-crimson-dark flex items-center justify-center text-white font-black text-sm shadow-md shadow-crimson/20 border border-crimson/30">H</div>
-                    <span class="text-base font-bold tracking-tight text-white group-hover:text-zinc-200 transition">Higanvein<span class="text-crimson">OS</span></span>
-                </a>
-            </div>
-
-            <!-- Nav Links -->
-            <nav class="hidden md:flex items-center space-x-7 text-xs font-medium text-zinc-400">
-                <a href="index.html" class="text-white font-semibold">Overview</a>
-                <a href="#editions" class="hover:text-white transition">Editions</a>
-                <a href="#lycoris" class="hover:text-white transition">Lycoris Browser</a>
-                <a href="features.html" class="hover:text-white transition">Architecture</a>
-                <a href="bundles.html" class="hover:text-white transition">Bundles</a>
-                <a href="changes.html" class="hover:text-white transition">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="search.html" class="hover:text-crimson transition text-zinc-300">Lycoris Search</a>
-            </nav>
-
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="https://discord.gg/HQANxjyfKx" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition" title="Discord Community">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-                </a>
-                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition" title="GitHub Repository">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                </a>
-                <a href="#editions" class="bg-crimson hover:bg-crimson-hover text-white px-4 py-2 rounded-lg font-semibold text-xs tracking-wide transition shadow-lg shadow-crimson/20 border border-crimson/50">
-                    Get ISO Image
-                </a>
-            </div>
-
-            <!-- Mobile Menu Toggle -->
-            <button id="mobile-toggle" class="md:hidden text-zinc-400 hover:text-white p-1">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-
-        <div id="mobile-dropdown" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-void-border bg-[#08040a] space-y-2 text-xs">
-            <a href="index.html" class="block text-white font-semibold py-1">Overview</a>
-            <a href="#editions" class="block text-zinc-400 hover:text-white py-1">Editions</a>
-            <a href="#lycoris" class="block text-zinc-400 hover:text-white py-1">Lycoris Browser</a>
-            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Architecture</a>
-            <a href="bundles.html" class="block text-zinc-400 hover:text-white py-1">Bundles</a>
-            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
-            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Documentation</a>
-            <a href="#editions" class="block text-center bg-crimson text-white py-2 rounded-md font-semibold mt-2">Get ISO Image</a>
+    <!-- Header Navigation (Void Linux Standard) -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">H</span>
+                <span>Higanvein Linux</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="#downloads">Download</a></li>
+                <li><a href="features.html">Architecture</a></li>
+                <li><a href="bundles.html">Bundles</a></li>
+                <li><a href="changes.html">News &amp; Changes</a></li>
+                <li><a href="docs.html">Handbook</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                <li><a href="https://discord.gg/HQANxjyfKx" target="_blank" rel="noopener noreferrer">Community</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Main Hero Section (Linear / Void Clean Professional Aesthetics) -->
-    <main class="flex-grow ambient-glow">
-        <section class="max-w-5xl mx-auto px-6 pt-20 pb-20 text-center space-y-8">
-            <div class="inline-flex items-center space-x-2 bg-void-surface border border-void-border px-3.5 py-1.5 rounded-full text-xs font-mono text-zinc-300">
-                <span class="w-2 h-2 rounded-full bg-crimson" aria-hidden="true"></span>
-                <span>ENGINEERED FOR SOVEREIGNTY · ZERO TELEMETRY · NATIVE TOOLCHAINS</span>
+    <div class="main-wrapper">
+        <!-- Hero Section (Clean 2-Column Split ala Void Linux) -->
+        <div class="hero-split">
+            <div class="logo-col">
+                <img src="logo.svg" alt="HiganveinOS Logo" width="160" height="160" onerror="this.onerror=null; this.src='favicon.svg';">
             </div>
-
-            <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-[1.05] max-w-4xl mx-auto">
-                The operating system that <span class="text-transparent bg-clip-text bg-gradient-to-r from-crimson via-rose-500 to-amber-500">respects your hardware</span> and your intelligence.
-            </h1>
-
-            <p class="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-                Void Linux and Arch Linux reimagined with native C and Rust cores, runit supervision, low-latency BORE scheduling, and an uncompromising anti-telemetry posture.
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                <a href="#editions" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-crimson hover:bg-crimson-hover text-white font-semibold text-sm transition duration-200 shadow-xl shadow-crimson/25 flex items-center justify-center gap-2 border border-crimson/50">
-                    <svg class="w-4 h-4 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Download Sovereign ISOs
-                </a>
-                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-void-card hover:bg-void-surface text-zinc-200 border border-void-border font-medium text-sm transition flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    Inspect Source Code
-                </a>
-            </div>
-
-            <!-- Precision Badges -->
-            <div class="pt-6 flex flex-wrap items-center justify-center gap-y-2 gap-x-8 text-xs font-mono text-zinc-400">
-                <span class="flex items-center gap-1.5">
-                    <span class="text-emerald-400">✓</span> Zero Telemetry Sinks (0.0.0.0)
-                </span>
-                <span class="flex items-center gap-1.5">
-                    <span class="text-emerald-400">✓</span> Native Rust Installer (< 2 MB RAM)
-                </span>
-                <span class="flex items-center gap-1.5">
-                    <span class="text-emerald-400">✓</span> Universal Hybrid Boot (CLI &amp; GUI)
-                </span>
-            </div>
-        </section>
-
-        <!-- Technical Specification Matrix (Void Style 2x3 Grid) -->
-        <section class="max-w-6xl mx-auto px-6 py-12 border-t border-void-border">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">INIT &amp; PROCESSES</div>
-                    <h3 class="text-base font-bold text-white">Pure Runit Supervision</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Deterministic, instant boot-up stages. Zero binary service logs, sub-second service daemon restarts, and non-systemd sovereign runtime on Void edition.
-                    </p>
-                </div>
-
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">KERNEL SCHEDULER</div>
-                    <h3 class="text-base font-bold text-white">BORE &amp; 6.6 LTS Kernels</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Burst-Oriented Response Enhancer on Arch for minimal desktop input jitter, paired with hardened Linux 6.6 LTS on Sovereign Void edition.
-                    </p>
-                </div>
-
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">NATIVE TOOLCHAINS</div>
-                    <h3 class="text-base font-bold text-white">Rust &amp; C Native Tooling</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Replaced bloat with native compiled binaries: <span class="font-mono text-zinc-200">hein</span> package wrapper, <span class="font-mono text-zinc-200">higan-installer</span> (Rust), and <span class="font-mono text-zinc-200">celenganku</span> (C).
-                    </p>
-                </div>
-
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">MEMORY DEFENSE</div>
-                    <h3 class="text-base font-bold text-white">ZRAM &amp; Low-Spec Tuning</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Automatic zstd compressed RAM swap (04-swap.sh) prevents OOM stalls, running happily on hardware from 2 GB up to multi-core workstations.
-                    </p>
-                </div>
-
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">GRAPHICS STACK</div>
-                    <h3 class="text-base font-bold text-white">Wayland Native &amp; GPU Blobs</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Labwc &amp; Higanvein-Shell with full GPU acceleration blobs out of the box: AMDGPU, Intel Iris/Arc, NVIDIA proprietary &amp; open modules.
-                    </p>
-                </div>
-
-                <div class="spec-card p-6 rounded-2xl space-y-3">
-                    <div class="text-xs font-mono font-bold text-crimson">UNIVERSAL BUNDLES</div>
-                    <h3 class="text-base font-bold text-white">Multi-Distro Profile Engine</h3>
-                    <p class="text-xs text-zinc-400 leading-relaxed">
-                        Universal <span class="font-mono text-zinc-200">higan-bundle</span> automatically detects your active distribution to deploy Gamer, Dev, Ricer, Cyber, or AI Agent environments.
-                    </p>
+            <div class="hero-content">
+                <h1>The Higanvein (Linux) distribution</h1>
+                <p>
+                    HiganveinOS is an independent, sovereign operating system designed for low-latency desktop responsiveness and complete privacy. Built on a non-systemd Void Linux core with pure <code>runit</code> service supervision, custom micro-initramfs, and native C/Rust userland utilities.
+                </p>
+                <p>
+                    Software packages are managed via XBPS and our native <code>hein</code> Rust wrapper. Memory footprint is strictly constrained to &lt;200 MiB idle RAM, with zero telemetry daemons and automated ZRAM compressed swap.
+                </p>
+                <div class="quick-links">
+                    <a href="#downloads">Get HiganveinOS &rarr;</a>
+                    <a href="docs.html">Installation Handbook &rarr;</a>
+                    <a href="changes.html">Release Changelog &rarr;</a>
+                    <a href="https://sourceforge.net/projects/higanvein/files/">SourceForge Mirrors &rarr;</a>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Editions / Downloads Section -->
-        <section id="editions" class="max-w-6xl mx-auto px-6 py-16 border-t border-void-border scroll-mt-16">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-                <div>
-                    <div class="text-xs font-mono font-bold text-crimson uppercase tracking-wider mb-1">OFFICIAL RELEASES</div>
-                    <h2 class="text-2xl md:text-3xl font-extrabold text-white">Choose Your Architecture</h2>
-                </div>
-                <p class="text-xs text-zinc-400 max-w-md">
-                    Each image is unified: one ISO boots into either a responsive Wayland desktop or ultra-lean CLI environment via bootloader menu flags.
+        <hr class="divider">
+
+        <!-- Technical 2x3 Grid (Core Engineering Principles ala Void Linux) -->
+        <div class="grid-2x3">
+            <div class="feature-cell">
+                <h3>Sovereign runit Core</h3>
+                <p>
+                    We use <a href="http://smarden.org/runit/">runit</a> as the default init system and process supervisor on the Sovereign edition. Fast, deterministic startup stages without complex binary logging daemons.
                 </p>
             </div>
+            <div class="feature-cell">
+                <h3>Native Toolchains in Rust &amp; C</h3>
+                <p>
+                    Core system utilities avoid heavy Python or Electron dependencies: <a href="https://github.com/xyuhnlianzy/HiganVein">higan-installer</a> (Rust), <code>hein</code> package wrapper (Rust), and <code>higan-lock</code>/<code>higan-shot</code> (Wayland C).
+                </p>
+            </div>
+            <div class="feature-cell">
+                <h3>Zero Telemetry Guarantee</h3>
+                <p>
+                    All corporate telemetry endpoints, crash reporters, and analytics domains are sinkholed directly to <code>0.0.0.0</code> in <code>/etc/hosts</code>. No telemetry daemons are installed or run in background.
+                </p>
+            </div>
+            <div class="feature-cell">
+                <h3>Low-Latency Kernel Tuning</h3>
+                <p>
+                    Offers verified Linux 6.6 LTS on Sovereign Void and CachyOS BORE (Burst-Oriented Response Enhancer) on the Arch edition, reducing input latency during heavy compilation workloads.
+                </p>
+            </div>
+            <div class="feature-cell">
+                <h3>Hardware Memory Defense</h3>
+                <p>
+                    Integrated ZRAM swap with zstd compression enabled during early userspace boot (<code>04-swap.sh</code>) paired with tuned earlyoom rules to prevent system freezes on low-spec hardware.
+                </p>
+            </div>
+            <div class="feature-cell">
+                <h3>Lycoris Web Platform</h3>
+                <p>
+                    Lightweight default browser compiled from native C, C++, Rust, and Zig over WebKitGTK. Consumes ~45-60 MB RAM at idle with built-in ad-blocking and native search routing.
+                </p>
+            </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 1. Sovereign Void Edition -->
-                <div class="spec-card p-8 rounded-2xl flex flex-col justify-between border-crimson/40 bg-gradient-to-b from-[#160c1c] to-[#0d0712] relative overflow-hidden">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="font-extrabold text-xl text-white">Sovereign Void Edition</span>
-                            <span class="bg-crimson/20 text-crimson border border-crimson/40 text-[10px] font-mono px-3 py-1 rounded-full font-bold">Recommended · 800 MB</span>
-                        </div>
-                        <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-                            Zero-systemd sovereign Void Linux core supervised by pure runit stages. Bundled with Linux 6.6 LTS, custom micro-initramfs, Wayland Labwc, HiganTerm, and Native Rust installer.
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-mono">
-                            <div class="p-3 rounded-xl bg-void-card border border-void-border text-zinc-300">
-                                <span class="text-zinc-500 block text-[10px] uppercase">Init &amp; Kernel</span>
-                                <span class="text-white font-semibold">Runit · Linux 6.6 LTS</span>
-                            </div>
-                            <div class="p-3 rounded-xl bg-void-card border border-void-border text-zinc-300">
-                                <span class="text-zinc-500 block text-[10px] uppercase">Memory Idle</span>
-                                <span class="text-emerald-400 font-bold">~180 MiB RAM</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-6 border-t border-void-border mt-6 flex items-center justify-between">
-                        <span class="text-xs font-mono text-zinc-400">800 MB · Hybrid CLI/GUI</span>
-                        <a href="https://sourceforge.net/projects/higanvein/files/" target="_blank" rel="noopener noreferrer" class="bg-crimson hover:bg-crimson-hover text-white font-semibold text-xs px-5 py-2.5 rounded-lg transition flex items-center gap-2 shadow-lg shadow-crimson/30">
-                            Download ISO
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                    </div>
+        <hr class="divider">
+
+        <!-- Download & Architecture Releases (Arch/Void Style Clean Cards) -->
+        <h2 id="downloads" class="section-title">
+            <span>Download Installation Images</span>
+            <span style="font-size: 13px; font-weight: normal; color: var(--text-dim);">Release 2026.10</span>
+        </h2>
+
+        <div class="download-grid">
+            <!-- Sovereign Void Edition -->
+            <div class="download-card">
+                <h4>
+                    <span>Sovereign Void Linux</span>
+                    <span class="badge-tag rec">Recommended</span>
+                </h4>
+                <p>
+                    Independent Void Linux base with runit init stages, custom micro-initramfs, Wayland Labwc desktop, and native Rust installer.
+                </p>
+                <ul class="spec-list">
+                    <li><span class="label">Kernel</span> <span class="val">Linux 6.6 LTS</span></li>
+                    <li><span class="label">Init System</span> <span class="val">runit</span></li>
+                    <li><span class="label">Package System</span> <span class="val">XBPS / hein (Rust)</span></li>
+                    <li><span class="label">Desktop / Wayland</span> <span class="val">Labwc / HiganTerm</span></li>
+                    <li><span class="label">Memory (Idle)</span> <span class="val">~180 MiB</span></li>
+                    <li><span class="label">ISO Size</span> <span class="val">800 MB (Unified CLI/GUI)</span></li>
+                </ul>
+                <a href="https://sourceforge.net/projects/higanvein/files/" class="btn-download" target="_blank" rel="noopener noreferrer">Download ISO (SourceForge)</a>
+            </div>
+
+            <!-- Arch Flagship Edition -->
+            <div class="download-card">
+                <h4>
+                    <span>Arch Linux Flagship</span>
+                    <span class="badge-tag">Rolling</span>
+                </h4>
+                <p>
+                    Bleeding-edge Arch base featuring CachyOS BORE kernel, Higanvein Unified Shell, full driver firmware microcode, and dev bundles.
+                </p>
+                <ul class="spec-list">
+                    <li><span class="label">Kernel</span> <span class="val">Linux CachyOS BORE</span></li>
+                    <li><span class="label">Init System</span> <span class="val">systemd</span></li>
+                    <li><span class="label">Package System</span> <span class="val">pacman / yay</span></li>
+                    <li><span class="label">Desktop / Shell</span> <span class="val">Higanvein-Shell (C/GTK3)</span></li>
+                    <li><span class="label">Target Use</span> <span class="val">Gaming &amp; Workstations</span></li>
+                    <li><span class="label">ISO Size</span> <span class="val">~2.8 GB (Unified CLI/GUI)</span></li>
+                </ul>
+                <a href="https://sourceforge.net/projects/higanvein/files/" class="btn-download" target="_blank" rel="noopener noreferrer">Download ISO (SourceForge)</a>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Two-column: Recent News & System Repository Log (Arch/Void Standard Layout) -->
+        <div class="layout-split">
+            <div>
+                <h3 class="section-title">Recent Project Updates</h3>
+
+                <div class="news-item">
+                    <div class="news-date">October 17, 2026</div>
+                    <div class="news-title"><a href="changes.html">Release 2026.10: Native Toolchain Consolidation &amp; Dual ISO Harmonization</a></div>
+                    <p class="news-desc">
+                        Replaced Python installation helpers with a static 419 KB Rust binary (<code>higan-installer</code>), integrated firmware blobs for AMDGPU, Intel Arc, and NVIDIA cards into the Void live initramfs, and updated <code>higan-bundle</code> to support automatic cross-distribution stack deployment.
+                    </p>
                 </div>
 
-                <!-- 2. Arch Flagship Edition -->
-                <div class="spec-card p-8 rounded-2xl flex flex-col justify-between border-void-border bg-void-card relative overflow-hidden">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="font-extrabold text-xl text-white">Arch Flagship Edition</span>
-                            <span class="bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 text-[10px] font-mono px-3 py-1 rounded-full font-bold">Rolling Release · ~2.8 GB</span>
-                        </div>
-                        <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">
-                            Bleeding-edge Arch base featuring CachyOS BORE optimized kernel, Higanvein Unified Shell, full driver microcode, and comprehensive gaming/workstation toolchains.
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-mono">
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border text-zinc-300">
-                                <span class="text-zinc-500 block text-[10px] uppercase">Init &amp; Kernel</span>
-                                <span class="text-white font-semibold">Systemd · CachyOS 7.x</span>
-                            </div>
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border text-zinc-300">
-                                <span class="text-zinc-500 block text-[10px] uppercase">Target Stack</span>
-                                <span class="text-zinc-200 font-semibold">Gaming &amp; Workstations</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pt-6 border-t border-void-border mt-6 flex items-center justify-between">
-                        <span class="text-xs font-mono text-zinc-400">~2.8 GB · Hybrid CLI/GUI</span>
-                        <a href="https://sourceforge.net/projects/higanvein/files/" target="_blank" rel="noopener noreferrer" class="bg-void-surface hover:bg-zinc-800 text-white font-semibold text-xs px-5 py-2.5 rounded-lg transition flex items-center gap-2 border border-void-border">
-                            Download ISO
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                        </a>
-                    </div>
+                <div class="news-item">
+                    <div class="news-date">October 14, 2026</div>
+                    <div class="news-title"><a href="changes.html">Lycoris Browser: Quad-Core Native Architecture</a></div>
+                    <p class="news-desc">
+                        Rebuilt the default browser frontend with WebKitGTK 4.1, C window management, C++ memory trim routines, Rust tracker sinkholing, and Zig URL sanitation to maintain sub-60 MB idle RAM consumption.
+                    </p>
                 </div>
             </div>
-        </section>
 
-        <!-- Lycoris Browser Section -->
-        <section id="lycoris" class="max-w-6xl mx-auto px-6 py-16 border-t border-void-border scroll-mt-16">
-            <div class="spec-card rounded-3xl p-8 md:p-12 relative overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                    <div class="lg:col-span-7 space-y-5">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-void-surface border border-void-border text-[11px] font-mono text-zinc-300 font-semibold uppercase tracking-wider">
-                            ANTI-CHROMIUM BROWSER
-                        </div>
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-                            Lycoris Browser
-                        </h2>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed">
-                            An independent, lightweight WebKitGTK browser engine crafted with a polyglot multi-language architecture: <b>C, C++, Rust, and Zig</b>. Zero telemetry, Firefox-style vertical tabs, and memory trim hooks.
-                        </p>
-                        
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border">
-                                <div class="text-xs font-mono font-bold text-crimson">C</div>
-                                <div class="text-[11px] text-zinc-400 mt-1">GTK3 window &amp; UI shell</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border">
-                                <div class="text-xs font-mono font-bold text-crimson">C++</div>
-                                <div class="text-[11px] text-zinc-400 mt-1">malloc_trim memory guard</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border">
-                                <div class="text-xs font-mono font-bold text-crimson">Rust</div>
-                                <div class="text-[11px] text-zinc-400 mt-1">Higan-Shield tracker filter</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-void-surface border border-void-border">
-                                <div class="text-xs font-mono font-bold text-crimson">Zig</div>
-                                <div class="text-[11px] text-zinc-400 mt-1">Omnibox query router</div>
-                            </div>
-                        </div>
-
-                        <div class="pt-2 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-400">
-                            <span>Idle: ~45–60 MB RAM</span>
-                            <span>·</span>
-                            <span>Streaming: ~200–450 MB RAM</span>
-                            <span>·</span>
-                            <span>Integrated SearXNG &amp; Pure Web</span>
-                        </div>
-                    </div>
-
-                    <!-- Clean Technical Mockup -->
-                    <div class="lg:col-span-5">
-                        <div class="rounded-2xl bg-[#09050c] border border-void-border overflow-hidden shadow-2xl">
-                            <div class="bg-[#120816] px-4 py-2.5 border-b border-void-border flex items-center justify-between">
-                                <div class="flex items-center gap-1.5">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-crimson"></div>
-                                    <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
-                                    <div class="w-2.5 h-2.5 rounded-full bg-zinc-700"></div>
-                                </div>
-                                <div class="text-[11px] font-mono text-zinc-400 flex items-center gap-1.5">
-                                    <span>lycoris-bin</span>
-                                    <span class="text-[10px] text-zinc-500">334 KB</span>
-                                </div>
-                                <div class="w-6"></div>
-                            </div>
-                            <div class="p-4 space-y-3 bg-[#0d0711]">
-                                <div class="flex items-center gap-2">
-                                    <div class="flex-grow bg-[#150d1b] border border-void-border rounded-md px-3 py-1.5 text-xs text-zinc-300 font-mono">
-                                        https://higanvein.pages.dev/search.html?q=...
-                                    </div>
-                                    <span class="text-xs text-crimson">⚡</span>
-                                    <span class="text-xs text-zinc-400">📖</span>
-                                </div>
-                                <div class="h-28 rounded-xl bg-[#08040a] border border-void-border flex flex-col items-center justify-center text-center p-4">
-                                    <div class="text-xs font-bold text-white">Direct GPU Hardware Acceleration</div>
-                                    <div class="text-[11px] text-zinc-400 font-mono mt-1">Zero Chromium telemetry telemetry sinkhole</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <h3 class="section-title">Core Packages &amp; Stacks</h3>
+                <ul class="log-list">
+                    <li><code>higan-installer 1.0.0</code> — Static Rust disk partitioner</li>
+                    <li><code>hein 0.4.2</code> — Native Rust XBPS wrapper</li>
+                    <li><code>lycoris 1.2.0</code> — Polyglot privacy browser</li>
+                    <li><code>higan-bundle 2.0</code> — Multi-distro stack provisioner</li>
+                    <li><code>higan-shot 1.0</code> — Wayland grim/slurp capture tool</li>
+                    <li><code>higan-lock 1.0</code> — Swaylock spider lily PAM wrapper</li>
+                    <li><code>linux 6.6.158_1</code> — Hardened LTS kernel base</li>
+                    <li><code>runit 2.1.2_16</code> — Stage 1/2/3 supervisor</li>
+                </ul>
             </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
-    <!-- Professional Footer -->
-    <footer class="border-t border-void-border bg-[#070308] text-xs text-zinc-500 py-12">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-6 h-6 rounded-md bg-crimson flex items-center justify-center text-white font-bold text-xs">H</div>
-                <span class="text-zinc-300 font-semibold">HiganveinOS Project</span>
-                <span class="text-zinc-600">·</span>
-                <span>Crafted by Yu Dyan &amp; Rezou</span>
+    <!-- Minimal Open Source Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                &copy; 2026 HiganveinOS Project. Developed by Yu Dyan. Released under open-source licenses.
             </div>
-            <div class="flex items-center space-x-6 text-zinc-400 font-mono">
-                <a href="changes.html" class="hover:text-white transition">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="terms.html" class="hover:text-white transition">Terms</a>
-                <a href="privacy.html" class="hover:text-white transition">Privacy</a>
-                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">GitHub</a>
+            <div class="footer-links">
+                <a href="changes.html">Changelog</a>
+                <a href="docs.html">Documentation</a>
+                <a href="search.html">Lycoris Search</a>
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">Source Code</a>
+                <a href="https://discord.gg/HQANxjyfKx" target="_blank" rel="noopener noreferrer">Discord</a>
             </div>
         </div>
     </footer>
 
-    <!-- Mobile Menu Script -->
-    <script>
-        const toggleBtn = document.getElementById('mobile-toggle');
-        const dropdown = document.getElementById('mobile-dropdown');
-        if (toggleBtn && dropdown) {
-            toggleBtn.addEventListener('click', () => {
-                dropdown.classList.toggle('hidden');
-            });
-        }
-    </script>
 </body>
 </html>

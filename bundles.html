@@ -1,253 +1,142 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modular Bundles — HiganveinOS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-    </style>
+    <title>Software Bundles — HiganveinOS</title>
+    <meta name="description" content="Modular post-installation software suites for HiganveinOS managed via the native higan-bundle utility.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
-    <!-- Navbar -->
-    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
-                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
-            </div>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
-                <a href="index.html" class="hover:text-white transition">Home</a>
-                <a href="features.html" class="hover:text-white transition">Features</a>
-                <a href="bundles.html" class="text-white font-semibold">Bundles</a>
-                <a href="changes.html" class="hover:text-white transition">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="about.html" class="hover:text-white transition">About</a>
-            </nav>
-            <div class="hidden md:block">
-                <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
-                    Download ISO
-                </a>
-            </div>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">H</span>
+                <span>Higanvein Linux</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#downloads">Download</a></li>
+                <li><a href="features.html">Architecture</a></li>
+                <li><a href="bundles.html" class="active">Bundles</a></li>
+                <li><a href="changes.html">News &amp; Changes</a></li>
+                <li><a href="docs.html">Handbook</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-14 flex-grow space-y-10">
-        <div class="space-y-3">
-            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-red-950/50 border border-red-800/40 text-red-400 text-xs font-semibold">
-                <span>MODULAR PROFILE ARCHITECTURE</span>
-            </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight">Tailor HiganveinOS to Your Workflow</h1>
-            <p class="text-zinc-400 text-sm max-w-2xl leading-relaxed">Universal post-install software stacks configured for both Sovereign Void Linux (XBPS/Runit) and Arch Linux (Pacman/SystemD) via <code class="text-red-400 font-mono">higan-bundle</code>.</p>
-        </div>
+    <div class="main-wrapper">
+        <h1 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px;">Modular Profile Bundles (<code>higan-bundle</code>)</h1>
+        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 24px;">
+            HiganveinOS keeps ISO images lean by default. Additional workflows are installed on-demand through our universal multi-distro provisioner.
+        </p>
 
-        <!-- Bundle Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- 1. Gamer Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 01</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Gaming Suite</h3>
-                    </div>
-                    <input type="checkbox" id="chk-gamer" value="--gamer" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
-                </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">Complete gaming platform: Steam, Epic/GOG support, Proton-GE manager, Xbox wireless drivers, and anti-crash kernel vm memory tweaks.</p>
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Steam</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Heroic Games</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">ProtonUp-Qt</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">GameMode</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">MangoHud</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">xpadneo</span>
-                </div>
-            </label>
+        <hr class="divider">
 
-            <!-- 2. Developer Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 02</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Developer Toolchain & Compilers</h3>
-                    </div>
-                    <input type="checkbox" id="chk-dev" value="--dev" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()" checked>
-                </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">VSCodium IDE + Neovim, full compiler suite (GCC, Clang, Rust, Go, Python, Node.js), Docker engine, and modern Rust CLI tools.</p>
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">VSCodium</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">GCC/Clang</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Rustup</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Go</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Node.js</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Python</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Docker</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">ripgrep</span>
-                </div>
-            </label>
-
-            <!-- 3. Ricing Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 03</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Ricing & Aesthetics (Hyprland + Serpantinum)</h3>
-                    </div>
-                    <input type="checkbox" id="chk-ricer" value="--ricer" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
-                </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">Modern Wayland tiling desktop featuring <b>Serpantinum Shell</b> (developed by <a href="https://github.com/ilyamiro/serpantinum" target="_blank" class="text-red-400 hover:underline font-semibold">ilyamiro</a>), Hyprland, Waybar, Waypaper, Mako notifications, Hyprlock, and Grim/Slurp screenshot suite.</p>
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-red-950/40 border border-red-900/50 text-red-300 text-[11px] font-mono">Serpantinum (by ilyamiro)</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Hyprland</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Waybar</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Waypaper</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Mako</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Grim/Slurp</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Hyprlock</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Starship</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Cava</span>
-                </div>
-            </label>
-
-            <!-- 4. Security Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-red-400 font-mono tracking-wider">PROFILE 04</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Cybersecurity & Penetration Testing</h3>
-                    </div>
-                    <input type="checkbox" id="chk-cyber" value="--cyber" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
-                </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">Offensive security arsenal curated from Kali, ParrotOS, and BlackArch: network recon, MITM, web vulnerability scanners, password hash recovery, binary analysis, and OpSec anonymity. Includes optional BlackArch 2800+ tool repository integration.</p>
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Nmap / Masscan</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Wireshark / Tshark</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Bettercap / Ettercap</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Metasploit</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">SQLmap / Gobuster</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Hydra / Hashcat</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Ghidra / Radare2</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Proxychains</span>
-                    <span class="px-2 py-0.5 rounded bg-red-950/40 border border-red-900/50 text-red-300 text-[11px] font-mono">--blackarch</span>
-                </div>
-            </label>
-
-            <!-- 5. Agentic AI Stack -->
-            <label class="bundle-card cursor-pointer p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-600/50 transition relative space-y-3 block">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-xs font-semibold text-emerald-400 font-mono tracking-wider">PROFILE 05 · NEW</span>
-                        <h3 class="text-lg font-bold text-white mt-0.5">Agentic AI & LLM Infrastructure</h3>
-                    </div>
-                    <input type="checkbox" id="chk-ai" value="--ai-agent" class="w-5 h-5 accent-red-600 rounded bg-zinc-950 border-zinc-700" onchange="updateCommand()">
-                </div>
-                <p class="text-xs text-zinc-400 leading-relaxed">Turn HiganveinOS into an autonomous AI engineering workstation. Features offline local inference via Ollama system service, 9Router multi-provider rate-limiting gateway, Hermes autonomous agent CLI, and instant system inspection via <code class="text-emerald-300">higan-ai-status</code>.</p>
-                <div class="flex flex-wrap gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Ollama Service</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">9Router Gateway</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Hermes Agent</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Python uv</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">Node.js</span>
-                    <span class="px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 text-[11px] font-mono">SQLite3</span>
-                    <span class="px-2 py-0.5 rounded bg-emerald-950/40 border border-emerald-900/50 text-emerald-300 text-[11px] font-mono">higan-ai-status</span>
-                </div>
-            </label>
-        </div>
-
-        <!-- Generated Command Console -->
-        <div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-zinc-400 font-mono">INSTALLATION COMMAND</span>
-                <button onclick="copyCommand()" id="copy-btn" class="text-xs font-semibold text-red-400 hover:text-red-300 transition">Copy to Clipboard</button>
-            </div>
-            <div class="p-4 rounded-xl bg-zinc-900/90 border border-zinc-800 font-mono text-xs md:text-sm text-zinc-200 overflow-x-auto flex items-center justify-between">
-                <span id="cmd-display">sudo higan-bundle --dev</span>
-            </div>
-            <p class="text-[11px] text-zinc-500">Run this directly inside your terminal on any running HiganveinOS machine.</p>
-        </div>
-
-        <!-- Quick Terminal Cheatsheet / How It Works -->
-        <div class="p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 space-y-4">
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono text-red-400">Quick Reference Guide</h3>
-            <p class="text-xs text-zinc-400">You can install any profile individually or combine multiple stacks using simple terminal commands:</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Gaming only:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --gamer</p>
-                </div>
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Developer & Compilers only:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --dev</p>
-                </div>
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Cybersecurity Arsenal only:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --cyber</p>
-                </div>
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># BlackArch Repository (2800+ tools):</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --blackarch</p>
-                </div>
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Agentic AI Stack (Ollama + 9Router + Hermes):</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --ai-agent</p>
-                </div>
-                <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
-                    <span class="text-zinc-500 text-[10px]"># Ricing (Hyprland + Serpantinum) only:</span>
-                    <p class="text-zinc-200 select-all">sudo higan-bundle --ricer</p>
+        <div class="download-grid">
+            <!-- 1. Gaming Suite -->
+            <div class="download-card">
+                <h4>
+                    <span>Gaming Suite</span>
+                    <span class="badge-tag">--gamer</span>
+                </h4>
+                <p>Configures a low-latency gaming environment with Wine, Proton, GameMode, and controller drivers.</p>
+                <ul class="spec-list">
+                    <li><span class="label">Client &amp; Launchers</span> <span class="val">Steam, Heroic Games, Lutris</span></li>
+                    <li><span class="label">Compatibility</span> <span class="val">ProtonUp-Qt, Wine-GE</span></li>
+                    <li><span class="label">Kernel Tweaks</span> <span class="val">GameMode, MangoHud</span></li>
+                    <li><span class="label">Peripherals</span> <span class="val">xpadneo (Xbox wireless)</span></li>
+                </ul>
+                <div style="background: var(--bg-code); padding: 8px 12px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; color: var(--text-muted);">
+                    sudo higan-bundle --gamer
                 </div>
             </div>
 
-            <div class="p-3 rounded-xl bg-zinc-950/80 border border-zinc-800 text-xs font-mono flex items-center justify-between">
-                <div>
-                    <span class="text-zinc-500 text-[10px]"># Interactive TUI Menu (choices 1-8):</span>
-                    <p class="text-red-400 select-all font-semibold">sudo higan-bundle</p>
+            <!-- 2. Developer Suite -->
+            <div class="download-card">
+                <h4>
+                    <span>Developer Toolchains</span>
+                    <span class="badge-tag">--dev</span>
+                </h4>
+                <p>Complete compiler suite, containers, modern terminal utilities, and developer editors.</p>
+                <ul class="spec-list">
+                    <li><span class="label">Compilers</span> <span class="val">GCC, Clang, Rustup, Go</span></li>
+                    <li><span class="label">Runtimes</span> <span class="val">Python 3.12, Node.js (LTS)</span></li>
+                    <li><span class="label">Editors</span> <span class="val">VSCodium, Neovim</span></li>
+                    <li><span class="label">Virtualization</span> <span class="val">Docker &amp; containerd</span></li>
+                </ul>
+                <div style="background: var(--bg-code); padding: 8px 12px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; color: var(--text-muted);">
+                    sudo higan-bundle --dev
+                </div>
+            </div>
+
+            <!-- 3. Ricing Suite -->
+            <div class="download-card">
+                <h4>
+                    <span>Wayland Tiling &amp; Ricing</span>
+                    <span class="badge-tag">--ricer</span>
+                </h4>
+                <p>Custom Wayland desktop stack with dynamic tiling, status bar, and Spider Lily color palette.</p>
+                <ul class="spec-list">
+                    <li><span class="label">Window Managers</span> <span class="val">Hyprland / Labwc</span></li>
+                    <li><span class="label">Panels &amp; Docks</span> <span class="val">Waybar, Serpantinum</span></li>
+                    <li><span class="label">Lock &amp; Shot</span> <span class="val">higan-lock, higan-shot</span></li>
+                    <li><span class="label">Aesthetics</span> <span class="val">Starship, Cava, Waypaper</span></li>
+                </ul>
+                <div style="background: var(--bg-code); padding: 8px 12px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; color: var(--text-muted);">
+                    sudo higan-bundle --ricer
+                </div>
+            </div>
+
+            <!-- 4. Security Suite -->
+            <div class="download-card">
+                <h4>
+                    <span>Cybersecurity &amp; Pen-Testing</span>
+                    <span class="badge-tag">--cyber</span>
+                </h4>
+                <p>Network analysis, packet inspection, wireless auditing, and reverse engineering tools.</p>
+                <ul class="spec-list">
+                    <li><span class="label">Recon &amp; Mapping</span> <span class="val">Nmap, Masscan, Amass</span></li>
+                    <li><span class="label">Traffic Analysis</span> <span class="val">Wireshark, tcpdump, TShark</span></li>
+                    <li><span class="label">Web &amp; Proxies</span> <span class="val">Burp Suite, OWASP ZAP, sqlmap</span></li>
+                    <li><span class="label">Wireless</span> <span class="val">Aircrack-ng, Kismet</span></li>
+                </ul>
+                <div style="background: var(--bg-code); padding: 8px 12px; border: 1px solid var(--border); font-family: monospace; font-size: 12px; color: var(--text-muted);">
+                    sudo higan-bundle --cyber
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
-        <div class="flex flex-wrap justify-center gap-6 text-zinc-400 mb-2"><a href="privacy.html" class="hover:text-white transition">Privacy Policy</a><a href="terms.html" class="hover:text-white transition">Terms <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>amp; Conditions</a><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" class="hover:text-white transition">Source Code</a></div><p><p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>copy; 2026 HiganveinOS Project. Zero Telemetry. Provided AS-IS.</p>
+        <hr class="divider">
+
+        <h3 class="section-title">Universal Execution Command</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 14px;">
+            The <code>higan-bundle</code> script executes in the foreground, automatically detects whether it is running on Void Linux (using <code>xbps-install</code> / <code>hein</code>) or Arch Linux (using <code>pacman</code>), and wires any required service daemons:
+        </p>
+
+        <pre style="background: var(--bg-code); border: 1px solid var(--border); padding: 14px 18px; border-radius: 4px; color: #f43f5e; overflow-x: auto;">
+sudo higan-bundle --dev --gamer</pre>
+    </div>
+
+    <!-- Minimal Open Source Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                &copy; 2026 HiganveinOS Project. Developed by Yu Dyan. Released under open-source licenses.
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="features.html">Architecture</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">Source Code</a>
+            </div>
+        </div>
     </footer>
 
-    <script>
-        function updateCommand() {
-            const gamer = document.getElementById('chk-gamer')?.checked;
-            const dev = document.getElementById('chk-dev')?.checked;
-            const ricer = document.getElementById('chk-ricer')?.checked;
-            const cyber = document.getElementById('chk-cyber')?.checked;
-            const ai = document.getElementById('chk-ai')?.checked;
-
-            let flags = [];
-            if (gamer) flags.push('--gamer');
-            if (dev) flags.push('--dev');
-            if (ricer) flags.push('--ricer');
-            if (cyber) flags.push('--cyber');
-            if (ai) flags.push('--ai-agent');
-
-            const display = document.getElementById('cmd-display');
-            if (flags.length === 0) {
-                display.innerText = 'sudo higan-bundle';
-            } else if (gamer && dev && ricer && cyber && ai) {
-                display.innerText = 'sudo higan-bundle --all';
-            } else {
-                display.innerText = 'sudo higan-bundle ' + flags.join(' ');
-            }
-        }
-
-        function copyCommand() {
-            const text = document.getElementById('cmd-display').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('copy-btn');
-                btn.innerText = 'Copied!';
-                setTimeout(() => { btn.innerText = 'Copy to Clipboard'; }, 2000);
-            });
-        }
-    </script>
 </body>
 </html>

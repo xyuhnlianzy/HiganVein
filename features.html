@@ -1,224 +1,154 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Features — HiganveinOS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
-    </style>
+    <title>Architecture &amp; Features — HiganveinOS</title>
+    <meta name="description" content="Technical specifications, architecture, and engineering principles behind HiganveinOS Void Sovereign and Arch Flagship editions.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
-    <!-- Navbar -->
-    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
-                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
-            </div>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
-                <a href="index.html" class="hover:text-white transition">Home</a>
-                <a href="features.html" class="text-white font-semibold">Features</a>
-                <a href="bundles.html" class="hover:text-white transition">Bundles</a>
-                <a href="changes.html" class="hover:text-white transition">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="about.html" class="hover:text-white transition">About</a>
-            </nav>
-            <div class="hidden md:block">
-                <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
-                    Download ISO
-                </a>
-            </div>
-            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
-            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
-            <a href="features.html" class="block text-white font-semibold py-1">Features</a>
-            <a href="bundles.html" class="block text-zinc-400 hover:text-white py-1">Bundles</a>
-            <a href="changes.html" class="block text-zinc-400 hover:text-white py-1">Changelog</a>
-            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
-            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
-            <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">H</span>
+                <span>Higanvein Linux</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#downloads">Download</a></li>
+                <li><a href="features.html" class="active">Architecture</a></li>
+                <li><a href="bundles.html">Bundles</a></li>
+                <li><a href="changes.html">News &amp; Changes</a></li>
+                <li><a href="docs.html">Handbook</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-6 py-14 flex-grow space-y-8">
-        <div class="space-y-2">
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">System Specifications & Features</h1>
-            <p class="text-zinc-400 text-sm">Detailed components and technical choices in current HiganveinOS builds.</p>
-        </div>
+    <div class="main-wrapper">
+        <h1 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px;">System Architecture &amp; Specifications</h1>
+        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 24px;">
+            HiganveinOS is built strictly on verified Linux technologies, rejecting telemetry, bloated runtimes, and unnecessary background daemons.
+        </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">CachyOS Linux Kernel</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Custom x86-64-v3 optimized kernel with BORE (Burst-Oriented Response Enhancer) scheduler. Prioritizes desktop interactivity, input latency, and consistent frame rates under heavy background compilations or gaming workloads.
+        <hr class="divider">
+
+        <h2 class="section-title">Core Subsystems</h2>
+        <div class="grid-2x3">
+            <div class="feature-cell">
+                <h3>runit Process Supervisor</h3>
+                <p>
+                    On the Sovereign Void edition, stage scripts (<code>00-pseudofs.sh</code>, <code>03-filesystems.sh</code>, <code>04-swap.sh</code>) provide deterministic early userspace initialization without systemd dependencies. Service directories under <code>/etc/sv/</code> link directly into <code>/var/service/</code>.
                 </p>
             </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Higan-Installer (Native Rust Engine)</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Ultra-lean disk installer rewritten in native Rust (419 KB static binary, &lt;2 MB RAM) replacing heavy Python/Qt dependencies on potato hardware. Features smart automatic partitioning for NVMe (<code class="text-zinc-300">nvme0n1p3</code>), eMMC, SATA, and VirtIO with automatic hybrid UEFI/BIOS bootloader generation and dotfiles synchronization.
+            <div class="feature-cell">
+                <h3>Native Rust Disk Installer</h3>
+                <p>
+                    Our installer (<code>higan-installer</code>) is a static 419 KB Rust binary requiring under 2 MB RAM during live execution. Handles NVMe (<code>nvme0n1pX</code>), SATA, and VirtIO partition schemes, chroot package installation, and automated hybrid BIOS/UEFI boot configuration.
                 </p>
             </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Multi-Bootloader Architecture</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    First-class support for Limine (modern, minimal, ultra-fast), GRUB (universal dual-boot with automated os-prober for Windows/other distros), and systemd-boot (native UEFI).
+            <div class="feature-cell">
+                <h3>Dual-Mode Hybrid Bootloader</h3>
+                <p>
+                    A single unified ISO supports both Wayland graphical desktop and minimal terminal console boots. Boot flags (<code>higan.mode=gui</code> vs <code>higan.mode=cli</code>) dictate early userland service startup without needing multiple images.
                 </p>
             </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Software Ecosystem &amp; AUR</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Pre-installed <code class="text-zinc-300">paru</code> (Rust-based ultra-fast AUR helper) for instant access to thousands of community packages, alongside <code class="text-zinc-300">Flatpak</code> with pre-configured Flathub repository integration in KDE Discover.
+            <div class="feature-cell">
+                <h3>CachyOS BORE Kernel &amp; 6.6 LTS</h3>
+                <p>
+                    Arch Flagship editions leverage the Burst-Oriented Response Enhancer (BORE) scheduler for minimal desktop latency under thread contention. Sovereign Void editions pin Linux 6.6 LTS for stability and broad hardware reliability.
                 </p>
             </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Btrfs Subvolumes &amp; Snapshot Rollback</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Automated layout partitioning into <code class="text-zinc-300">@</code> (root), <code class="text-zinc-300">@home</code> (user data), and <code class="text-zinc-300">@snapshots</code> with transparent ZSTD filesystem compression. Features <code class="text-zinc-300">btrfs-assistant</code> GUI and <code class="text-zinc-300">snapper</code> timeline automation for 1-click system restore points.
+            <div class="feature-cell">
+                <h3>Integrated GPU Microcode</h3>
+                <p>
+                    Firmware microcode blobs for AMDGPU, Intel Iris/Arc, and NVIDIA (proprietary and open modules) are integrated into userspace and initramfs to ensure video acceleration works on initial boot.
                 </p>
             </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Modular Profile Manager (<code class="text-zinc-300">higan-bundle</code>)</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Keep your core ISO small (~2.8 GB). Easily install specialized software stacks on demand: Gaming Suite (Steam, Heroic, ProtonUp-Qt), Developer Suite (VSCodium, compilers, Docker), or Ricing (Hyprland Wayland suite).
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Custom Split-Screen Bootloader Theme</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Anime-inspired artwork boot interface across GRUB, Limine, and Syslinux featuring Frieren in a red spider lily landscape with high-contrast left-framed navigation menus.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Memory &amp; Swap Configuration</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Compressed RAM swap via zstd (2.5× physical RAM) configured via systemd-zram-generator. Paired with earlyoom daemon to prevent system lockups when physical memory reaches 90% threshold.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Windows Compatibility Layer</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Pre-installed Wine runtime with full 32-bit and 64-bit Vulkan graphics libraries (Mesa, Intel, AMD). MIME associations allow direct double-click execution of .exe and .msi binaries from Dolphin.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Full GPU Hardware Acceleration (All Vendors)</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Out-of-the-box hardware acceleration for AMD Radeon RX (RDNA 1–4, Vega, Polaris), NVIDIA GeForce GTX/RTX (Maxwell to Blackwell via open Nouveau/NVK), and Intel Arc/Xe. Signed firmware microcode blobs and Vulkan userspace drivers are pre-baked, eliminating CPU software fallback rendering on physical machines.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Laptop Optimization Suite</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Tuned for portable hardware: out-of-the-box Touchpad Tap-to-Click &amp; natural scrolling, <code class="text-zinc-300">power-profiles-daemon</code> with battery-saver profiles, ACPI lid-close event handling, native Fn brightness hotkey control via <code class="text-zinc-300">brightnessctl</code>, and Bluetooth auto-enable.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">HiganTerm &amp; Default Shell</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Ships with <code class="text-zinc-300">HiganTerm</code> (powered by GNOME Ptyxis) customized with the Spider Lily Crimson palette (<code class="text-zinc-300">#0b070f</code> / <code class="text-zinc-300">#e11d48</code>) for container-ready terminal operations, Wayland clipboard handling, and Fastfetch hardware telemetry.
-                </p>
-            </div>
-
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2">
-                <h3 class="text-white font-bold text-base">Field-Verified Hardware Footprint</h3>
-                <p class="text-zinc-400 text-xs leading-relaxed">
-                    Stress-tested under synthetic CPU &amp; memory loads. Officially certifies a bare minimum of 2 CPU Cores, 1 GB RAM (single lightweight workload, no bundles), and 30 GB disk space with active ZRAM compression.
+            <div class="feature-cell">
+                <h3>Cross-Distro Bundle Engine</h3>
+                <p>
+                    <code>higan-bundle</code> automatically detects the active base distribution (Void Linux via <code>xbps</code> / Arch Linux via <code>pacman</code>) to provision Gamer, Dev, Ricer, Cyber, or AI Agent stacks with proper service symlinks.
                 </p>
             </div>
         </div>
 
-        <!-- 12-Layer Verification Engine -->
-        <div class="p-6 md:p-8 rounded-2xl bg-zinc-900/50 border border-red-950/60 space-y-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></div>
-                <h2 class="text-white font-bold text-lg tracking-tight">12-Layer Continuous Deep Audit</h2>
+        <hr class="divider">
+
+        <h2 class="section-title">Edition Comparison Matrix</h2>
+        <div style="overflow-x: auto; margin-bottom: 32px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--bg-box); border: 1px solid var(--border);">
+                <thead>
+                    <tr style="background: var(--bg-header); border-bottom: 1px solid var(--border); text-align: left;">
+                        <th style="padding: 10px 14px; color: #fff;">Feature / Component</th>
+                        <th style="padding: 10px 14px; color: var(--accent);">Sovereign Edition (Void)</th>
+                        <th style="padding: 10px 14px; color: #fff;">Flagship Edition (Arch)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Init System &amp; PID 1</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">runit 2.1.2</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">systemd</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Kernel Flavor</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">Linux 6.6 LTS</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">Linux CachyOS BORE 7.x</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Package Management</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">XBPS + hein (Rust wrapper)</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">Pacman + Yay (AUR)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Wayland Compositor / UI</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">Labwc + HiganTerm (Ptyxis)</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">Higanvein-Shell (GTK3/C)</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Live Memory Footprint</td>
+                        <td style="padding: 10px 14px; font-family: monospace; color: var(--green);">~180 MiB RAM</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">~420 MiB RAM</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 14px; color: var(--text-muted);">ISO Download Size</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">800 MB (zstd squashed)</td>
+                        <td style="padding: 10px 14px; font-family: monospace;">~2.8 GB</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 14px; color: var(--text-muted);">Telemetry Status</td>
+                        <td style="padding: 10px 14px; color: var(--green); font-family: monospace;">0.0.0.0 Sinkholed (Zero)</td>
+                        <td style="padding: 10px 14px; color: var(--green); font-family: monospace;">0.0.0.0 Sinkholed (Zero)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="text-align: center; margin-top: 24px;">
+            <a href="index.html#downloads" class="btn-download">Proceed to Downloads &rarr;</a>
+        </p>
+    </div>
+
+    <!-- Minimal Open Source Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                &copy; 2026 HiganveinOS Project. Developed by Yu Dyan. Released under open-source licenses.
             </div>
-            <p class="text-zinc-400 text-xs leading-relaxed">
-                Every HiganveinOS ISO image release undergoes an automated 12-layer continuous deep diagnostic audit before distribution. This rigorous pipeline guarantees zero critical regressions, flawless dependency resolution, and verified permission boundaries from hardware firmware to user space.
-            </p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-2 text-xs font-mono">
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">01. Firmware &amp; Table</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">MBR/GPT hybrid alignment</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">02. Bootloader Stages</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">GRUB, Limine &amp; Syslinux syntax</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">03. Kernel &amp; Microcode</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">BORE, AMD/Intel ucode</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">04. Initramfs Early-Boot</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">mkinitcpio hook sequencing</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">05. Base &amp; Packaging</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">Repo resolver &amp; zero conflicts</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">06. Hardware Enablers</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">Mesa, Vulkan ICD, Broadcom</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">07. Security Boundaries</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">0440 sudoers, device groups</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">08. Init &amp; Daemons</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">Systemd units &amp; target chains</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">09. Display &amp; Wayland</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">XDG runtime socket passthrough</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">10. Desktop Skeleton</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">/etc/skel, KDE Plasma 6 configs</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">11. Installer Logic</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">Btrfs subvolumes, post-cleanup</span>
-                </div>
-                <div class="p-2.5 rounded-lg bg-zinc-950/70 border border-zinc-800 text-zinc-300">
-                    <span class="text-red-500 font-bold block mb-1">12. Ecosystem &amp; Runtime</span>
-                    <span class="text-[11px] text-zinc-500 font-sans">Wine .exe associations &amp; CLI</span>
-                </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="changes.html">Changelog</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">Source Code</a>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
-        <div class="flex flex-wrap justify-center gap-6 text-zinc-400 mb-2"><a href="privacy.html" class="hover:text-white transition">Privacy Policy</a><a href="terms.html" class="hover:text-white transition">Terms <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>amp; Conditions</a><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" class="hover:text-white transition">Source Code</a></div><p><p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>copy; 2026 HiganveinOS Project. Zero Telemetry. Provided AS-IS.</p>
     </footer>
 
-    <script>
-        const btn = document.getElementById('menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>

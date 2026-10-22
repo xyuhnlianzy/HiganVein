@@ -1,168 +1,104 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Changelog — HiganveinOS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; background-color: #0c0c0e; color: #f4f4f5; }
-    </style>
+    <title>Changelog &amp; Release History — HiganveinOS</title>
+    <meta name="description" content="Technical release notes, system changes, kernel audits, and package updates for HiganveinOS.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-red-600 selection:text-white">
-    <!-- Navbar -->
-    <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center text-white font-bold text-sm">H</div>
-                <span class="text-lg font-bold tracking-tight text-white">HiganveinOS</span>
-            </div>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-zinc-400">
-                <a href="index.html" class="hover:text-white transition">Home</a>
-                <a href="features.html" class="hover:text-white transition">Features</a>
-                <a href="bundles.html" class="hover:text-white transition">Bundles</a>
-                <a href="changes.html" class="text-white font-semibold">Changelog</a>
-                <a href="docs.html" class="hover:text-white transition">Docs</a>
-                <a href="about.html" class="hover:text-white transition">About</a>
-            </nav>
-            <div class="hidden md:block">
-                <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold text-xs transition">
-                    Download ISO
-                </a>
-            </div>
-            <button id="menu-btn" class="md:hidden text-zinc-400 hover:text-white p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 pt-2 border-t border-zinc-800 bg-zinc-950 space-y-2 text-sm">
-            <a href="index.html" class="block text-zinc-400 hover:text-white py-1">Home</a>
-            <a href="features.html" class="block text-zinc-400 hover:text-white py-1">Features</a>
-            <a href="bundles.html" class="block text-zinc-400 hover:text-white py-1">Bundles</a>
-            <a href="changes.html" class="block text-white font-semibold py-1">Changelog</a>
-            <a href="docs.html" class="block text-zinc-400 hover:text-white py-1">Docs</a>
-            <a href="about.html" class="block text-zinc-400 hover:text-white py-1">About</a>
-            <a href="https://downloads.sourceforge.net/project/higanvein/files/" class="block text-center bg-red-600 text-white py-2 rounded-lg font-semibold mt-2">Download ISO</a>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="brand">
+                <span class="brand-badge">H</span>
+                <span>Higanvein Linux</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#downloads">Download</a></li>
+                <li><a href="features.html">Architecture</a></li>
+                <li><a href="bundles.html">Bundles</a></li>
+                <li><a href="changes.html" class="active">News &amp; Changes</a></li>
+                <li><a href="docs.html">Handbook</a></li>
+                <li><a href="search.html">Search</a></li>
+                <li><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-3xl mx-auto px-6 py-14 flex-grow space-y-8">
-        <div class="space-y-2">
-            <h1 class="text-3xl font-extrabold text-white tracking-tight">Changelog & Technical Milestones</h1>
-            <p class="text-zinc-400 text-sm">Documenting core fixes, package changes, and installer architecture updates.</p>
-        </div>
+    <div class="main-wrapper" style="max-width: 880px;">
+        <h1 style="font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px;">News &amp; Release History</h1>
+        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 24px;">
+            Documenting architectural decisions, security advisories, kernel audits, and package repository updates.
+        </p>
 
-        <div class="space-y-6">
-            <!-- 2026.10.16 -->
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-red-900/40 space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.10.16 (Sovereign Dual-Edition &amp; Native Rust Overhaul)</span>
-                    <span class="bg-red-600/20 text-red-400 text-xs px-2.5 py-1 rounded font-medium border border-red-600/30">Latest</span>
-                </div>
-                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Sovereign Void Linux Base &amp; Kernel 6.6 LTS:</b> Released non-systemd sovereign edition running pure Runit stages, tickless 1000Hz preemption kernel (6.6.158 LTS), custom micro-initramfs (3.4 MB), and an idle RAM footprint of ~180 MiB.</li>
-                    <li><b class="text-zinc-200">Unified Dual-Mode Bootloader (One ISO per Edition):</b> Both Arch and Void variants now pack GUI Desktop (Wayland / Labwc / Higanvein-Shell) and CLI Pure Console modes into a single unified hybrid ISO, selectable directly at the GRUB / Syslinux bootloader menu.</li>
-                    <li><b class="text-zinc-200">Native Rust Installer (higan-installer):</b> Rebuilt core disk installer in pure native Rust (419 KB static binary, &lt;2 MB RAM), replacing legacy Python interpreters and saving memory on potato hardware. Added automatic NVMe, eMMC, SATA SSD, and VirtIO detection with hybrid BIOS/UEFI GRUB generation.</li>
-                    <li><b class="text-zinc-200">Full Hardware GPU &amp; Acceleration Stack:</b> Injected signed firmware microcode blobs for AMD Radeon RX (RDNA 1–4, Polaris, Vega), NVIDIA GeForce GTX/RTX (Maxwell to Blackwell), and Intel Arc/Xe (GuC/HuC). Full Vulkan userspace drivers (<code class="text-zinc-300">mesa-vulkan-nouveau/NVK</code>, <code class="text-zinc-300">radv</code>, <code class="text-zinc-300">anv</code>) and VA-API hardware acceleration out of the box.</li>
-                    <li><b class="text-zinc-200">HiganTerm (Ptyxis Rebranding) &amp; Wayland Desktop Stack:</b> Adopted GNOME Ptyxis rebranded as <code class="text-zinc-300">HiganTerm</code> with custom Spider Lily crimson palette (<code class="text-zinc-300">#0b070f</code>, <code class="text-zinc-300">#e11d48</code>). Integrated <code class="text-zinc-300">higan-lock</code> (ext-session-lock-v1), <code class="text-zinc-300">higan-shot</code> screenshot suite (grim + slurp), Thunar file manager, brightnessctl backlight, and PipeWire audio Fn-key bindings.</li>
-                    <li><b class="text-zinc-200">Universal higan-bundle Architecture:</b> Refactored <code class="text-zinc-300">higan-bundle</code> to run seamlessly across both Void Linux (<code class="text-zinc-300">hein</code> / <code class="text-zinc-300">xbps</code> + <code class="text-zinc-300">runit</code>) and Arch Linux (<code class="text-zinc-300">pacman</code> + <code class="text-zinc-300">systemd</code>) for Gamer, Dev, Ricer, Cyber, and Agentic AI stacks.</li>
+        <hr class="divider">
+
+        <!-- 2026.10.17 -->
+        <article class="news-item" style="margin-bottom: 36px;">
+            <div class="news-date">October 17, 2026</div>
+            <h2 class="news-title" style="font-size: 19px; margin-bottom: 12px;">
+                <a href="#">Release 2026.10: Native Toolchain Consolidation &amp; Dual ISO Harmonization</a>
+            </h2>
+            <div class="news-desc" style="line-height: 1.7;">
+                <p style="margin-bottom: 10px;">
+                    This release concludes our migration away from heavy script interpreters on live install media, solidifying the two primary distribution tiers:
+                </p>
+                <ul style="margin-left: 20px; margin-bottom: 14px; list-style-type: square; color: var(--text-muted);">
+                    <li><strong>Native Rust Installer (<code>higan-installer</code>):</strong> Completely replaces legacy Python disk partitioning routines with a standalone 419 KB static binary consuming less than 2 MB resident memory.</li>
+                    <li><strong>Sovereign Void Linux Core:</strong> Non-systemd release running tickless 1000Hz preemption kernel (6.6.158 LTS), custom micro-initramfs, and pure runit stage execution with an idle memory usage of ~180 MiB.</li>
+                    <li><strong>Unified Hybrid Boot Architecture:</strong> Discontinued separate minimal CLI ISOs. Each image now contains full Wayland GUI and console targets, controlled via bootloader command-line parameters (<code>higan.mode=gui</code> / <code>higan.mode=cli</code>).</li>
+                    <li><strong>Hardware Microcode Blobs:</strong> Pre-loaded vendor firmware for AMDGPU, Intel Arc/Iris, and NVIDIA cards into the Void rootfs to eliminate black-screen boots.</li>
+                    <li><strong>Universal Bundle Provisioner:</strong> <code>higan-bundle</code> updated to automatically detect host package and init facilities (Void/XBPS vs Arch/Pacman).</li>
                 </ul>
             </div>
+        </article>
 
-            <!-- 2026.09.24 -->
-            <div class="flex gap-4">
-                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
-                <div class="pb-8">
-                    <span class="text-xs text-zinc-500 font-mono">2026.09.24</span>
-                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.24 (Global Mirrors &amp; AI Stack)</span>
-                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
-                        <li>Global Mirror Migration (SourceForge) with high-speed CDN routing</li>
-                        <li>Cybersecurity Arsenal &amp; BlackArch Integration (2,800+ specialized packages)</li>
-                        <li>Agentic AI Infrastructure Stack (Ollama, Hermes Agent, 9Router)</li>
-                        <li>Core CLI v6 Integrity Fixes and systemd-timesyncd clock stabilization</li>
-                    </ul>
-                </div>
+        <!-- 2026.10.14 -->
+        <article class="news-item" style="margin-bottom: 36px;">
+            <div class="news-date">October 14, 2026</div>
+            <h2 class="news-title" style="font-size: 19px; margin-bottom: 12px;">
+                <a href="#">Lycoris Browser: Quad-Core Native Architecture</a>
+            </h2>
+            <div class="news-desc" style="line-height: 1.7;">
+                <p style="margin-bottom: 10px;">
+                    Launched our default sovereign web platform built on WebKitGTK 4.1 with a hybrid compiled architecture: C window shell, C++ heap compaction (<code>malloc_trim</code>), Rust tracker sinkholing, and Zig omnibox query sanitizer. Delivers ~45–60 MB idle RAM consumption and native hardware video acceleration.
+                </p>
             </div>
+        </article>
 
-            <!-- 2026.09.23 -->
-            <div class="flex gap-4">
-                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
-                <div class="pb-8">
-                    <span class="text-xs text-zinc-500 font-mono">2026.09.23</span>
-                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.23 (Stable v1.0 — Post-Audit)</span>
-                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
-                        <li>Phase 2 Modular Init Architecture (Systemd / OpenRC / Runit) preview</li>
-                        <li>Ecosystem &amp; Snapshot Rollback with Paru, Flatpak, and Btrfs-Assistant / Snapper</li>
-                        <li>Laptop Hardware Optimization (Touchpad, Fn-keys, brightnessctl, power profiles)</li>
-                        <li>ZRAM swap multiplier tuned to 2.5× physical RAM</li>
-                        <li>Full Bootloader Tri-Engine Synchronization (Limine UEFI, systemd-boot, GRUB)</li>
-                    </ul>
-                </div>
+        <!-- 2026.09.24 -->
+        <article class="news-item" style="margin-bottom: 36px;">
+            <div class="news-date">September 24, 2026</div>
+            <h2 class="news-title" style="font-size: 19px; margin-bottom: 12px;">
+                <a href="#">Release 2026.09.24: High-Speed Mirror Infrastructure &amp; ZRAM Auto-Tuning</a>
+            </h2>
+            <div class="news-desc" style="line-height: 1.7;">
+                <p style="margin-bottom: 10px;">
+                    Migrated public downloads to global SourceForge high-speed CDN mirrors. Tuned early userspace ZRAM swap multiplier to 2.5× physical RAM using zstd compression, coupled with customized earlyoom kill rules to prevent desktop stalls during heavy compilation or large memory allocations.
+                </p>
             </div>
+        </article>
+    </div>
 
-            <!-- 2026.09.22 -->
-            <div class="flex gap-4">
-                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-600 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
-                <div class="pb-8">
-                    <span class="text-xs text-zinc-500 font-mono">2026.09.22</span>
-                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.22 (Pre-Audit Candidate)</span>
-                    <ul class="mt-3 space-y-1 text-sm text-zinc-400 list-disc list-inside">
-                        <li>11-layer deep audit: fixed <code class="text-red-400">/etc/group</code> missing audio/video/storage/input groups</li>
-                        <li>Fixed sudoers <code class="text-red-400">0644→0440</code> — sudo was silently ignoring wheel rule</li>
-                        <li>Added KWin compositor config, KScreenLocker (off), KSplash (disabled) to skel</li>
-                        <li>Added <code class="text-red-400">mesa</code> base package (was only lib32-mesa)</li>
-                        <li>Fixed installer Wayland sudo display socket passthrough</li>
-                        <li>Fixed installer: clean live user/autostart artifacts from installed system</li>
-                        <li>Fixed sudoers file permissions on installed user account</li>
-                        <li>Added <code class="text-red-400">--help</code> flag to higan-bundle</li>
-                    </ul>
-                </div>
+    <!-- Minimal Open Source Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div>
+                &copy; 2026 HiganveinOS Project. Developed by Yu Dyan. Released under open-source licenses.
             </div>
-
-            <!-- 2026.09.21 -->
-            <div class="flex gap-4">
-                <div class="flex flex-col items-center"><div class="w-3 h-3 rounded-full bg-zinc-700 mt-1"></div><div class="w-px flex-1 bg-zinc-800 mt-1"></div></div>
-                <div class="pb-8">
-                    <span class="text-xs text-zinc-500 font-mono">2026.09.21</span>
-                    <span class="ml-3 text-white font-bold text-base">Release 2026.09.21 (Public Beta v5.0 — Release Candidate 1)</span>
-                    <ul class="mt-3 space-y-1 text-xs text-zinc-400 list-disc list-inside">
-                        <li>Custom Anime Bootloader Art across GRUB, Limine, Syslinux featuring Frieren.</li>
-                        <li>Higan-Installer v5.0 with real-time partition visualizer bars and dual-boot allocation.</li>
-                        <li>Modular profile installer (<code class="text-zinc-300">higan-bundle</code>) for Gamer, Developer, and Ricing stacks.</li>
-                        <li>Btrfs subvolume layout (<code class="text-zinc-300">@</code>, <code class="text-zinc-300">@home</code>, <code class="text-zinc-300">@snapshots</code>) with transparent ZSTD compression.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 2026.09.20 -->
-            <div class="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-4">
-                <div class="flex items-center justify-between">
-                    <span class="text-white font-bold text-base">Release 2026.09.20 (Public Beta)</span>
-                    <span class="bg-zinc-800 text-zinc-400 text-xs px-2.5 py-1 rounded">Previous</span>
-                </div>
-                <ul class="space-y-2 text-xs text-zinc-400 list-disc list-inside leading-relaxed">
-                    <li><b class="text-zinc-200">Higan-Installer v4.0 Pro:</b> Rewritten native PyQt6 wizard with interactive Dual-Boot storage slider, dynamic drive model queries, and live system safety filters.</li>
-                    <li><b class="text-zinc-200">Multi-Boot Integration:</b> Added os-prober and universal GRUB configuration supporting automated Windows, Linux, and BSD detection.</li>
-                    <li><b class="text-zinc-200">Kernel & Memory:</b> Upgraded to CachyOS BORE scheduler with earlyoom daemon protection and zstd ZRAM (2× RAM size).</li>
-                    <li><b class="text-zinc-200">Windows Compatibility Stack:</b> Integrated Wine runtime with 32-bit and 64-bit Vulkan drivers for out-of-the-box .exe execution.</li>
-                    <li><b class="text-zinc-200">Hardware Firmware:</b> Added Broadcom wireless DKMS, SOF audio firmware, and power-profiles-daemon for laptop battery management.</li>
-                </ul>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="features.html">Architecture</a>
+                <a href="docs.html">Documentation</a>
+                <a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" rel="noopener noreferrer">Source Code</a>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 px-6">
-        <div class="flex flex-wrap justify-center gap-6 text-zinc-400 mb-2"><a href="privacy.html" class="hover:text-white transition">Privacy Policy</a><a href="terms.html" class="hover:text-white transition">Terms <p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>amp; Conditions</a><a href="https://github.com/xyuhnlianzy/HiganVein" target="_blank" class="hover:text-white transition">Source Code</a></div><p><p>&copy; 2026 HiganveinOS. Built with Arch Linux and CachyOS components.</p>copy; 2026 HiganveinOS Project. Zero Telemetry. Provided AS-IS.</p>
     </footer>
 
-    <script>
-        const btn = document.getElementById('menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        btn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>

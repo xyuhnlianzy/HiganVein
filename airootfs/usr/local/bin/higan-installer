@@ -687,6 +687,28 @@ term_margin_gradient: 0
     kernel_cmdline: root=UUID={root_uuid} {root_flags}rw
     module_path: boot():/initramfs-{pkgbase_name}-fallback.img
 """)
+                    # Multi-Boot Autodetection: Windows Boot Manager
+                    win_boot = f"{target}/boot/efi/EFI/Microsoft/Boot/bootmgfw.efi"
+                    if os.path.exists(win_boot):
+                        with open(limine_cfg, "a") as f:
+                            f.write("""
+/Windows Boot Manager
+    protocol: efi_chainload
+    image_path: boot():/EFI/Microsoft/Boot/bootmgfw.efi
+""")
+                        log("  Limine: Windows Boot Manager detected and added to boot menu.")
+
+                    # Multi-Boot Autodetection: macOS / OpenCore
+                    mac_boot = f"{target}/boot/efi/EFI/OC/OpenCore.efi"
+                    if os.path.exists(mac_boot):
+                        with open(limine_cfg, "a") as f:
+                            f.write("""
+/macOS (OpenCore)
+    protocol: efi_chainload
+    image_path: boot():/EFI/OC/OpenCore.efi
+""")
+                        log("  Limine: macOS (OpenCore) detected and added to boot menu.")
+
                     log(f"  Limine EFI installed with synchronized theme (root UUID: {root_uuid})")
 
             elif bootloader == "systemd-boot":

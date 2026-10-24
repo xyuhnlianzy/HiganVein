@@ -254,28 +254,60 @@ fn install_system(target_disk: &str, is_alongside: bool, fs_type: &str, username
     sh("arch-chroot /mnt/target systemctl enable sddm.service 2>/dev/null || true");
     sh("arch-chroot /mnt/target systemctl enable bluetooth.service 2>/dev/null || true");
 
-    println!("{EMERALD}:: [5/5] Installing Multi-Boot Bootloader (GRUB + os-prober)...{RESET}");
-    let grub_default = "/mnt/target/etc/default/grub";
-    if Path::new(grub_default).exists() {
-        if let Ok(content) = fs::read_to_string(grub_default) {
-            let mut patched = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false");
-            if !patched.contains("GRUB_DISABLE_OS_PROBER=false") {
-                patched.push_str("\nGRUB_DISABLE_OS_PROBER=false\n");
-            }
-            let _ = fs::write(grub_default, patched);
+    println!("{EMERALD}:: [5/5] Deploying Bootloader & Configuring Multi-Boot...{RESET}");
+    let use_limine = prompt(":: Choose Bootloader: [1] Limine (Modern/Fast, Recommended) | [2] GRUB", "1") == "1";
+
+    if use_limine && !p_esp.is_empty() {
+        println!("{CYAN}:: Installing Limine Modern UEFI Bootloader...{RESET}");
+        let efi_boot = "/mnt/target/boot/efi/EFI/BOOT";
+        let _ = fs::create_dir_all(efi_boot);
+        sh("cp -f /mnt/target/usr/share/limine/BOOTX64.EFI /mnt/target/boot/efi/EFI/BOOT/BOOTX64.EFI 2>/dev/null || true");
+        sh("cp -f /mnt/target/usr/share/limine/limine-wallpaper.jpg /mnt/target/boot/efi/limine-wallpaper.jpg 2>/dev/null || true");
+
+        // Copy kernel & initramfs to ESP for instant chainloading
+        sh("cp -f /mnt/target/boot/vmlinuz-linux-cachyos* /mnt/target/boot/efi/ 2>/dev/null || true");
+        sh("cp -f /mnt/target/boot/initramfs-linux-cachyos* /mnt/target/boot/efi/ 2>/dev/null || true");
+
+        let mut limine_conf = format!(
+            "timeout: 3\ndefault_entry: 1\nwallpaper: boot():/limine-wallpaper.jpg\nwallpaper_style: stretched\nterm_background: 00000000\nterm_foreground: fafafa\n\n/HiganveinOS Flagship\n    protocol: linux\n    kernel_path: boot():/vmlinuz-linux-cachyos-lts\n    kernel_cmdline: root=UUID={uuid_root} rw loglevel=3 quiet splash\n    module_path: boot():/initramfs-linux-cachyos-lts.img\n"
+        );
+
+        // Windows Boot Manager probe
+        if Path::new("/mnt/target/boot/efi/EFI/Microsoft/Boot/bootmgfw.efi").exists() {
+            println!("{EMERALD}:: [Limine] Found Windows Boot Manager! Adding to boot menu.{RESET}");
+            limine_conf.push_str("\n/Windows Boot Manager\n    protocol: efi_chainload\n    image_path: boot():/EFI/Microsoft/Boot/bootmgfw.efi\n");
         }
+
+        // macOS OpenCore probe
+        if Path::new("/mnt/target/boot/efi/EFI/OC/OpenCore.efi").exists() {
+            println!("{EMERALD}:: [Limine] Found macOS OpenCore! Adding to boot menu.{RESET}");
+            limine_conf.push_str("\n/macOS (OpenCore)\n    protocol: efi_chainload\n    image_path: boot():/EFI/OC/OpenCore.efi\n");
+        }
+
+        let _ = fs::write("/mnt/target/boot/efi/limine.conf", &limine_conf);
+        let _ = fs::write("/mnt/target/boot/limine.conf", &limine_conf);
+
+        // Install Limine MBR as well
+        sh(&format!("arch-chroot /mnt/target limine bios-install {target_disk} 2>/dev/null || true"));
+    } else {
+        println!("{CYAN}:: Installing GRUB Bootloader with os-prober...{RESET}");
+        let grub_default = "/mnt/target/etc/default/grub";
+        if Path::new(grub_default).exists() {
+            if let Ok(content) = fs::read_to_string(grub_default) {
+                let mut patched = content.replace("GRUB_DISABLE_OS_PROBER=true", "GRUB_DISABLE_OS_PROBER=false");
+                if !patched.contains("GRUB_DISABLE_OS_PROBER=false") {
+                    patched.push_str("\nGRUB_DISABLE_OS_PROBER=false\n");
+                }
+                let _ = fs::write(grub_default, patched);
+            }
+        }
+
+        sh(&format!("arch-chroot /mnt/target grub-install --target=i386-pc --recheck {target_disk} 2>/dev/null || true"));
+        if !p_esp.is_empty() {
+            sh("arch-chroot /mnt/target grub-install --target=x86_64-efi --efi-directory=/boot/efi --boot-directory=/boot --bootloader-id=HiganveinOS --recheck 2>/dev/null || true");
+        }
+        sh("arch-chroot /mnt/target grub-mkconfig -o /boot/grub/grub.cfg");
     }
-
-    // Install BIOS MBR
-    sh(&format!("arch-chroot /mnt/target grub-install --target=i386-pc --recheck {target_disk} 2>/dev/null || true"));
-
-    // Install UEFI ESP if available
-    if !p_esp.is_empty() {
-        sh("arch-chroot /mnt/target grub-install --target=x86_64-efi --efi-directory=/boot/efi --boot-directory=/boot --bootloader-id=HiganveinOS --recheck 2>/dev/null || true");
-    }
-
-    println!("{CYAN}:: Probing for other Operating Systems (Windows / macOS / Linux)...{RESET}");
-    sh("arch-chroot /mnt/target grub-mkconfig -o /boot/grub/grub.cfg");
 
     sh("sync");
     sh("umount -R /mnt/target 2>/dev/null || true");

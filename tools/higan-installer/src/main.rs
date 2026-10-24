@@ -269,7 +269,7 @@ fn install_system(target_disk: &str, is_alongside: bool, fs_type: &str, username
         sh("cp -f /mnt/target/boot/initramfs-linux-cachyos* /mnt/target/boot/efi/ 2>/dev/null || true");
 
         let mut limine_conf = format!(
-            "timeout: 3\ndefault_entry: 1\nwallpaper: boot():/limine-wallpaper.jpg\nwallpaper_style: stretched\nterm_background: 00000000\nterm_foreground: fafafa\n\n/HiganveinOS Flagship\n    protocol: linux\n    kernel_path: boot():/vmlinuz-linux-cachyos-lts\n    kernel_cmdline: root=UUID={uuid_root} rw loglevel=3 quiet splash\n    module_path: boot():/initramfs-linux-cachyos-lts.img\n"
+            "# Limine Bootloader - HiganveinOS Tech-Noir Theme\ntimeout: 3\ndefault_entry: 1\ninterface_resolution: 0x0\ninterface_help_hidden: yes\n\n# Branding & Colors (Spider Lily Tech-Noir Palette)\ninterface_branding: HIGANVEIN PROTOCOL · ZERO TELEMETRY\ninterface_branding_colour: e11d48\n\n# Canvas & Wallpaper\nwallpaper: boot():/limine-wallpaper.jpg\nwallpaper_style: stretched\nbackdrop: 0b070f\n\n# Terminal Box Styling\nterm_background: 900b070f\nterm_foreground: f5e6ed\nterm_highlight: e11d48\nterm_highlight_background: 33e11d48\nterm_margin: 48\nterm_margin_gradient: 16\nterm_font_scale: 2x2\n\n/HiganveinOS Flagship\n    protocol: linux\n    kernel_path: boot():/vmlinuz-linux-cachyos-lts\n    kernel_cmdline: root=UUID={uuid_root} rw loglevel=3 quiet splash\n    module_path: boot():/initramfs-linux-cachyos-lts.img\n"
         );
 
         // Windows Boot Manager probe

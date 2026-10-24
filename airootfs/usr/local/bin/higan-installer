@@ -663,25 +663,37 @@ term_foreground: fafafa
                     except Exception:
                         pass
                     with open(limine_cfg, "w") as f:
-                        f.write(f"""timeout: 5
-interface_resolution: 1920x1080
-interface_branding: 
-interface_help_hidden: yes
+                        f.write(f"""# Limine Bootloader - HiganveinOS Tech-Noir Theme
+timeout: 3
 default_entry: 1
+interface_resolution: 0x0
+interface_help_hidden: yes
+
+# Branding & Colors (Spider Lily Tech-Noir Palette)
+interface_branding: HIGANVEIN PROTOCOL · ZERO TELEMETRY
+interface_branding_colour: e11d48
+
+# Canvas & Wallpaper
 wallpaper: boot():/limine-wallpaper.jpg
 wallpaper_style: stretched
-term_background: 00000000
-term_foreground: fafafa
-term_margin: 0
-term_margin_gradient: 0
+backdrop: 0b070f
 
-/HiganveinOS
+# Terminal Box Styling
+term_background: 900b070f
+term_foreground: f5e6ed
+term_highlight: e11d48
+term_highlight_background: 33e11d48
+term_margin: 48
+term_margin_gradient: 16
+term_font_scale: 2x2
+
+/HiganveinOS Flagship (CachyOS LTS)
     protocol: linux
     kernel_path: boot():/vmlinuz-{pkgbase_name}
     kernel_cmdline: root=UUID={root_uuid} {root_flags}rw loglevel=3 quiet splash
     module_path: boot():/initramfs-{pkgbase_name}.img
 
-/HiganveinOS (Fallback Initramfs)
+/HiganveinOS Flagship (Fallback Initramfs)
     protocol: linux
     kernel_path: boot():/vmlinuz-{pkgbase_name}
     kernel_cmdline: root=UUID={root_uuid} {root_flags}rw

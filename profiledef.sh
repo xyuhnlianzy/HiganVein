@@ -10,6 +10,7 @@ airootfs_image_type="squashfs"
 airootfs_image_tool_options=('-comp' 'zstd' '-Xcompression-level' '19')
 file_permissions=(
   ["/usr/local/bin/higan-installer"]="0:0:755"
+  ["/usr/local/bin/higan-installer-cli"]="0:0:755"
   ["/usr/local/bin/higan-installer-launcher"]="0:0:755"
   ["/usr/local/bin/higan-set-wallpaper"]="0:0:755"
   ["/usr/local/bin/higan-live-init"]="0:0:755"

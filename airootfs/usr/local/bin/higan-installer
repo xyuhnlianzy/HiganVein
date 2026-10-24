@@ -1607,16 +1607,21 @@ class HiganInstallerApp(QWidget):
         self.erase_desc.setObjectName("label_muted")
         self.erase_desc.setStyleSheet("color: #52525b; font-size: 8pt; padding-left: 26px;")
 
-        self.rad_alongside = QRadioButton("Install alongside another OS (Dual-Boot)")
+        self.rad_alongside = QRadioButton("Install alongside another OS (Dual / Triple-Boot)")
         self.group_mode.addButton(self.rad_alongside)
 
-        self.rad_manual = QRadioButton("Manual partitioning")
+        self.alongside_desc = QLabel("Preserves existing Windows, macOS, and Linux partitions intact. Auto-configures Multi-Boot menu.")
+        self.alongside_desc.setObjectName("label_muted")
+        self.alongside_desc.setStyleSheet("color: #10b981; font-size: 8pt; padding-left: 26px;")
+
+        self.rad_manual = QRadioButton("Manual partitioning (Advanced)")
         self.group_mode.addButton(self.rad_manual)
 
         l.addWidget(self.rad_erase)
         l.addWidget(self.erase_desc)
 
         l.addWidget(self.rad_alongside)
+        l.addWidget(self.alongside_desc)
 
         # Dual-boot slider
         self.dual_box = QFrame()
@@ -1696,11 +1701,15 @@ class HiganInstallerApp(QWidget):
         self.disk_bar.set_partitions(parts, total_gb)
 
     def launch_partition_manager(self):
-        for tool in ["partitionmanager", "gparted"]:
+        for tool in ["gparted", "partitionmanager"]:
             if shutil.which(tool):
                 subprocess.Popen([tool])
                 return
-        QMessageBox.information(self, "Partition Manager", "No partition manager found. Install kde-partitionmanager or gparted.")
+        target_disk = self.combo_disk.currentText().split(" ")[0]
+        if shutil.which("ptyxis") and shutil.which("cfdisk"):
+            subprocess.Popen(["ptyxis", "--", "sudo", "cfdisk", target_disk if target_disk else "/dev/sda"])
+            return
+        QMessageBox.information(self, "Partition Manager", "No partition manager found. Run 'sudo cfdisk' in terminal.")
 
     def populate_disks(self):
         self.combo_disk.clear()
@@ -1989,6 +1998,12 @@ class HiganInstallerApp(QWidget):
 
 
 if __name__ == '__main__':
+    # CLI Mode or Headless TTY Fallback
+    if '--cli' in sys.argv or '-c' in sys.argv or (not os.environ.get('DISPLAY') and not os.environ.get('WAYLAND_DISPLAY')):
+        cli_bin = '/usr/local/bin/higan-installer-cli'
+        if os.path.exists(cli_bin):
+            os.execv(cli_bin, [cli_bin] + [a for a in sys.argv[1:] if a not in ('--cli', '-c')])
+
     app = QApplication(sys.argv)
     window = HiganInstallerApp()
     window.show()

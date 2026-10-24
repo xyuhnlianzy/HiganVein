@@ -1,0 +1,7 @@
+#!/bin/sh
+# Terminate all running Windows / Wine applications cleanly
+wineserver -k 2>/dev/null
+pkill -9 -f "wine|wineserver|explorer.exe|services.exe" 2>/dev/null || true
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send -i process-stop "Higanvein Windows Engine" "All Windows processes terminated." -t 2000 2>/dev/null || true
+fi

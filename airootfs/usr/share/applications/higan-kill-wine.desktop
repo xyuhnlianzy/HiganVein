@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Terminate Windows Apps
+GenericName=Kill Windows Processes
+Comment=Force kill all running Windows processes and Wine servers
+Exec=/usr/local/bin/higan-kill-wine
+Icon=process-stop
+Terminal=false
+Categories=System;Utility;
+StartupNotify=false

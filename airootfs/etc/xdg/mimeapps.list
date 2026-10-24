@@ -1,3 +1,9 @@
+[Default Applications]
+application/x-ms-dos-executable=higan-wine.desktop;
+application/x-msi=higan-wine.desktop;
+application/x-msdownload=higan-wine.desktop;
+
 [Added Associations]
-application/x-ms-dos-executable=wine.desktop;
-application/x-msi=wine.desktop;
+application/x-ms-dos-executable=higan-wine.desktop;wine.desktop;
+application/x-msi=higan-wine.desktop;wine.desktop;
+application/x-msdownload=higan-wine.desktop;

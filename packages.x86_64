@@ -2,8 +2,7 @@ base
 base-devel
 archiso
 mkinitcpio-archiso
-linux-cachyos
-linux-cachyos-headers
+linux-cachyos-lts
 linux-firmware
 sof-firmware
 broadcom-wl-dkms
@@ -43,11 +42,9 @@ xdg-utils
 arch-install-scripts
 xdg-user-dirs
 power-profiles-daemon
-brightnessctl
 acpid
 earlyoom
 zram-generator
-firefox
 ptyxis
 fish
 paru
@@ -72,8 +69,6 @@ memtest86+
 edk2-shell
 
 # --- Filesystem & Tools ---
-partitionmanager
-kpmcore
 btrfs-assistant
 snapper
 mtools

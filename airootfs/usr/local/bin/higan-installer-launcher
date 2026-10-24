@@ -1,16 +1,64 @@
 #!/usr/bin/env bash
-# Grant root permission to current user Wayland / X11 session
+# HiganveinOS Resilient Installer Launcher
+# Bulletproof execution for Real Hardware (UEFI/BIOS), VirtualBox, VMware, and Mac
+
+LOGFILE="/tmp/higan-installer.log"
+exec > >(tee -a "$LOGFILE") 2>&1
+
+echo ":: [HiganInstaller] Initializing installer environment..."
+
+# 1. Grant root access to user display server (Wayland / X11)
 xhost +si:localuser:root 2>/dev/null || xhost + 2>/dev/null || true
 
+# 2. Virtual Machine & GPU Hardware Fallbacks
+IS_VM=0
+if command -v systemd-detect-virt >/dev/null 2>&1 && systemd-detect-virt -q; then
+    IS_VM=1
+fi
+if grep -qiE "virtualbox|vmware|qemu|kvm|hyper-v" /sys/class/dmi/id/product_name 2>/dev/null; then
+    IS_VM=1
+fi
+
+if [ "$IS_VM" -eq 1 ] || [ ! -e /dev/dri/card0 ]; then
+    echo ":: [HiganInstaller] Virtualized or Software Rendering environment detected. Applying safe display flags..."
+    export LIBGL_ALWAYS_SOFTWARE=1
+    export QT_QUICK_BACKEND="software"
+    export WLR_NO_HARDWARE_CURSORS=1
+    export WLR_RENDERER=pixman
+fi
+
+# 3. Environment Variables Export
 export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 export QT_QPA_PLATFORM="wayland;xcb"
+export GDK_BACKEND="wayland,x11,*"
 
-# Sleep briefly so desktop environment finishes loading
-sleep 2
+# 4. Launch with Root Escalation & Crash Protection
+launch_cmd() {
+    if [ "$EUID" -eq 0 ]; then
+        /usr/local/bin/higan-installer "$@"
+    else
+        sudo -E env \
+            XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+            WAYLAND_DISPLAY="$WAYLAND_DISPLAY" \
+            DISPLAY="$DISPLAY" \
+            QT_QPA_PLATFORM="$QT_QPA_PLATFORM" \
+            LIBGL_ALWAYS_SOFTWARE="$LIBGL_ALWAYS_SOFTWARE" \
+            QT_QUICK_BACKEND="$QT_QUICK_BACKEND" \
+            /usr/local/bin/higan-installer "$@"
+    fi
+}
 
-if [ "$EUID" -eq 0 ]; then
-    exec /usr/local/bin/higan-installer "$@"
-else
-    exec sudo XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" WAYLAND_DISPLAY="$WAYLAND_DISPLAY" DISPLAY="$DISPLAY" QT_QPA_PLATFORM="$QT_QPA_PLATFORM" /usr/local/bin/higan-installer "$@"
+echo ":: [HiganInstaller] Launching GUI installer..."
+launch_cmd "$@"
+EXIT_CODE=$?
+
+# 5. Fallback: If GUI failed or crashed, launch in Terminal automatically so user is never left hanging
+if [ "$EXIT_CODE" -ne 0 ]; then
+    echo ":: [HiganInstaller] GUI process exited with code $EXIT_CODE. Launching Terminal Fallback Wizard..."
+    if command -v ptyxis >/dev/null 2>&1; then
+        ptyxis -- sudo /usr/local/bin/higan-installer --cli "$@"
+    else
+        sudo /usr/local/bin/higan-installer --cli "$@"
+    fi
 fi

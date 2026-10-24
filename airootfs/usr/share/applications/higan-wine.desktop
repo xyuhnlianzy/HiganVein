@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Higanvein Windows Engine
+GenericName=Windows Application Runner
+Comment=Run Windows applications (.exe, .msi) seamlessly with low latency
+Exec=/usr/local/bin/higan-wine %f
+MimeType=application/x-ms-dos-executable;application/x-msi;application/x-msdownload;
+Icon=wine
+Terminal=false
+Categories=Utility;Emulator;
+StartupNotify=true
+NoDisplay=false

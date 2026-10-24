@@ -1,0 +1,47 @@
+#!/bin/bash
+# HiganveinOS Native Windows Engine
+# Optimized for CachyOS BORE, zero Gecko/Mono nags, font anti-aliasing, and low-latency execution
+
+EXE_PATH="$1"
+if [ -z "$EXE_PATH" ]; then
+    echo "Usage: higan-wine <path-to-windows-exe-or-msi> [args...]"
+    exit 1
+fi
+
+# Performance & Anti-nag Environment Flags
+export WINEPREFIX="${WINEPREFIX:-$HOME/.wine}"
+export WINEDLLOVERRIDES="mscoree,mshtml="
+export WINEDEBUG="-all"
+export WINEFSYNC=1
+export WINEESYNC=1
+export STAGING_SHARED_MEMORY=1
+export DXVK_HUD=0
+
+# Ensure wine prefix has font anti-aliasing and registry optimizations if new
+if [ ! -d "$WINEPREFIX/drive_c" ]; then
+    wineboot -u >/dev/null 2>&1
+    
+    # Apply Font Smoothing (ClearType equivalent in Wine)
+    cat << 'EOF' | regedit - >/dev/null 2>&1
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Control Panel\Desktop]
+"FontSmoothing"="2"
+"FontSmoothingType"=dword:00000002
+"FontSmoothingGamma"=dword:00000578
+"FontSmoothingOrientation"=dword:00000001
+EOF
+fi
+
+# Visual notification via notify-send if available
+EXE_NAME=$(basename "$EXE_PATH")
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send -i wine "Higanvein Windows Engine" "Launching $EXE_NAME..." -t 2500 2>/dev/null || true
+fi
+
+# Check if GameMode is present and launch with high CPU/IO priority
+if command -v gamemoderun >/dev/null 2>&1; then
+    exec gamemoderun wine "$@"
+else
+    exec wine "$@"
+fi

@@ -287,7 +287,13 @@ fn install_system(target_disk: &str, is_alongside: bool, fs_type: &str, username
         let _ = fs::write("/mnt/target/boot/efi/limine.conf", &limine_conf);
         let _ = fs::write("/mnt/target/boot/limine.conf", &limine_conf);
 
-        // Install Limine MBR as well
+        // Register Limine as Top-Priority UEFI Bootloader in NVRAM
+        let part_num = p_esp.trim_start_matches(&format!("{target_disk}{sep}"));
+        sh(&format!(
+            "arch-chroot /mnt/target efibootmgr --create --disk {target_disk} --part {part_num} --label 'HiganveinOS (Limine)' --loader '\\EFI\\BOOT\\BOOTX64.EFI' 2>/dev/null || true"
+        ));
+
+        // Overwrite MBR sector 0 for Legacy BIOS systems so old GRUB stage 1 is wiped
         sh(&format!("arch-chroot /mnt/target limine bios-install {target_disk} 2>/dev/null || true"));
     } else {
         println!("{CYAN}:: Installing GRUB Bootloader with os-prober...{RESET}");

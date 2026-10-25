@@ -1,8 +1,8 @@
-# HiganveinOS Frieren Void GRUB Theme
-# Inspired by anime character art split-screen layout
+# HiganveinOS Tech-Noir GRUB Theme
+# Spider Lily Palette (#0b070f / #e11d48)
 
 desktop-image: "background.jpg"
-desktop-color: "#09090b"
+desktop-color: "#0b070f"
 terminal-font: "DejaVu Sans Regular 12"
 terminal-box: "select_*.png"
 terminal-left: "70"

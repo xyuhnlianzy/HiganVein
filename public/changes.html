@@ -38,6 +38,27 @@
 
         <hr class="divider">
 
+        <!-- 2026.10.24 -->
+        <article class="news-item" style="margin-bottom: 36px;">
+            <div class="news-date">October 24, 2026</div>
+            <h2 class="news-title" style="font-size: 19px; margin-bottom: 12px;">
+                <a href="#">Release 2026.10.24: Arch SystemD Consolidation, Limine Tech-Noir, and Windows Engine</a>
+            </h2>
+            <div class="news-desc" style="line-height: 1.7;">
+                <p style="margin-bottom: 10px;">
+                    Major architectural pivot focusing engineering resources directly on our <strong>Arch Linux SystemD Flagship tier</strong> for superior hardware acceleration, gaming, and daily driver reliability:
+                </p>
+                <ul style="margin-left: 20px; margin-bottom: 14px; list-style-type: square; color: var(--text-muted);">
+                    <li><strong>Kernel Optimization (<code>linux-cachyos-lts</code>):</strong> Transitioned to Linux 6.18 LTS with CachyOS BORE scheduler, shaving idle RAM to ~220–250 MiB while preserving top-tier desktop responsiveness.</li>
+                    <li><strong>Limine Modern Bootloader (Default):</strong> First-class integration of Limine with native monitor resolution, custom Spider Lily Tech-Noir theme, and automatic zero-overhead chainload detection for Windows Boot Manager and macOS OpenCore.</li>
+                    <li><strong>Compact Native Windows Engine (<code>higan-wine</code>):</strong> Out-of-the-box double-click execution for <code>.exe</code> and <code>.msi</code> binaries with subpixel font smoothing, disabled Gecko/Mono popups, GameMode integration, and desktop task killer (<code>higan-kill-wine</code>).</li>
+                    <li><strong>Bulletproof Dual-Engine Installer:</strong> Upgraded <code>higan-installer-launcher</code> with automated VM software rendering fallback (<code>LIBGL_ALWAYS_SOFTWARE=1</code>) and high-speed Rust CLI engine (<code>higan-installer-cli</code>) for reliable Multi-Boot alongside Windows/macOS.</li>
+                    <li><strong>ISO Footprint Reduction:</strong> Trimmed duplicate browsers and bloated packages, cutting ISO size down from 2.8 GB to ~1.3 GB.</li>
+                    <li><strong>Void Runit Track:</strong> Preserved under <code>sovereign-builder/</code> in status <em>On Hold</em> for dedicated research.</li>
+                </ul>
+            </div>
+        </article>
+
         <!-- 2026.10.17 -->
         <article class="news-item" style="margin-bottom: 36px;">
             <div class="news-date">October 17, 2026</div>

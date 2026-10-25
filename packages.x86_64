@@ -117,6 +117,7 @@ lib32-vulkan-icd-loader
 # --- GUI Apps & Pop-up Helper Deps ---
 python-pyqt6
 python-gobject
+python-evdev
 gtk3
 gtk4
 libadwaita
